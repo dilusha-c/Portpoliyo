@@ -107,6 +107,21 @@ function App() {
         
         // The progress is used by both left and right bars with origin-right and origin-left respectively
         // so they grow outward from the center
+        
+        // Track current visible section without changing URL
+        const sections = ['home', 'about', 'skills', 'experience', 'projects', 'certificates', 'contact'];
+        for (let section of sections) {
+          const element = document.getElementById(section);
+          if (element) {
+            const rect = element.getBoundingClientRect();
+            // Consider a section in view if it's top is in the top half of the screen
+            if (rect.top <= window.innerHeight/2 && rect.bottom >= window.innerHeight/2) {
+              sessionStorage.setItem('currentSection', section);
+              setActiveSection(section);
+              break;
+            }
+          }
+        }
       }
     }
     window.addEventListener('scroll', handleScroll)
@@ -148,6 +163,103 @@ function App() {
     }
   }, [mobileMenuOpen])
   
+  // URL management system - keep the base URL consistent
+  useEffect(() => {
+    // Handle initial URL hash if present, but then clean it
+    const handleInitialURL = () => {
+      // First try to get hash from URL
+      const hash = window.location.hash.substring(1);
+      
+      // If hash exists in URL, use it
+      if (hash) {
+        // Store the hash as current section
+        sessionStorage.setItem('currentSection', hash);
+        
+        // Scroll to the section without changing URL
+        setTimeout(() => {
+          const section = document.getElementById(hash);
+          if (section) {
+            const yPosition = section.getBoundingClientRect().top + window.pageYOffset;
+            const headerOffset = 80;
+            
+            window.scrollTo({
+              top: yPosition - headerOffset,
+              behavior: 'smooth'
+            });
+          }
+          
+          // Clean the URL to base URL only
+          window.history.replaceState(null, document.title, window.location.pathname);
+        }, 100);
+      } 
+      // If no hash in URL, try to restore from session storage
+      else {
+        const savedSection = sessionStorage.getItem('currentSection');
+        if (savedSection) {
+          setTimeout(() => {
+            const section = document.getElementById(savedSection);
+            if (section) {
+              const yPosition = section.getBoundingClientRect().top + window.pageYOffset;
+              const headerOffset = 80;
+              
+              window.scrollTo({
+                top: yPosition - headerOffset,
+                behavior: 'auto' // Use 'auto' instead of 'smooth' to avoid visible scrolling on refresh
+              });
+            }
+          }, 100);
+        }
+      }
+    };
+    
+    // Handle browser back/forward buttons without changing URL
+    const handlePopState = () => {
+      // Don't allow URL changes with hash - redirect to base URL
+      if (window.location.hash) {
+        // Get the section from the hash before removing it
+        const hash = window.location.hash.substring(1);
+        if (hash) {
+          sessionStorage.setItem('currentSection', hash);
+        }
+        
+        // Clean the URL
+        window.history.replaceState(null, document.title, window.location.pathname);
+        
+        // Scroll to the section if it exists
+        if (hash) {
+          const section = document.getElementById(hash);
+          if (section) {
+            const yPosition = section.getBoundingClientRect().top + window.pageYOffset;
+            const headerOffset = 80;
+            
+            window.scrollTo({
+              top: yPosition - headerOffset,
+              behavior: 'smooth'
+            });
+          }
+        }
+      }
+    };
+    
+    // Handle page refreshes and navigation
+    window.onbeforeunload = () => {
+      // We don't need to do anything special here since sessionStorage persists across refreshes
+      // But this ensures we have a hook if needed later
+    };
+    
+    // Set up event listeners
+    window.addEventListener('popstate', handlePopState);
+    
+    // Execute initial URL handling
+    handleInitialURL();
+    
+    // Clean up event listeners
+    return () => {
+      window.removeEventListener('popstate', handlePopState);
+      window.onbeforeunload = null;
+    };
+  }, []);
+
   // Add a class to the body when image modal is open in robotic mode to keep cursor visible
   useEffect(() => {
     if (imageModal.isOpen && roboticMode) {
@@ -158,13 +270,26 @@ function App() {
       style.id = 'modal-close-button-style';
       style.innerHTML = `
         .modal-content .close-button {
-          box-shadow: 0 0 10px 2px rgba(239, 68, 68, 0.7);
+          box-shadow: 0 0 15px 3px rgba(239, 68, 68, 0.8);
           animation: pulse-red 2s infinite;
         }
         @keyframes pulse-red {
-          0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); }
-          70% { box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); }
+          0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.8); }
+          50% { box-shadow: 0 0 15px 5px rgba(239, 68, 68, 0.4); }
           100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+        }
+        
+        /* Make close button more visible in robotic mode */
+        .modal-content {
+          position: relative;
+        }
+        
+        /* Ensure the close button is always at the top-right */
+        .modal-content .close-button {
+          position: absolute !important;
+          top: 0 !important;
+          right: 0 !important;
+          z-index: 9999 !important;
         }
       `;
       document.head.appendChild(style);
@@ -236,16 +361,14 @@ function App() {
       const yPosition = window.pageYOffset + section.getBoundingClientRect().top;
       const headerOffset = 80;
       
-      // Try native smooth scrolling first
+      // Try native smooth scrolling first - but don't change URL
       window.scrollTo({
         top: yPosition - headerOffset,
         behavior: 'smooth'
       });
       
-      // Update URL hash without jump
-      setTimeout(() => {
-        history.pushState(null, null, `#${sectionId}`);
-      }, 500);
+      // Store the current section in sessionStorage without changing URL
+      sessionStorage.setItem('currentSection', sectionId);
       
     } catch (error) {
       // Fallback for older browsers
@@ -262,7 +385,7 @@ function App() {
     })
   }
   
-  // Completely new navigation implementation
+  // Navigation implementation that doesn't change URL
   const scrollToSection = (sectionId) => {
     try {
       // Find the target section
@@ -282,10 +405,8 @@ function App() {
           behavior: 'smooth'
         });
         
-        // Update the URL hash for bookmarking
-        setTimeout(() => {
-          window.history.pushState(null, '', `#${sectionId}`);
-        }, 10);
+        // Store current section in sessionStorage instead of changing URL
+        sessionStorage.setItem('currentSection', sectionId);
         
         return true;
       }
@@ -295,6 +416,11 @@ function App() {
     return false;
   }
 
+  // Utility function to get current section from sessionStorage
+  const getCurrentSection = () => {
+    return sessionStorage.getItem('currentSection') || 'home';
+  }
+  
   const fadeInUp = {
     hidden: { opacity: 0, y: 20 },
     visible: { opacity: 1, y: 0 }
@@ -367,8 +493,17 @@ function App() {
   const handleModalOutsideClick = (e) => {
     // Get the modal content element
     const modalContent = document.querySelector('.modal-content');
-    // Check if the click was outside the modal content
-    if (modalContent && !modalContent.contains(e.target)) {
+    const closeButton = document.querySelector('.close-button');
+    
+    // Check if the click was outside the modal content or on the overlay
+    // We specifically check if it's not on the content and not on the close button
+    if (modalContent && !modalContent.contains(e.target) || 
+        (e.target.classList && e.target.classList.contains('modal-overlay'))) {
+      closeImageModal();
+    }
+    
+    // Also close if clicked directly on the close button
+    if (closeButton && (closeButton === e.target || closeButton.contains(e.target))) {
       closeImageModal();
     }
   };
@@ -663,6 +798,7 @@ function App() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 z-[9000] overflow-hidden touch-none modal-overlay"
+            onClick={closeImageModal} 
             onWheel={(e) => e.stopPropagation()} 
             onTouchMove={(e) => e.stopPropagation()}
           >
@@ -675,7 +811,9 @@ function App() {
                 damping: 20, 
                 stiffness: 100 
               }}
-              className="modal-content relative max-w-4xl w-full max-h-[90vh] overflow-hidden rounded-lg touch-none pointer-events-auto gear-cursor-container"
+              className={`modal-content relative max-w-4xl w-full max-h-[90vh] overflow-hidden rounded-lg touch-none pointer-events-auto gear-cursor-container ${
+                roboticMode ? 'border border-cyan-500/30 shadow-cyan-500/20 shadow-lg' : ''
+              }`}
               onClick={e => e.stopPropagation()}
               onWheel={(e) => e.stopPropagation()}
               onTouchMove={(e) => e.stopPropagation()}
@@ -685,16 +823,26 @@ function App() {
                 onClick={closeImageModal}
                 className={`close-button absolute top-0 right-0 ${
                   roboticMode 
-                    ? 'bg-red-900/80 hover:bg-red-700 text-red-200' 
+                    ? 'bg-red-700 hover:bg-red-600 text-white' 
                     : 'bg-black/70 hover:bg-red-600 text-white'
-                } rounded-tr-lg rounded-bl-lg p-3 z-20 transition-all duration-300 ease-in-out`}
+                } rounded-tr-lg p-4 z-50 transition-all duration-300 ease-in-out shadow-lg`}
                 aria-label="Close modal"
+                style={{ 
+                  transform: 'none', 
+                  margin: '0',
+                  position: 'absolute',
+                  top: '0',
+                  right: '0'
+                }}
               >
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M18 6L6 18M6 6l12 12"></path>
                 </svg>
                 {roboticMode && (
-                  <span className="absolute -inset-1 border border-red-500 opacity-50 rounded-tr-lg rounded-bl-lg"></span>
+                  <>
+                    <span className="absolute -inset-1 border-2 border-red-400 opacity-75 rounded-tr-lg"></span>
+                    <span className="absolute inset-0 bg-red-500/20 rounded-tr-lg animate-pulse"></span>
+                  </>
                 )}
               </button>
               
