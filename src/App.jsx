@@ -49,6 +49,11 @@ function App() {
   const [showBootScreen, setShowBootScreen] = useState(false)
   const [portfolioVisible, setPortfolioVisible] = useState(false)
   const [showSkillsModal, setShowSkillsModal] = useState(false)
+  const [imageModal, setImageModal] = useState({
+    isOpen: false,
+    imageSrc: '',
+    title: ''
+  })
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const controls = useAnimation()
   const { scrollYProgress } = useScroll({
@@ -150,6 +155,20 @@ function App() {
     }
     animateSkills()
   }, [controls])
+  
+  // Cleanup effect for modal
+  useEffect(() => {
+    return () => {
+      // Ensure we clean up event listeners and restore scrolling if component unmounts with modal open
+      if (imageModal.isOpen) {
+        document.body.style.overflow = '';
+        document.body.style.position = '';
+        document.body.style.width = '';
+        document.body.style.paddingRight = '';
+        document.removeEventListener('keydown', handleEscapeKey);
+      }
+    }
+  }, [imageModal.isOpen])
 
   // Scroll to top function
   const scrollToTop = () => {
@@ -159,31 +178,37 @@ function App() {
     })
   }
   
-  // Scroll to section function
+  // Completely new navigation implementation
   const scrollToSection = (sectionId) => {
-    const section = document.getElementById(sectionId);
-    if (section) {
-      // Prevent default scroll behavior
-      event.preventDefault();
+    try {
+      // Find the target section
+      const targetSection = document.getElementById(sectionId);
       
-      // Get the element's position relative to the viewport
-      const rect = section.getBoundingClientRect();
-      
-      // Account for fixed header if needed (adjust the value based on your header height)
-      const headerOffset = 80;
-      
-      // Calculate the absolute position on the page
-      const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-      const top = rect.top + scrollTop - headerOffset;
-      
-      window.scrollTo({
-        top: top,
-        behavior: 'smooth'
-      });
-      
-      // Update URL without causing a page reload
-      history.pushState(null, null, `#${sectionId}`);
+      if (targetSection) {
+        // Get the y-position of the section
+        const yPosition = targetSection.getBoundingClientRect().top + window.pageYOffset;
+        
+        // Adjust for header height
+        const headerOffset = 80;
+        const finalPosition = yPosition - headerOffset;
+        
+        // Perform the scroll
+        window.scrollTo({
+          top: finalPosition,
+          behavior: 'smooth'
+        });
+        
+        // Update the URL hash for bookmarking
+        setTimeout(() => {
+          window.history.pushState(null, '', `#${sectionId}`);
+        }, 10);
+        
+        return true;
+      }
+    } catch (error) {
+      console.error("Error scrolling to section:", error);
     }
+    return false;
   }
 
   const fadeInUp = {
@@ -216,6 +241,48 @@ function App() {
   const handleBootComplete = () => {
     setShowBootScreen(false);
     setPortfolioVisible(true);
+  };
+  
+  // Function to open image modal with enhanced scroll prevention
+  const openImageModal = (imageSrc, title) => {
+    setImageModal({
+      isOpen: true,
+      imageSrc,
+      title
+    });
+    
+    // Multiple methods to ensure scrolling is disabled
+    document.body.style.overflow = 'hidden'; // Basic method
+    document.body.style.position = 'fixed'; // More aggressive approach
+    document.body.style.width = '100%'; // Prevent layout shift
+    document.body.style.paddingRight = '15px'; // Compensate for scrollbar disappearance
+    
+    // Add event listener for escape key to close modal
+    document.addEventListener('keydown', handleEscapeKey);
+  };
+
+  // Function to handle escape key press
+  const handleEscapeKey = (e) => {
+    if (e.key === 'Escape') {
+      closeImageModal();
+    }
+  };
+
+  // Function to close image modal and restore scrolling
+  const closeImageModal = () => {
+    setImageModal({
+      ...imageModal,
+      isOpen: false
+    });
+    
+    // Restore scrolling and layout
+    document.body.style.overflow = '';
+    document.body.style.position = '';
+    document.body.style.width = '';
+    document.body.style.paddingRight = '';
+    
+    // Remove event listener
+    document.removeEventListener('keydown', handleEscapeKey);
   };
   
   return (
@@ -473,6 +540,61 @@ function App() {
           </>
         )}
       </AnimatePresence>
+
+      {/* Image Modal - For displaying full award images */}
+      <AnimatePresence>
+        {imageModal.isOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 z-[100000] overflow-hidden touch-none"
+            onClick={closeImageModal}
+            onWheel={(e) => e.stopPropagation()} 
+            onTouchMove={(e) => e.stopPropagation()}
+          >
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              transition={{ 
+                type: "spring", 
+                damping: 20, 
+                stiffness: 100 
+              }}
+              className="relative max-w-4xl w-full max-h-[90vh] overflow-hidden rounded-lg touch-none"
+              onClick={e => e.stopPropagation()}
+              onWheel={(e) => e.stopPropagation()}
+              onTouchMove={(e) => e.stopPropagation()}
+            >
+              {/* Close button */}
+              <button 
+                onClick={closeImageModal}
+                className="absolute top-2 right-2 bg-black/70 hover:bg-black text-white rounded-full p-2 z-10"
+                aria-label="Close modal"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M18 6L6 18M6 6l12 12"></path>
+                </svg>
+              </button>
+              
+              {/* Image title - if available */}
+              {imageModal.title && (
+                <div className="absolute bottom-0 left-0 right-0 bg-black/70 text-white p-4 backdrop-blur-sm">
+                  <h3 className="text-lg font-bold">{imageModal.title}</h3>
+                </div>
+              )}
+              
+              {/* Image */}
+              <img 
+                src={imageModal.imageSrc} 
+                alt={imageModal.title || "Award Image"} 
+                className="w-full h-auto object-contain max-h-[90vh] bg-black"
+              />
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
       
       {/* Portfolio content */}
       <AnimatePresence>
@@ -575,10 +697,7 @@ function App() {
                   {['Home', 'About', 'Projects', 'Publications', 'Certificates', 'Awards', 'Contact'].map((item) => (
                     <motion.button
                       key={item}
-                      onClick={(e) => {
-                        e.preventDefault();
-                        scrollToSection(item.toLowerCase());
-                      }}
+                      onClick={() => scrollToSection(item.toLowerCase())}
                       className={`px-2 lg:px-3 py-1.5 rounded-lg text-sm lg:text-base hover:text-cyan-400 ${theme === 'dark' ? 'hover:bg-slate-800/60' : 'hover:bg-slate-100/60'} transition-colors font-medium whitespace-nowrap`}
                       whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
@@ -680,8 +799,7 @@ function App() {
                         {['Home', 'About', 'Projects', 'Publications', 'Certificates', 'Awards', 'Contact'].map((item) => (
                           <motion.button
                             key={item}
-                            onClick={(e) => {
-                              e.preventDefault();
+                            onClick={() => {
                               scrollToSection(item.toLowerCase());
                               setMobileMenuOpen(false);
                             }}
@@ -1027,22 +1145,46 @@ function App() {
                 </div>
                 <div className="flex flex-wrap gap-4 justify-center">
                   <motion.button 
-                    onClick={(e) => {
-                      e.preventDefault();
-                      scrollToSection('certificates');
+                    onClick={() => {
+                      // Direct access to element for reliability
+                      const certificatesSection = document.getElementById('certificates');
+                      if (certificatesSection) {
+                        // Manual scroll with offset
+                        const yPosition = certificatesSection.getBoundingClientRect().top + window.pageYOffset;
+                        window.scrollTo({
+                          top: yPosition - 80, // Offset for header
+                          behavior: 'smooth'
+                        });
+                      }
                     }}
-                    className="bg-gradient-to-r from-slate-600 to-slate-700 text-white font-bold py-3 px-8 rounded-lg shadow-lg hover:shadow-slate-500/50 transition-all"
+                    className={`${
+                      theme === 'dark'
+                        ? 'bg-gradient-to-r from-slate-600 to-slate-700 text-white'
+                        : 'bg-gradient-to-r from-slate-400 to-slate-500 text-white'
+                    } font-bold py-3 px-8 rounded-lg shadow-lg hover:shadow-slate-500/50 transition-all`}
                     whileHover={{ scale: 1.05, boxShadow: "0 0 15px rgba(100, 116, 139, 0.5)" }}
                     whileTap={{ scale: 0.95 }}
                   >
                     My Certificates
                   </motion.button>
                   <motion.button 
-                    onClick={(e) => {
-                      e.preventDefault();
-                      scrollToSection('projects');
+                    onClick={() => {
+                      // Direct access to element for reliability
+                      const projectsSection = document.getElementById('projects');
+                      if (projectsSection) {
+                        // Manual scroll with offset
+                        const yPosition = projectsSection.getBoundingClientRect().top + window.pageYOffset;
+                        window.scrollTo({
+                          top: yPosition - 80, // Offset for header
+                          behavior: 'smooth'
+                        });
+                      }
                     }}
-                    className="bg-gradient-to-r from-gray-600 to-gray-700 text-white font-bold py-3 px-8 rounded-lg shadow-lg hover:shadow-gray-500/50 transition-all"
+                    className={`${
+                      theme === 'dark'
+                        ? 'bg-gradient-to-r from-gray-600 to-gray-700 text-white'
+                        : 'bg-gradient-to-r from-gray-400 to-gray-500 text-white'
+                    } font-bold py-3 px-8 rounded-lg shadow-lg hover:shadow-gray-500/50 transition-all`}
                     whileHover={{ scale: 1.05, boxShadow: "0 0 15px rgba(107, 114, 128, 0.5)" }}
                     whileTap={{ scale: 0.95 }}
                   >
@@ -1056,10 +1198,7 @@ function App() {
                   transition={{ duration: 1.5, repeat: Infinity }}
                 >
                   <button 
-                    onClick={(e) => {
-                      e.preventDefault();
-                      scrollToSection('about');
-                    }} 
+                    onClick={() => scrollToSection('about')} 
                     className={`${theme === 'dark' ? 'text-white/50 hover:text-white' : 'text-slate-700 hover:text-slate-900'} cursor-pointer`}
                   >
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="animate-bounce"><path d="m6 9 6 6 6-6"></path></svg>
@@ -1217,10 +1356,7 @@ function App() {
                         Download CV
                       </motion.a>
                       <motion.button 
-                        onClick={(e) => {
-                          e.preventDefault();
-                          scrollToSection('contact');
-                        }}
+                        onClick={() => scrollToSection('contact')}
                         className={`${theme === 'dark' ? 'bg-slate-700 hover:bg-slate-600' : 'bg-slate-200 hover:bg-slate-300'} text-inherit font-bold py-2 px-6 rounded-lg transition-colors flex items-center gap-2`}
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
@@ -2166,7 +2302,10 @@ function App() {
                       viewport={{ once: true }}
                       transition={{ duration: 0.5 }}
                     >
-                      <div className="relative h-48">
+                      <div 
+                        className="relative h-48 cursor-pointer"
+                        onClick={() => openImageModal(codefestAwardImg, 'CODEFEST 2024 Award')}
+                      >
                         <img 
                           src={codefestAwardImg} 
                           alt="CODEFEST 2024 Award" 
@@ -2177,6 +2316,11 @@ function App() {
                             <div className="scan-line"></div>
                           </div>
                         )}
+                        <div className="absolute inset-0 bg-black bg-opacity-0 hover:bg-opacity-30 transition-all duration-300 flex items-center justify-center">
+                          <span className="text-white opacity-0 hover:opacity-100 transition-opacity duration-300 bg-black/50 px-3 py-1 rounded-lg">
+                            Click to view
+                          </span>
+                        </div>
                       </div>
                       <div className="p-6">
                         <div className="flex items-center mb-3">
@@ -2189,9 +2333,6 @@ function App() {
                         <p className={`${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'} mb-4 text-sm`}>
                           Excited to share that Team ENIGMA—comprising Sandil Perera, Hesara Perera, and myself—emerged as Finalists in the Algothon under the Tertiary Category at CODEFEST 2024, organized by SLIIT, Faculty of Computing. It was an incredible experience tackling complex algorithmic challenges, collaborating as a team, and pushing our problem-solving skills to the next level.
                         </p>
-                        <div className={`mt-4 inline-block px-3 py-1 rounded-full text-xs font-medium ${theme === 'dark' ? 'bg-slate-600 text-white' : 'bg-slate-200 text-slate-800'}`}>
-                          Certificate
-                        </div>
                       </div>
                     </motion.div>
                     
@@ -2204,7 +2345,10 @@ function App() {
                       viewport={{ once: true }}
                       transition={{ duration: 0.5, delay: 0.15 }}
                     >
-                      <div className="relative h-48">
+                      <div 
+                        className="relative h-48 cursor-pointer"
+                        onClick={() => openImageModal(deansListAwardImg, "Dean's List Award")}
+                      >
                         <img 
                           src={deansListAwardImg} 
                           alt="Dean's List Award" 
@@ -2215,6 +2359,11 @@ function App() {
                             <div className="scan-line"></div>
                           </div>
                         )}
+                        <div className="absolute inset-0 bg-black bg-opacity-0 hover:bg-opacity-30 transition-all duration-300 flex items-center justify-center">
+                          <span className="text-white opacity-0 hover:opacity-100 transition-opacity duration-300 bg-black/50 px-3 py-1 rounded-lg">
+                            Click to view
+                          </span>
+                        </div>
                       </div>
                       <div className="p-6">
                         <div className="flex items-center mb-3">
@@ -2227,9 +2376,6 @@ function App() {
                         <p className={`${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'} mb-4 text-sm`}>
                           I am pleased to announce that I have been named to the Dean's List for Semester 1, achieving a GPA of 3.7 in my Computer Science program at SLIIT. This recognition reflects my commitment to academic rigor and pursuit of excellence.
                         </p>
-                        <div className={`mt-4 inline-block px-3 py-1 rounded-full text-xs font-medium ${theme === 'dark' ? 'bg-slate-600 text-white' : 'bg-slate-200 text-slate-800'}`}>
-                          Certification
-                        </div>
                       </div>
                     </motion.div>
                     
@@ -2242,7 +2388,10 @@ function App() {
                       viewport={{ once: true }}
                       transition={{ duration: 0.5, delay: 0.3 }}
                     >
-                      <div className="relative h-48">
+                      <div 
+                        className="relative h-48 cursor-pointer"
+                        onClick={() => openImageModal(sliitXtremeAwardImg, "SliitXtreme 3.0 Award")}
+                      >
                         <img 
                           src={sliitXtremeAwardImg} 
                           alt="SliitXtreme 3.0 Award" 
@@ -2253,6 +2402,11 @@ function App() {
                             <div className="scan-line"></div>
                           </div>
                         )}
+                        <div className="absolute inset-0 bg-black bg-opacity-0 hover:bg-opacity-30 transition-all duration-300 flex items-center justify-center">
+                          <span className="text-white opacity-0 hover:opacity-100 transition-opacity duration-300 bg-black/50 px-3 py-1 rounded-lg">
+                            Click to view
+                          </span>
+                        </div>
                       </div>
                       <div className="p-6">
                         <div className="flex items-center mb-3">
@@ -2265,9 +2419,6 @@ function App() {
                         <p className={`${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'} mb-4 text-sm`}>
                           As part of Team ENIGMA, I contributed to securing the 5th position at SLIITXtreme 3.0. This collaborative effort highlighted our team's ability to work together and solve complex coding challenges.
                         </p>
-                        <div className={`mt-4 inline-block px-3 py-1 rounded-full text-xs font-medium ${theme === 'dark' ? 'bg-slate-600 text-white' : 'bg-slate-200 text-slate-800'}`}>
-                          Award Ceremony
-                        </div>
                       </div>
                     </motion.div>
                   </div>
