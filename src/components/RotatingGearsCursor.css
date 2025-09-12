@@ -27,7 +27,7 @@
   width: 30px;
   height: 30px;
   pointer-events: none;
-  z-index: 99999;
+  z-index: 999999; /* Increased z-index to ensure it's above all other elements */
   transform: translate(-50%, -50%);
   will-change: transform, opacity;
   transition: transform 0.08s ease;
@@ -103,4 +103,37 @@
   background: radial-gradient(circle, rgba(14, 165, 233, 0.6) 0%, rgba(14, 165, 233, 0) 60%);
   animation: cursorPulse 1s ease-in-out infinite;
   box-shadow: 0 0 15px 5px rgba(14, 165, 233, 0.5);
+}
+
+/* Ensure the cursor is visible above the modal */
+.gear-cursor-visible {
+  pointer-events: auto !important;
+  z-index: 9500 !important; /* Lower than gear-cursor but higher than other content */
+}
+
+/* When modal is open in robotic mode, ensure the cursor is visible */
+body.modal-open-robotic .gear-cursor {
+  z-index: 999999 !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  pointer-events: none !important;
+}
+
+/* Special handling for modal containers */
+.gear-cursor-container {
+  pointer-events: auto !important;
+}
+
+/* Ensure modal elements don't interfere with cursor */
+body.modal-open-robotic .modal-overlay {
+  pointer-events: auto;
+}
+
+/* Make sure the cursor is visible over interactive elements in the modal */
+body.modal-open-robotic button,
+body.modal-open-robotic a,
+body.modal-open-robotic [role="button"],
+body.modal-open-robotic .clickable {
+  position: relative;
+  z-index: auto !important; /* Let stacking context determine z-index */
 }

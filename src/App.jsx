@@ -147,6 +147,18 @@ function App() {
       }
     }
   }, [mobileMenuOpen])
+  
+  // Add a class to the body when image modal is open in robotic mode to keep cursor visible
+  useEffect(() => {
+    if (imageModal.isOpen && roboticMode) {
+      document.body.classList.add('modal-open-robotic');
+    } else {
+      document.body.classList.remove('modal-open-robotic');
+    }
+    return () => {
+      document.body.classList.remove('modal-open-robotic');
+    };
+  }, [imageModal.isOpen, roboticMode])
 
   // Animate skills when they come into view
   useEffect(() => {
@@ -608,7 +620,7 @@ function App() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 z-[100000] overflow-hidden touch-none"
+            className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 z-[9000] overflow-hidden touch-none modal-overlay"
             onClick={closeImageModal}
             onWheel={(e) => e.stopPropagation()} 
             onTouchMove={(e) => e.stopPropagation()}
@@ -622,7 +634,7 @@ function App() {
                 damping: 20, 
                 stiffness: 100 
               }}
-              className="relative max-w-4xl w-full max-h-[90vh] overflow-hidden rounded-lg touch-none"
+              className="relative max-w-4xl w-full max-h-[90vh] overflow-hidden rounded-lg touch-none pointer-events-auto gear-cursor-container"
               onClick={e => e.stopPropagation()}
               onWheel={(e) => e.stopPropagation()}
               onTouchMove={(e) => e.stopPropagation()}
@@ -649,7 +661,7 @@ function App() {
               <img 
                 src={imageModal.imageSrc} 
                 alt={imageModal.title || "Award Image"} 
-                className="w-full h-auto object-contain max-h-[90vh] bg-black"
+                className="w-full h-auto object-contain max-h-[90vh] bg-black gear-cursor-visible"
               />
             </motion.div>
           </motion.div>
