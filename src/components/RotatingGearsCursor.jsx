@@ -5,15 +5,53 @@ import useIsMobile from '../hooks/useIsMobile';
 
 const RotatingGearsCursor = () => {
   const { theme } = useContext(ThemeContext);
-  const isMobile = useIsMobile();
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const [isVisible, setIsVisible] = useState(false); // Start invisible and show after mount
   const [isClicking, setIsClicking] = useState(false);
   const [isHovering, setIsHovering] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
+  
+  // Check for mobile in multiple ways for reliability
+  const isMobile = useIsMobile();
+  const [isTouch, setIsTouch] = useState(false);
+  
+  // Additional touch detection
+  useEffect(() => {
+    // Check if device has touch capability
+    const hasTouchCapability = 'ontouchstart' in window || 
+      navigator.maxTouchPoints > 0 || 
+      navigator.msMaxTouchPoints > 0 ||
+      window.matchMedia('(pointer: coarse)').matches;
+      
+    setIsTouch(hasTouchCapability);
+      
+    // Additional safety: check window width
+    const isMobileWidth = window.innerWidth < 768;
+    
+    // If any mobile detection is true, make sure cursor is disabled
+    if (hasTouchCapability || isMobileWidth) {
+      document.body.classList.remove('gear-cursor-active');
+    }
+  }, []);
 
-  // Don't render on mobile devices
-  if (isMobile) return null;
+  // Don't render on mobile/touch devices to improve performance and avoid interference
+  if (isMobile || isTouch) {
+    // Remove gear-cursor-active class from body to ensure default cursor behavior on mobile
+    useEffect(() => {
+      document.body.classList.remove('gear-cursor-active');
+      // Force reset any cursor styling that might have been applied
+      document.body.style.cursor = '';
+      const allElements = document.querySelectorAll('*');
+      allElements.forEach(el => {
+        if (el.style && el.style.cursor === 'none') {
+          el.style.cursor = '';
+        }
+      });
+      return () => {};
+    }, []);
+    
+    return null;
+  }
 
   // Handle initial mount
   useEffect(() => {

@@ -87,6 +87,29 @@ const ThemeProvider = ({ children }) => {
   )
 }
 
+// Quick mobile check before rendering to prevent cursor issues
+const detectMobile = () => {
+  if (typeof window !== 'undefined') {
+    return (
+      ('ontouchstart' in window) ||
+      (navigator.maxTouchPoints > 0) || 
+      (navigator.msMaxTouchPoints > 0) ||
+      /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ||
+      window.innerWidth < 768 ||
+      window.matchMedia('(pointer: coarse)').matches
+    );
+  }
+  return false;
+};
+
+// Apply mobile class immediately if needed
+if (detectMobile()) {
+  document.body.classList.add('is-mobile-device');
+  document.documentElement.setAttribute('data-mobile', 'true');
+  // Ensure no cursor effects are applied
+  document.body.classList.remove('gear-cursor-active');
+}
+
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <ThemeProvider>

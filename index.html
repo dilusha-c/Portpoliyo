@@ -3,8 +3,20 @@
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/png" href="/logo.png" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes" />
+    <meta name="theme-color" content="#0f172a" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <link rel="dns-prefetch" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <title>Dilusha Chamika</title>
+    <style>
+      /* Immediate critical CSS to prevent FOUC and ensure visibility */
+      body, html { visibility: visible !important; display: block !important; }
+      @media (max-width: 767px) {
+        * { cursor: auto !important; }
+        body { overflow-x: hidden !important; width: 100% !important; }
+      }
+    </style>
   </head>
   <body>
     <div id="root"></div>

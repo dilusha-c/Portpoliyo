@@ -14,6 +14,8 @@ import LeftRobotDecoration from './components/LeftRobotDecoration'
 import RobotBackgroundDecoration from './components/RobotBackgroundDecoration'
 import HumanRobotDecoration from './components/HumanRobotDecoration'
 import FlyingDrone from './components/FlyingDrone'
+import useIsMobile from './hooks/useIsMobile'
+import SafeMobileDetect from './components/SafeMobileDetect'
 
 import './App.css'
 import './components/PublicationsScanner.css'
@@ -25,6 +27,8 @@ import './components/HardwareAnimations.css'
 import './components/HonorsAwards.css'
 import './components/Education.css'
 import './components/overflow-fix.css'
+import './components/mobile-fixes.css'
+import './components/mobile-critical-fix.css'
 import { ThemeContext } from './main.jsx'
 
 // Import project images
@@ -65,6 +69,7 @@ function App() {
     title: ''
   })
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const isMobile = useIsMobile()
   const controls = useAnimation()
   const { scrollYProgress } = useScroll({
     offset: ["start start", "end end"]
@@ -456,6 +461,42 @@ function App() {
       console.error('Error initializing EmailJS:', error);
     }
   }, []);
+  
+  // Add mobile class to body for mobile-specific styling with enhanced detection
+  useEffect(() => {
+    // Multiple checks for mobile detection
+    const hasTouchScreen = (
+      ('maxTouchPoints' in navigator && navigator.maxTouchPoints > 0) || 
+      ('msMaxTouchPoints' in navigator && navigator.msMaxTouchPoints > 0) ||
+      ('ontouchstart' in window)
+    );
+    
+    const userAgentMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    const isSmallScreen = window.innerWidth < 768;
+    const hasCoarsePointer = window.matchMedia('(pointer: coarse)').matches;
+    
+    // Consider device mobile if ANY of these conditions are true
+    const isActuallyMobile = hasTouchScreen || userAgentMobile || isSmallScreen || hasCoarsePointer || isMobile;
+    
+    if (isActuallyMobile) {
+      document.body.classList.add('is-mobile-device');
+      
+      // Force remove any cursor styling that might be applied
+      document.body.classList.remove('gear-cursor-active');
+      document.body.style.cursor = '';
+      
+      // Also add a data attribute for CSS targeting
+      document.documentElement.setAttribute('data-mobile', 'true');
+    } else {
+      document.body.classList.remove('is-mobile-device');
+      document.documentElement.removeAttribute('data-mobile');
+    }
+    
+    return () => {
+      document.body.classList.remove('is-mobile-device');
+      document.documentElement.removeAttribute('data-mobile');
+    };
+  }, [isMobile]);
 
   // Handle contact form input changes
   const handleContactInputChange = (e) => {
@@ -694,8 +735,11 @@ function App() {
   
   return (
     <>
-      {/* Custom rotating gears cursor - automatically disabled on mobile devices */}
-      {roboticMode && <RotatingGearsCursor />}
+      {/* SafeMobileDetect ensures mobile display works correctly */}
+      <SafeMobileDetect />
+      
+      {/* Custom rotating gears cursor - only enabled on desktop in robotic mode */}
+      {roboticMode && !isMobile && <RotatingGearsCursor />}
       
       {/* Boot screen for first-time visitors */}
       {showBootScreen && <BootScreen onComplete={handleBootComplete} />}
