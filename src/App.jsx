@@ -152,11 +152,35 @@ function App() {
   useEffect(() => {
     if (imageModal.isOpen && roboticMode) {
       document.body.classList.add('modal-open-robotic');
+      
+      // Add CSS for the close button glow in robotic mode
+      const style = document.createElement('style');
+      style.id = 'modal-close-button-style';
+      style.innerHTML = `
+        .modal-content .close-button {
+          box-shadow: 0 0 10px 2px rgba(239, 68, 68, 0.7);
+          animation: pulse-red 2s infinite;
+        }
+        @keyframes pulse-red {
+          0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); }
+          70% { box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); }
+          100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+        }
+      `;
+      document.head.appendChild(style);
     } else {
       document.body.classList.remove('modal-open-robotic');
+      const style = document.getElementById('modal-close-button-style');
+      if (style) {
+        document.head.removeChild(style);
+      }
     }
     return () => {
       document.body.classList.remove('modal-open-robotic');
+      const style = document.getElementById('modal-close-button-style');
+      if (style) {
+        document.head.removeChild(style);
+      }
     };
   }, [imageModal.isOpen, roboticMode])
 
@@ -322,13 +346,29 @@ function App() {
     document.body.style.width = '100%';
     document.body.style.paddingRight = '15px'; // Compensate for scrollbar disappearance
     
-    // Add event listener for escape key to close modal
+    // Add event listeners for escape key and clicks to close modal
     document.addEventListener('keydown', handleEscapeKey);
+    
+    // Small delay to avoid immediate trigger of the click event
+    setTimeout(() => {
+      document.addEventListener('mousedown', handleModalOutsideClick);
+      document.addEventListener('touchstart', handleModalOutsideClick);
+    }, 10);
   };
 
   // Function to handle escape key press
   const handleEscapeKey = (e) => {
     if (e.key === 'Escape') {
+      closeImageModal();
+    }
+  };
+  
+  // Function to handle clicks outside the modal content
+  const handleModalOutsideClick = (e) => {
+    // Get the modal content element
+    const modalContent = document.querySelector('.modal-content');
+    // Check if the click was outside the modal content
+    if (modalContent && !modalContent.contains(e.target)) {
       closeImageModal();
     }
   };
@@ -353,8 +393,10 @@ function App() {
     // Important: restore the scroll position
     window.scrollTo(0, scrollY);
     
-    // Remove event listener
+    // Remove all event listeners
     document.removeEventListener('keydown', handleEscapeKey);
+    document.removeEventListener('mousedown', handleModalOutsideClick);
+    document.removeEventListener('touchstart', handleModalOutsideClick);
   };
   
   return (
@@ -621,7 +663,6 @@ function App() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 z-[9000] overflow-hidden touch-none modal-overlay"
-            onClick={closeImageModal}
             onWheel={(e) => e.stopPropagation()} 
             onTouchMove={(e) => e.stopPropagation()}
           >
@@ -634,20 +675,27 @@ function App() {
                 damping: 20, 
                 stiffness: 100 
               }}
-              className="relative max-w-4xl w-full max-h-[90vh] overflow-hidden rounded-lg touch-none pointer-events-auto gear-cursor-container"
+              className="modal-content relative max-w-4xl w-full max-h-[90vh] overflow-hidden rounded-lg touch-none pointer-events-auto gear-cursor-container"
               onClick={e => e.stopPropagation()}
               onWheel={(e) => e.stopPropagation()}
               onTouchMove={(e) => e.stopPropagation()}
             >
-              {/* Close button */}
+              {/* Close button - positioned in the top right corner */}
               <button 
                 onClick={closeImageModal}
-                className="absolute top-2 right-2 bg-black/70 hover:bg-black text-white rounded-full p-2 z-10"
+                className={`close-button absolute top-0 right-0 ${
+                  roboticMode 
+                    ? 'bg-red-900/80 hover:bg-red-700 text-red-200' 
+                    : 'bg-black/70 hover:bg-red-600 text-white'
+                } rounded-tr-lg rounded-bl-lg p-3 z-20 transition-all duration-300 ease-in-out`}
                 aria-label="Close modal"
               >
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M18 6L6 18M6 6l12 12"></path>
                 </svg>
+                {roboticMode && (
+                  <span className="absolute -inset-1 border border-red-500 opacity-50 rounded-tr-lg rounded-bl-lg"></span>
+                )}
               </button>
               
               {/* Image title - if available */}
@@ -1220,25 +1268,57 @@ function App() {
                     onClick={() => smoothScrollToSection('certificates')}
                     className={`${
                       theme === 'dark'
-                        ? 'bg-gradient-to-r from-slate-600 to-slate-700 text-white'
-                        : 'bg-gradient-to-r from-slate-400 to-slate-500 text-white'
-                    } font-bold py-3 px-8 rounded-lg shadow-lg hover:shadow-slate-500/50 transition-all`}
-                    whileHover={{ scale: 1.05, boxShadow: "0 0 15px rgba(100, 116, 139, 0.5)" }}
+                        ? roboticMode
+                          ? 'bg-gradient-to-r from-cyan-800 to-blue-900 text-cyan-200 border border-cyan-700'
+                          : 'bg-gradient-to-r from-slate-600 to-slate-700 text-white'
+                        : roboticMode
+                          ? 'bg-gradient-to-r from-cyan-500 to-blue-600 text-white border border-blue-400'
+                          : 'bg-gradient-to-r from-slate-400 to-slate-500 text-white'
+                    } font-bold py-3 px-8 rounded-lg shadow-lg hover:shadow-blue-500/50 transition-all`}
+                    whileHover={{ 
+                      scale: 1.05, 
+                      boxShadow: roboticMode 
+                        ? "0 0 15px rgba(6, 182, 212, 0.5)" 
+                        : "0 0 15px rgba(100, 116, 139, 0.5)" 
+                    }}
                     whileTap={{ scale: 0.95 }}
                   >
-                    My Certificates
+                    {roboticMode ? (
+                      <span className="flex items-center gap-2">
+                        <span className="inline-block w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span>
+                        My Certificates
+                      </span>
+                    ) : (
+                      "My Certificates"
+                    )}
                   </motion.button>
                   <motion.button 
                     onClick={() => smoothScrollToSection('projects')}
                     className={`${
                       theme === 'dark'
-                        ? 'bg-gradient-to-r from-gray-600 to-gray-700 text-white'
-                        : 'bg-gradient-to-r from-gray-400 to-gray-500 text-white'
-                    } font-bold py-3 px-8 rounded-lg shadow-lg hover:shadow-gray-500/50 transition-all`}
-                    whileHover={{ scale: 1.05, boxShadow: "0 0 15px rgba(107, 114, 128, 0.5)" }}
+                        ? roboticMode
+                          ? 'bg-gradient-to-r from-blue-800 to-indigo-900 text-blue-200 border border-blue-700'
+                          : 'bg-gradient-to-r from-gray-600 to-gray-700 text-white'
+                        : roboticMode
+                          ? 'bg-gradient-to-r from-blue-500 to-indigo-600 text-white border border-indigo-400'
+                          : 'bg-gradient-to-r from-gray-400 to-gray-500 text-white'
+                    } font-bold py-3 px-8 rounded-lg shadow-lg hover:shadow-blue-500/50 transition-all`}
+                    whileHover={{ 
+                      scale: 1.05, 
+                      boxShadow: roboticMode 
+                        ? "0 0 15px rgba(37, 99, 235, 0.5)" 
+                        : "0 0 15px rgba(107, 114, 128, 0.5)" 
+                    }}
                     whileTap={{ scale: 0.95 }}
                   >
-                    My Projects
+                    {roboticMode ? (
+                      <span className="flex items-center gap-2">
+                        <span className="inline-block w-2 h-2 rounded-full bg-blue-400 animate-pulse"></span>
+                        My Projects
+                      </span>
+                    ) : (
+                      "My Projects"
+                    )}
                   </motion.button>
                 </div>
                 
