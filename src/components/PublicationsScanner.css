@@ -1,0 +1,209 @@
+.pulse-animation {
+  position: relative;
+  overflow: visible; /* Changed from hidden to visible to avoid scroll issues */
+}
+
+/* Radial pulse effect */
+.pulse-animation .pulse-effect {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: 50%;
+  transform: scale(0);
+  background: radial-gradient(
+    circle,
+    rgba(33, 150, 243, 0.15) 0%,
+    rgba(33, 150, 243, 0) 70%
+  );
+  animation: pulse 3s infinite;
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* Highlight line effect */
+.pulse-animation .highlight-line {
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 50%;
+  height: 2px;
+  background: linear-gradient(
+    to right,
+    rgba(33, 150, 243, 0),
+    rgba(33, 150, 243, 0.7),
+    rgba(33, 150, 243, 0)
+  );
+  animation: highlight-sweep 3s infinite;
+  z-index: 2;
+  pointer-events: none;
+}
+
+/* Citation markers */
+.pulse-animation .citation-markers {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: 
+    radial-gradient(circle, rgba(33, 150, 243, 0.3) 1px, transparent 1px),
+    radial-gradient(circle, rgba(66, 165, 245, 0.15) 1px, transparent 1px);
+  background-size: 30px 30px, 40px 40px;
+  background-position: 0 0, 15px 15px;
+  opacity: 0.05;
+  animation: citation-fade 4s ease-in-out infinite;
+  z-index: 1;
+  pointer-events: none;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(0);
+    opacity: 0.8;
+  }
+  100% {
+    transform: scale(2);
+    opacity: 0;
+  }
+}
+
+@keyframes highlight-sweep {
+  0% {
+    left: -100%;
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    left: 100%;
+    opacity: 0;
+  }
+}
+
+@keyframes citation-fade {
+  0%, 100% { opacity: 0.05; }
+  50% { opacity: 0.1; }
+}
+
+.academic-glow {
+  box-shadow: 0 0 10px rgba(33, 150, 243, 0.4), 
+              0 0 20px rgba(33, 150, 243, 0.2),
+              0 0 30px rgba(33, 150, 243, 0.1);
+}
+
+/* Citation corner markings */
+.pulse-animation .citation-top-left {
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  width: 15px;
+  height: 15px;
+  border-top: 2px solid rgba(33, 150, 243, 0.7);
+  border-left: 2px solid rgba(33, 150, 243, 0.7);
+  z-index: 5;
+}
+
+.pulse-animation .citation-top-right {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  width: 15px;
+  height: 15px;
+  border-top: 2px solid rgba(33, 150, 243, 0.7);
+  border-right: 2px solid rgba(33, 150, 243, 0.7);
+  z-index: 5;
+}
+
+.pulse-animation .citation-bottom-left {
+  position: absolute;
+  bottom: 5px;
+  left: 5px;
+  width: 15px;
+  height: 15px;
+  border-bottom: 2px solid rgba(33, 150, 243, 0.7);
+  border-left: 2px solid rgba(33, 150, 243, 0.7);
+  z-index: 5;
+}
+
+.pulse-animation .citation-bottom-right {
+  position: absolute;
+  bottom: 5px;
+  right: 5px;
+  width: 15px;
+  height: 15px;
+  border-bottom: 2px solid rgba(33, 150, 243, 0.7);
+  border-right: 2px solid rgba(33, 150, 243, 0.7);
+  z-index: 5;
+}
+
+/* Citation indicator text */
+.citation-indicator {
+  position: absolute;
+  bottom: 2px;
+  left: 2px;
+  font-size: 0.65rem;
+  color: rgba(33, 150, 243, 0.9);
+  font-family: monospace;
+  display: flex;
+  align-items: center;
+  opacity: 0.8;
+}
+
+.citation-indicator .dot {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background-color: rgba(33, 150, 243, 0.9);
+  margin-right: 4px;
+  animation: blink 1.5s infinite;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 1; }
+}
+
+/* Fix to ensure animations don't affect page scrolling */
+.pulse-animation .citation-top-left,
+.pulse-animation .citation-top-right,
+.pulse-animation .citation-bottom-left,
+.pulse-animation .citation-bottom-right,
+.pulse-animation .pulse-effect,
+.pulse-animation .highlight-line,
+.pulse-animation .citation-markers,
+.pulse-animation .citation-indicator {
+  pointer-events: none; /* Ensures these elements don't capture mouse events */
+  z-index: 1; /* Keep them above the content but below interactive elements */
+}
+
+/* Special cursor states for interactive elements when gear cursor is active */
+.gear-cursor-active a,
+.gear-cursor-active button,
+.gear-cursor-active [role="button"],
+.gear-cursor-active input,
+.gear-cursor-active select,
+.gear-cursor-active textarea {
+  cursor: pointer !important;
+}
+
+/* Blue highlights for the citation markers */
+.pulse-animation .highlight-line::after {
+  content: '';
+  position: absolute;
+  width: 20px;
+  height: 2px;
+  background: rgba(33, 150, 243, 0.8);
+  box-shadow: 0 0 8px 2px rgba(33, 150, 243, 0.5);
+  animation: highlight-blink 4s infinite alternate;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+@keyframes highlight-blink {
+  0%, 20%, 40%, 100% { opacity: 0.2; }
+  30%, 80% { opacity: 0.8; }
+}

@@ -1,0 +1,103 @@
+/* Rotating Gears Cursor Styles */
+@keyframes gearRotation {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(-360deg); }
+}
+
+@keyframes cursorPulse {
+  0% { opacity: 0.8; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.1); }
+  100% { opacity: 0.8; transform: scale(1); }
+}
+
+@keyframes borderPulse {
+  0% { box-shadow: 0 0 0 0 rgba(6, 182, 212, 0.7); }
+  70% { box-shadow: 0 0 0 4px rgba(6, 182, 212, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(6, 182, 212, 0); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.8); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+/* Main cursor container */
+.gear-cursor {
+  position: fixed;
+  width: 30px;
+  height: 30px;
+  pointer-events: none;
+  z-index: 99999;
+  transform: translate(-50%, -50%);
+  will-change: transform, opacity;
+  transition: transform 0.08s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Main gear element */
+.gear-cursor .main-gear {
+  width: 30px;
+  height: 30px;
+  /* Removed rotating animation for better performance */
+  filter: drop-shadow(0px 0px 5px rgba(6, 182, 212, 0.9));
+  opacity: 1;
+  stroke: rgba(6, 182, 212, 0.9);
+  stroke-width: 1.5;
+}
+
+/* Hide default cursor when custom cursor is active */
+.gear-cursor-active {
+  cursor: none !important;
+}
+
+/* Ensuring cursor is always visible */
+.gear-cursor svg {
+  filter: drop-shadow(0px 0px 2px rgba(33, 150, 243, 0.7));
+}
+
+/* Hover state */
+.gear-cursor.hovering .main-gear {
+  /* Removed animation properties for better performance */
+  stroke: rgba(59, 130, 246, 1); /* Blue color when hovering */
+  fill: rgba(59, 130, 246, 0.2);
+  filter: drop-shadow(0px 0px 8px rgba(59, 130, 246, 0.9));
+  transform: scale(1.2);
+}
+
+/* Click state */
+.gear-cursor.clicking {
+  transform: translate(-50%, -50%) scale(0.8);
+}
+
+.gear-cursor.clicking .main-gear {
+  /* Removed animation properties for better performance */
+  stroke-width: 2;
+  stroke: rgba(14, 165, 233, 1); /* Brighter blue when clicking */
+  fill: rgba(14, 165, 233, 0.3);
+}
+
+/* Gear glow effect */
+.gear-glow {
+  position: absolute;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(6, 182, 212, 0.3) 0%, rgba(6, 182, 212, 0) 70%);
+  animation: cursorPulse 2s ease-in-out infinite;
+  z-index: -1;
+}
+
+.gear-cursor.hovering .gear-glow {
+  width: 40px;
+  height: 40px;
+  background: radial-gradient(circle, rgba(59, 130, 246, 0.4) 0%, rgba(59, 130, 246, 0) 70%);
+}
+
+.gear-cursor.clicking .gear-glow {
+  width: 28px;
+  height: 28px;
+  background: radial-gradient(circle, rgba(14, 165, 233, 0.5) 0%, rgba(14, 165, 233, 0) 60%);
+  animation: cursorPulse 1s ease-in-out infinite;
+}

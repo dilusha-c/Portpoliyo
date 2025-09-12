@@ -1,0 +1,454 @@
+/* Futuristic Text Animation Styles */
+
+@keyframes glitchEffect {
+  0% {
+    text-shadow: 0.05em 0 0 rgba(6, 182, 212, 0.75),
+                -0.05em -0.025em 0 rgba(14, 165, 233, 0.75),
+                -0.025em 0.05em 0 rgba(59, 130, 246, 0.75);
+  }
+  14% {
+    text-shadow: 0.05em 0 0 rgba(6, 182, 212, 0.75),
+                -0.05em -0.025em 0 rgba(14, 165, 233, 0.75),
+                -0.025em 0.05em 0 rgba(59, 130, 246, 0.75);
+  }
+  15% {
+    text-shadow: -0.05em -0.025em 0 rgba(6, 182, 212, 0.75),
+                0.025em 0.025em 0 rgba(14, 165, 233, 0.75),
+                -0.05em -0.05em 0 rgba(59, 130, 246, 0.75);
+  }
+  49% {
+    text-shadow: -0.05em -0.025em 0 rgba(6, 182, 212, 0.75),
+                0.025em 0.025em 0 rgba(14, 165, 233, 0.75),
+                -0.05em -0.05em 0 rgba(59, 130, 246, 0.75);
+  }
+  50% {
+    text-shadow: 0.025em 0.05em 0 rgba(6, 182, 212, 0.75),
+                0.05em 0 0 rgba(14, 165, 233, 0.75),
+                0 -0.05em 0 rgba(59, 130, 246, 0.75);
+  }
+  99% {
+    text-shadow: 0.025em 0.05em 0 rgba(6, 182, 212, 0.75),
+                0.05em 0 0 rgba(14, 165, 233, 0.75),
+                0 -0.05em 0 rgba(59, 130, 246, 0.75);
+  }
+  100% {
+    text-shadow: -0.025em 0 0 rgba(6, 182, 212, 0.75),
+                -0.025em -0.025em 0 rgba(14, 165, 233, 0.75),
+                -0.025em -0.05em 0 rgba(59, 130, 246, 0.75);
+  }
+}
+
+@keyframes scanLine {
+  0% {
+    transform: translateY(-100%);
+  }
+  50%, 100% {
+    transform: translateY(100%);
+  }
+}
+
+@keyframes dataFlow {
+  0% {
+    background-position: 0% 0%;
+  }
+  100% {
+    background-position: 200% 0%;
+  }
+}
+
+.hero-text-word {
+  position: relative;
+  display: inline-block;
+  transition: all 0.3s ease;
+  overflow: hidden;
+  letter-spacing: 0.5px;
+}
+
+.hero-text-word:hover {
+  animation: glitchEffect 1s linear infinite;
+}
+
+@keyframes pulseText {
+  0% { text-shadow: 0 0 5px rgba(6, 182, 212, 0.5); }
+  50% { text-shadow: 0 0 15px rgba(6, 182, 212, 0.8); }
+  100% { text-shadow: 0 0 5px rgba(6, 182, 212, 0.5); }
+}
+
+@keyframes glitchEffect {
+  0% {
+    text-shadow: 0.05em 0 0 rgba(255, 0, 0, 0.75),
+                -0.05em -0.025em 0 rgba(0, 255, 0, 0.75),
+                -0.025em 0.05em 0 rgba(0, 0, 255, 0.75);
+  }
+  14% {
+    text-shadow: 0.05em 0 0 rgba(255, 0, 0, 0.75),
+                -0.05em -0.025em 0 rgba(0, 255, 0, 0.75),
+                -0.025em 0.05em 0 rgba(0, 0, 255, 0.75);
+  }
+  15% {
+    text-shadow: -0.05em -0.025em 0 rgba(255, 0, 0, 0.75),
+                0.025em 0.025em 0 rgba(0, 255, 0, 0.75),
+                -0.05em -0.05em 0 rgba(0, 0, 255, 0.75);
+  }
+  49% {
+    text-shadow: -0.05em -0.025em 0 rgba(255, 0, 0, 0.75),
+                0.025em 0.025em 0 rgba(0, 255, 0, 0.75),
+                -0.05em -0.05em 0 rgba(0, 0, 255, 0.75);
+  }
+  50% {
+    text-shadow: 0.025em 0.05em 0 rgba(255, 0, 0, 0.75),
+                0.05em 0 0 rgba(0, 255, 0, 0.75),
+                0 -0.05em 0 rgba(0, 0, 255, 0.75);
+  }
+  99% {
+    text-shadow: 0.025em 0.05em 0 rgba(255, 0, 0, 0.75),
+                0.05em 0 0 rgba(0, 255, 0, 0.75),
+                0 -0.05em 0 rgba(0, 0, 255, 0.75);
+  }
+  100% {
+    text-shadow: -0.025em 0 0 rgba(255, 0, 0, 0.75),
+                -0.025em -0.025em 0 rgba(0, 255, 0, 0.75),
+                -0.025em -0.05em 0 rgba(0, 0, 255, 0.75);
+  }
+}
+
+@keyframes dataScan {
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 100% 50%;
+  }
+}
+
+/* Group specific styling */
+
+/* Intro group (Hello, I'm) styling */
+.intro-group {
+  position: relative;
+}
+
+.intro-group::before {
+  content: '';
+  position: absolute;
+  bottom: -5px;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, #0ea5e9, transparent);
+  transform: scaleX(0);
+  transform-origin: center;
+  transition: transform 0.5s ease;
+  z-index: 1;
+  border-radius: 1px;
+}
+
+/* Add additional glowing effect around the group */
+.intro-group::after {
+  content: '';
+  position: absolute;
+  top: -10px;
+  left: -20px;
+  right: -20px;
+  bottom: -10px;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(14, 165, 233, 0.2) 0%,
+    rgba(14, 165, 233, 0) 70%
+  );
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  pointer-events: none;
+  z-index: -1;
+  border-radius: 15px;
+}
+
+.intro-group:hover::after {
+  opacity: 1;
+}
+
+.intro-group:hover::before {
+  transform: scaleX(1);
+}
+
+.intro-group:hover .intro-word {
+  color: #0ea5e9 !important;
+  text-shadow: 0 0 12px rgba(14, 165, 233, 0.8), 0 0 25px rgba(14, 165, 233, 0.4) !important;
+  transform: scale(1.1);
+  letter-spacing: 1px;
+}
+
+/* Name group (Dilusha Chamika) styling */
+.name-group {
+  position: relative;
+}
+
+.name-group::before {
+  content: '';
+  position: absolute;
+  bottom: -5px;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, #06b6d4, #3b82f6, transparent);
+  transform: scaleX(0);
+  transform-origin: center;
+  transition: transform 0.5s ease;
+  z-index: 1;
+  border-radius: 1px;
+}
+
+/* Add additional glowing effect around the group */
+.name-group::after {
+  content: '';
+  position: absolute;
+  top: -10px;
+  left: -20px;
+  right: -20px;
+  bottom: -10px;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(6, 182, 212, 0.2) 0%,
+    rgba(59, 130, 246, 0) 70%
+  );
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  pointer-events: none;
+  z-index: -1;
+  border-radius: 15px;
+}
+
+.name-group:hover::after {
+  opacity: 1;
+}
+
+.name-group:hover::before {
+  transform: scaleX(1);
+}
+
+.name-group:hover .hero-text-word {
+  color: #06b6d4 !important;
+  text-shadow: 0 0 18px rgba(6, 182, 212, 0.8), 0 0 30px rgba(6, 182, 212, 0.4) !important;
+  animation: glitchEffect 2s linear infinite !important;
+  letter-spacing: 3px !important;
+  transform: scale(1.15);
+}
+
+.name-group:hover .scan-line::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -10%;
+  width: 120%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  animation: scanAcross 1s linear;
+}
+
+/* Individual styling */
+.intro-word {
+  position: relative;
+  overflow: visible;
+  transition: all 0.3s ease;
+}
+
+.hero-text-word::before {
+  content: '';
+  position: absolute;
+  bottom: -3px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #06b6d4, transparent);
+  transform: scaleX(0);
+  transform-origin: center;
+  transition: transform 0.3s ease;
+}
+
+/* All words hover effect */
+.hero-text-word,
+.intro-word {
+  position: relative;
+  cursor: pointer;
+}
+
+/* Enhanced hover effects */
+.hero-text-word:hover {
+  transform: translateY(-2px);
+  animation: none;
+  text-shadow: 0 0 15px currentColor;
+}
+
+.hero-text-word:hover::before {
+  transform: scaleX(1);
+  background: linear-gradient(90deg, transparent, currentColor, transparent);
+  height: 3px;
+}
+
+.intro-word:hover {
+  transform: translateY(-2px);
+  animation: none;
+  text-shadow: 0 0 15px currentColor;
+}
+
+.intro-word:hover::after {
+  transform: scaleX(1);
+}
+
+/* Data scan effect that appears briefly on hover */
+.hero-text-word::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, 
+    transparent, 
+    rgba(6, 182, 212, 0.2), 
+    transparent
+  );
+  background-size: 200% 100%;
+  z-index: -1;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.hero-text-word:hover::after {
+  opacity: 1;
+  animation: dataScan 1s linear infinite;
+}
+
+.hero-text-word::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(to right, rgba(6, 182, 212, 0), rgba(6, 182, 212, 0.8), rgba(6, 182, 212, 0));
+  transform: translateY(-5px);
+  opacity: 0;
+  transition: all 0.3s ease;
+}
+
+.hero-text-word:hover::before {
+  opacity: 1;
+  animation: scanLine 2s linear infinite;
+}
+
+.hero-text-word::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(to right, rgba(59, 130, 246, 0), rgba(59, 130, 246, 0.8), rgba(59, 130, 246, 0));
+  transform: translateY(5px);
+  opacity: 0;
+  transition: all 0.3s ease;
+}
+
+.hero-text-word:hover::after {
+  opacity: 1;
+  animation: scanLine 2s linear infinite reverse;
+}
+
+/* Special styles for name words */
+.name-text-word {
+  position: relative;
+  background-size: 200% 100%;
+  animation: dataFlow 4s linear infinite;
+  overflow: hidden;
+}
+
+.name-text-word:hover {
+  background-size: 400% 100%;
+  animation: dataFlow 2s linear infinite;
+}
+
+.name-text-word::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(
+    to right,
+    transparent,
+    rgba(6, 182, 212, 0.5),
+    transparent
+  );
+  transform: skewX(-25deg);
+  transition: all 0.3s ease;
+}
+
+.name-text-word:hover::before {
+  left: 150%;
+  transition: all 0.8s ease;
+}
+
+/* Circuit pattern behind text on hover */
+.circuit-hover {
+  position: relative;
+}
+
+.circuit-hover::before {
+  content: '';
+  position: absolute;
+  top: -5px;
+  left: -5px;
+  right: -5px;
+  bottom: -5px;
+  background-image: 
+    radial-gradient(circle at 25% 25%, rgba(6, 182, 212, 0.2) 2px, transparent 3px),
+    linear-gradient(to right, rgba(6, 182, 212, 0.1) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(6, 182, 212, 0.1) 1px, transparent 1px);
+  background-size: 20px 20px, 10px 10px, 10px 10px;
+  border-radius: 5px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: -1;
+}
+
+.circuit-hover:hover::before {
+  opacity: 1;
+}
+
+/* Data scan effect */
+@keyframes dataScan {
+  0% {
+    transform: translateY(-100%);
+    opacity: 0.7;
+  }
+  50% {
+    opacity: 0.3;
+  }
+  100% {
+    transform: translateY(100%);
+    opacity: 0.7;
+  }
+}
+
+.name-text-word::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 10px;
+  background: linear-gradient(to bottom, 
+    rgba(6, 182, 212, 0.5), 
+    rgba(6, 182, 212, 0.1)
+  );
+  transform: translateY(-100%);
+  opacity: 0;
+  z-index: -1;
+}
+
+.name-text-word:hover::after {
+  opacity: 1;
+  animation: dataScan 1.5s ease infinite;
+}

@@ -1,0 +1,177 @@
+import { useEffect, useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Player } from '@lottiefiles/react-lottie-player';
+import HumanoidRobot from './HumanoidRobot';
+
+const BootScreen = ({ onComplete }) => {
+  const [isLoading, setIsLoading] = useState(true);
+  
+  // Boot sequence animation timing
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+      if (onComplete) onComplete();
+      
+      // No longer saving to localStorage since we want to show on every refresh
+    }, 4000); // 4 seconds boot sequence
+    
+    return () => clearTimeout(timer);
+  }, [onComplete]);
+  
+  return (
+    <AnimatePresence>
+      {isLoading && (
+        <motion.div 
+          className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-cyberpunk-background"
+          initial={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 1 }}
+          style={{ paddingBottom: "5vh" }} /* Add some padding to shift everything up a bit */
+        >
+          {/* Grid background */}
+          <div className="absolute inset-0 opacity-5 bg-[linear-gradient(to_right,#06b6d4_1px,transparent_1px),linear-gradient(to_bottom,#06b6d4_1px,transparent_1px)]" style={{ backgroundSize: '40px 40px' }}></div>
+          
+          {/* Enhanced glow effect */}
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-[radial-gradient(circle,rgba(6,182,212,0.2)_0%,transparent_70%)]"></div>
+          
+          {/* Digital particles */}
+          <div className="absolute inset-0 overflow-hidden">
+            {[...Array(15)].map((_, i) => (
+              <motion.div
+                key={i}
+                className="absolute w-1 h-1 bg-cyan-400 rounded-full"
+                initial={{ 
+                  x: Math.random() * window.innerWidth, 
+                  y: Math.random() * window.innerHeight,
+                  opacity: 0 
+                }}
+                animate={{ 
+                  x: Math.random() * window.innerWidth, 
+                  y: Math.random() * window.innerHeight,
+                  opacity: [0, 0.8, 0] 
+                }}
+                transition={{ 
+                  repeat: Infinity, 
+                  duration: 3 + Math.random() * 3,
+                  delay: Math.random() * 2 
+                }}
+              />
+            ))}
+          </div>
+          
+          {/* Circuit board pattern */}
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] opacity-20 pointer-events-none">
+            <svg width="100%" height="100%" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+              <pattern id="circuitPattern" patternUnits="userSpaceOnUse" width="20" height="20" patternTransform="rotate(45)">
+                <rect width="100%" height="100%" fill="none" />
+                <path d="M0,10 h20 M10,0 v20" stroke="rgba(6,182,212,0.5)" strokeWidth="0.5" />
+                <circle cx="10" cy="10" r="2" fill="rgba(6,182,212,0.7)" />
+                <circle cx="0" cy="0" r="1" fill="rgba(6,182,212,0.5)" />
+                <circle cx="0" cy="20" r="1" fill="rgba(6,182,212,0.5)" />
+                <circle cx="20" cy="0" r="1" fill="rgba(6,182,212,0.5)" />
+                <circle cx="20" cy="20" r="1" fill="rgba(6,182,212,0.5)" />
+              </pattern>
+              <rect width="100%" height="100%" fill="url(#circuitPattern)" />
+            </svg>
+          </div>
+          
+          {/* Robot animation section */}
+          <div className="relative mb-8">
+            {/* Humanoid Robot Animation */}
+            <motion.div
+              className="relative z-10" /* Removed mb-16 to center properly */
+              animate={{ y: [0, -5, 0] }}
+              transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+            >
+              <HumanoidRobot />
+              
+              {/* Secondary glow elements */}
+              <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 flex justify-center space-x-12">
+                <motion.div
+                  className="w-6 h-6 bg-cyan-400/30 rounded-full blur-lg"
+                  animate={{ opacity: [0.2, 0.5, 0.2] }}
+                  transition={{ duration: 2, repeat: Infinity, delay: 0.5 }}
+                />
+                <motion.div
+                  className="w-6 h-6 bg-blue-400/30 rounded-full blur-lg"
+                  animate={{ opacity: [0.2, 0.5, 0.2] }}
+                  transition={{ duration: 2, repeat: Infinity, delay: 0 }}
+                />
+              </div>
+            </motion.div>
+          </div>
+          
+          {/* Loading text with typing animation - moved higher */}
+          <div className="text-center relative mt-1"> {/* Removed margin completely */}
+            <motion.h2 
+              className="text-2xl md:text-3xl font-orbitron mb-6 text-cyan-400 typewriter" /* Increased margin-bottom from mb-4 to mb-6 */
+              initial={{ width: 0 }}
+              animate={{ width: "100%" }}
+              transition={{ duration: 2, delay: 0.5 }}
+            >
+              Booting Portfolio of Dilusha Chamika
+            </motion.h2>
+            
+            {/* Loading indicator with progress bar */}
+            <div className="text-xl text-cyan-300 font-mono flex flex-col items-center justify-center gap-2">
+              <motion.div
+                initial={{ opacity: 0.3 }}
+                animate={{ opacity: [0.3, 1, 0.3] }}
+                transition={{ duration: 1.5, repeat: Infinity }}
+              >
+                Loading<span className="blinking-dots"></span>
+              </motion.div>
+              
+              {/* Animated progress bar */}
+              <div className="w-64 h-2 bg-slate-800 rounded-full overflow-hidden mt-2 relative">
+                <motion.div 
+                  className="h-full bg-gradient-to-r from-cyan-500 to-blue-500"
+                  initial={{ width: '0%' }}
+                  animate={{ width: '100%' }}
+                  transition={{ duration: 3.8, ease: "easeInOut" }}
+                />
+                
+                {/* Glowing dots on progress bar */}
+                <motion.div
+                  className="absolute top-0 h-full w-2 bg-white rounded-full opacity-70 blur-[1px]"
+                  animate={{ left: ['0%', '100%'] }}
+                  transition={{ duration: 3.8, ease: "easeInOut" }}
+                />
+              </div>
+              
+              {/* Fake loading status messages */}
+              <motion.div 
+                className="text-xs text-cyan-400/70 mt-1"
+                animate={{ opacity: [0, 1] }}
+                transition={{ duration: 0.5, times: [0, 1], delay: 0.5 }}
+              >
+                Initializing systems... 
+              </motion.div>
+              <motion.div 
+                className="text-xs text-cyan-400/70"
+                animate={{ opacity: [0, 1] }}
+                transition={{ duration: 0.5, times: [0, 1], delay: 1.5 }}
+              >
+                Loading portfolio data...
+              </motion.div>
+              <motion.div 
+                className="text-xs text-cyan-400/70"
+                animate={{ opacity: [0, 1] }}
+                transition={{ duration: 0.5, times: [0, 1], delay: 2.5 }}
+              >
+                Rendering interface...
+              </motion.div>
+            </div>
+          </div>
+          
+          {/* Scanline effect */}
+          <div className="absolute inset-0 pointer-events-none">
+            <div className="w-full h-full scanline"></div>
+          </div>
+        </motion.div>
+      )}
+    </AnimatePresence>
+  );
+};
+
+export default BootScreen;

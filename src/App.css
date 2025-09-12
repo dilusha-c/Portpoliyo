@@ -1,0 +1,108 @@
+/* Cu#root {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  text-align: left;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+/* Boot Screen Animations */
+.bg-cyberpunk-background {
+  background-color: #0a1121;
+  background-image: radial-gradient(circle at center, #0c1428 0%, #050a14 100%);
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 0; }
+  50% { opacity: 1; }
+}
+
+.blinking-dots::after {
+  content: "...";
+  animation: blink 1.5s infinite;
+  display: inline-block;
+  width: 1.5em;
+}
+
+.typewriter {
+  overflow: hidden;
+  white-space: nowrap;
+  border-right: 3px solid #06b6d4;
+  animation: typing 3s steps(40, end), blink-caret 0.75s step-end infinite;
+}
+
+@keyframes typing {
+  from { width: 0 }
+  to { width: 100% }
+}
+
+@keyframes blink-caret {
+  from, to { border-color: transparent }
+  50% { border-color: #06b6d4 }
+}
+
+.scanline {
+  background: linear-gradient(to bottom, transparent 0%, rgba(6, 182, 212, 0.05) 50%, transparent 100%);
+  background-size: 100% 4px;
+  animation: scanline 4s linear infinite;
+}
+
+@keyframes scanline {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(100%); }
+}
+
+/* Floating animation for images/elements */
+@keyframes float {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+  100% { transform: translateY(0px); }
+}
+
+.animate-float {
+  animation: float 5s ease-in-out infinite;
+}*/
+html {
+  scroll-behavior: smooth;
+}
+
+#root {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  text-align: left;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+/* Interactive cursor states */
+.gear-cursor-active a,
+.gear-cursor-active button,
+.gear-cursor-active [role="button"],
+.gear-cursor-active input[type="submit"],
+.gear-cursor-active input[type="button"],
+.gear-cursor-active input[type="checkbox"],
+.gear-cursor-active input[type="radio"],
+.gear-cursor-active select,
+.gear-cursor-active .clickable {
+  cursor: pointer !important;
+}
+
+/* Hover state for interactive elements with gear cursor */
+.gear-cursor-active a:hover,
+.gear-cursor-active button:hover,
+.gear-cursor-active [role="button"]:hover,
+.gear-cursor-active input[type="submit"]:hover,
+.gear-cursor-active input[type="button"]:hover,
+.gear-cursor-active .clickable:hover {
+  cursor: pointer !important;
+}

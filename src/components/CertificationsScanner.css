@@ -1,0 +1,170 @@
+.scanner-animation {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+/* Main scan effect - create a separate element for the main scan */
+.scanner-animation .scan-effect {
+  content: '';
+  position: absolute;
+  top: -150%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(
+    to bottom,
+    rgba(13, 71, 161, 0) 0%,
+    rgba(25, 118, 210, 0.15) 50%,
+    rgba(13, 71, 161, 0) 100%
+  );
+  transform: rotate(45deg);
+  animation: scanning 3s linear infinite;
+  z-index: 2;
+  pointer-events: none;
+}
+
+/* Horizontal scan line - create a separate element for this */
+.scanner-animation .scan-line {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: rgba(33, 150, 243, 0.8);
+  box-shadow: 0 0 10px 3px rgba(33, 150, 243, 0.6);
+  animation: scan-line 3s linear infinite;
+  z-index: 3;
+  pointer-events: none;
+}
+
+/* Data points overlay */
+.scanner-animation .data-points {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: 
+    radial-gradient(circle, rgba(66, 165, 245, 0.5) 1px, transparent 1px),
+    radial-gradient(circle, rgba(33, 150, 243, 0.3) 1px, transparent 1px);
+  background-size: 20px 20px, 30px 30px;
+  background-position: 0 0, 10px 10px;
+  opacity: 0.05;
+  animation: data-point 4s infinite;
+  pointer-events: none;
+  z-index: 1;
+}
+
+@keyframes scanning {
+  0% {
+    top: -150%;
+  }
+  100% {
+    top: 100%;
+  }
+}
+
+@keyframes scan-line {
+  0% {
+    top: 0;
+    opacity: 0.7;
+  }
+  50% {
+    opacity: 0.9;
+  }
+  100% {
+    top: 100%;
+    opacity: 0.7;
+  }
+}
+
+@keyframes blink {
+  0%, 25% { opacity: 0.2; }
+  50% { opacity: 1; }
+  75%, 100% { opacity: 0.2; }
+}
+
+/* Data points animation */
+@keyframes data-point {
+  0%, 100% { opacity: 0.05; }
+  50% { opacity: 0.15; }
+}
+
+.robotic-glow {
+  box-shadow: 0 0 10px rgba(33, 150, 243, 0.6), 
+              0 0 20px rgba(25, 118, 210, 0.4),
+              0 0 30px rgba(13, 71, 161, 0.2);
+}
+
+/* Corner brackets */
+.scanner-animation .scan-data-top-left {
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  width: 10px;
+  height: 10px;
+  border-top: 2px solid rgba(33, 150, 243, 0.8);
+  border-left: 2px solid rgba(33, 150, 243, 0.8);
+  z-index: 5;
+}
+
+.scanner-animation .scan-data-top-right {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  width: 10px;
+  height: 10px;
+  border-top: 2px solid rgba(33, 150, 243, 0.8);
+  border-right: 2px solid rgba(33, 150, 243, 0.8);
+  z-index: 5;
+}
+
+.scanner-animation .scan-data-bottom-left {
+  position: absolute;
+  bottom: 5px;
+  left: 5px;
+  width: 10px;
+  height: 10px;
+  border-bottom: 2px solid rgba(33, 150, 243, 0.8);
+  border-left: 2px solid rgba(33, 150, 243, 0.8);
+  z-index: 5;
+}
+
+.scanner-animation .scan-data-bottom-right {
+  position: absolute;
+  bottom: 5px;
+  right: 5px;
+  width: 10px;
+  height: 10px;
+  border-bottom: 2px solid rgba(33, 150, 243, 0.8);
+  border-right: 2px solid rgba(33, 150, 243, 0.8);
+  z-index: 5;
+}
+
+/* Blue tech panel specific styling */
+.blue-tech-panel {
+  position: relative;
+  border: 1px solid rgb(33, 150, 243) !important;
+  box-shadow: 
+    0 0 0 1px rgba(33, 150, 243, 0.3),
+    0 0 8px rgba(33, 150, 243, 0.5),
+    inset 0 0 4px rgba(33, 150, 243, 0.2) !important;
+}
+
+/* Add a subtle blue pulse to the scanning indicator */
+.scanner-animation .w-2.h-2.bg-blue-500 {
+  animation: blue-pulse 2s infinite;
+}
+
+@keyframes blue-pulse {
+  0%, 100% { 
+    opacity: 0.6;
+    box-shadow: 0 0 5px rgba(33, 150, 243, 0.8);
+  }
+  50% { 
+    opacity: 1;
+    box-shadow: 0 0 12px rgba(33, 150, 243, 1);
+  }
+}
