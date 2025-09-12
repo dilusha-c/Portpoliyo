@@ -156,19 +156,67 @@ function App() {
     animateSkills()
   }, [controls])
   
-  // Cleanup effect for modal
+  // Cleanup and navigation handling effect for modal
   useEffect(() => {
+    // Function to handle browser back button while modal is open
+    const handlePopState = () => {
+      if (imageModal.isOpen) {
+        closeImageModal();
+      }
+    };
+    
+    // Add popstate listener if modal is open
+    if (imageModal.isOpen) {
+      window.addEventListener('popstate', handlePopState);
+    }
+    
     return () => {
+      // Remove popstate listener
+      window.removeEventListener('popstate', handlePopState);
+      
       // Ensure we clean up event listeners and restore scrolling if component unmounts with modal open
       if (imageModal.isOpen) {
+        const scrollY = parseInt(document.body.getAttribute('data-scroll-position') || '0', 10);
+        
         document.body.style.overflow = '';
         document.body.style.position = '';
+        document.body.style.top = '';
         document.body.style.width = '';
         document.body.style.paddingRight = '';
+        
+        window.scrollTo(0, scrollY);
         document.removeEventListener('keydown', handleEscapeKey);
       }
     }
   }, [imageModal.isOpen])
+  
+  // Cross-browser scroll function that works reliably
+  const smoothScrollToSection = (sectionId) => {
+    const section = document.getElementById(sectionId);
+    if (!section) return;
+    
+    try {
+      // Calculate position
+      const yPosition = window.pageYOffset + section.getBoundingClientRect().top;
+      const headerOffset = 80;
+      
+      // Try native smooth scrolling first
+      window.scrollTo({
+        top: yPosition - headerOffset,
+        behavior: 'smooth'
+      });
+      
+      // Update URL hash without jump
+      setTimeout(() => {
+        history.pushState(null, null, `#${sectionId}`);
+      }, 500);
+      
+    } catch (error) {
+      // Fallback for older browsers
+      const yPosition = section.offsetTop;
+      window.scrollTo(0, yPosition - 80);
+    }
+  }
 
   // Scroll to top function
   const scrollToTop = () => {
@@ -245,16 +293,21 @@ function App() {
   
   // Function to open image modal with enhanced scroll prevention
   const openImageModal = (imageSrc, title) => {
+    // Store the scroll position in a data attribute
+    const scrollY = window.scrollY;
+    document.body.setAttribute('data-scroll-position', scrollY);
+    
     setImageModal({
       isOpen: true,
       imageSrc,
       title
     });
     
-    // Multiple methods to ensure scrolling is disabled
-    document.body.style.overflow = 'hidden'; // Basic method
-    document.body.style.position = 'fixed'; // More aggressive approach
-    document.body.style.width = '100%'; // Prevent layout shift
+    // Better approach to disable scrolling without jumping
+    document.body.style.overflow = 'hidden';
+    document.body.style.top = `-${scrollY}px`;
+    document.body.style.position = 'fixed';
+    document.body.style.width = '100%';
     document.body.style.paddingRight = '15px'; // Compensate for scrollbar disappearance
     
     // Add event listener for escape key to close modal
@@ -268,18 +321,25 @@ function App() {
     }
   };
 
-  // Function to close image modal and restore scrolling
+  // Function to close image modal and restore scrolling while preserving position
   const closeImageModal = () => {
     setImageModal({
       ...imageModal,
       isOpen: false
     });
     
+    // Get the scroll position from the data attribute
+    const scrollY = parseInt(document.body.getAttribute('data-scroll-position') || '0', 10);
+    
     // Restore scrolling and layout
     document.body.style.overflow = '';
     document.body.style.position = '';
+    document.body.style.top = '';
     document.body.style.width = '';
     document.body.style.paddingRight = '';
+    
+    // Important: restore the scroll position
+    window.scrollTo(0, scrollY);
     
     // Remove event listener
     document.removeEventListener('keydown', handleEscapeKey);
@@ -1145,18 +1205,7 @@ function App() {
                 </div>
                 <div className="flex flex-wrap gap-4 justify-center">
                   <motion.button 
-                    onClick={() => {
-                      // Direct access to element for reliability
-                      const certificatesSection = document.getElementById('certificates');
-                      if (certificatesSection) {
-                        // Manual scroll with offset
-                        const yPosition = certificatesSection.getBoundingClientRect().top + window.pageYOffset;
-                        window.scrollTo({
-                          top: yPosition - 80, // Offset for header
-                          behavior: 'smooth'
-                        });
-                      }
-                    }}
+                    onClick={() => smoothScrollToSection('certificates')}
                     className={`${
                       theme === 'dark'
                         ? 'bg-gradient-to-r from-slate-600 to-slate-700 text-white'
@@ -1168,18 +1217,7 @@ function App() {
                     My Certificates
                   </motion.button>
                   <motion.button 
-                    onClick={() => {
-                      // Direct access to element for reliability
-                      const projectsSection = document.getElementById('projects');
-                      if (projectsSection) {
-                        // Manual scroll with offset
-                        const yPosition = projectsSection.getBoundingClientRect().top + window.pageYOffset;
-                        window.scrollTo({
-                          top: yPosition - 80, // Offset for header
-                          behavior: 'smooth'
-                        });
-                      }
-                    }}
+                    onClick={() => smoothScrollToSection('projects')}
                     className={`${
                       theme === 'dark'
                         ? 'bg-gradient-to-r from-gray-600 to-gray-700 text-white'
