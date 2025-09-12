@@ -41,9 +41,10 @@ module.exports = {
         'scanline': 'scanline 6s linear infinite',
         'blink': 'blink 2s infinite',
         'flicker': 'flicker 3s linear infinite',
-        'rotate-gear': 'rotate-gear 10s linear infinite',
+        'rotate-gear': '', /* Removed rotation animation for better performance */
         'boot-text': 'boot-text 3s steps(40, end)',
         'progress-dots': 'progress-dots 2s steps(4, end) infinite',
+        'shimmer': 'shimmer 2s infinite',
       },
       keyframes: {
         'gradient-x': {
@@ -126,6 +127,10 @@ module.exports = {
           '50%': { content: '"..."' },
           '75%': { content: '"..."' },
           '100%': { content: '"."' },
+        },
+        'shimmer': {
+          '0%': { transform: 'translateX(-100%)' },
+          '100%': { transform: 'translateX(100%)' }
         },
       },
       backgroundImage: {
