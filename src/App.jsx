@@ -50,8 +50,8 @@ const EMAILJS_SERVICE_ID = "service_x1uwzug";
 const EMAILJS_TEMPLATE_ID = "template_by258k9";
 const EMAILJS_PUBLIC_KEY = "QKBnCihmn2DpuKPqt";
 
-// Initialize EmailJS once outside the component
-emailjs.init(EMAILJS_PUBLIC_KEY);
+// Initialize EmailJS - using a safer approach inside an effect hook instead of at the global level
+// We'll do this in a useEffect hook inside the component
 
 function App() {
   const { theme, roboticMode, toggleTheme, toggleRoboticMode } = useContext(ThemeContext)
@@ -439,6 +439,23 @@ function App() {
     submitted: false,
     error: null
   });
+  
+  // Initialize EmailJS
+  useEffect(() => {
+    try {
+      // Initialize EmailJS with the proper options
+      emailjs.init({
+        publicKey: EMAILJS_PUBLIC_KEY,
+        // Limited to a single email per session to avoid spam
+        limitRate: {
+          throttle: 2000 // wait 2 sec before trying again
+        }
+      });
+      console.log('EmailJS initialized successfully');
+    } catch (error) {
+      console.error('Error initializing EmailJS:', error);
+    }
+  }, []);
 
   // Handle contact form input changes
   const handleContactInputChange = (e) => {
@@ -471,21 +488,28 @@ function App() {
     });
     
     try {
+      console.log('Starting email submission process...');
+      
       // Using Email.js to send emails
       const templateParams = {
         from_name: contactFormData.name,
         from_email: contactFormData.email,
         subject: contactFormData.subject || 'Portfolio Contact Form',
         message: contactFormData.message,
-        to_name: 'Portfolio Owner' // Add recipient name
+        to_name: 'Portfolio Owner', // Add recipient name
+        reply_to: contactFormData.email // Ensure replies go back to sender
       };
       
+      console.log('Sending email with params:', templateParams);
+      
       // Send email using EmailJS
-      await emailjs.send(
+      const response = await emailjs.send(
         EMAILJS_SERVICE_ID,
         EMAILJS_TEMPLATE_ID,
         templateParams
       );
+      
+      console.log('Email sent successfully!', response.status, response.text);
       
       // Success!
       setFormStatus({
@@ -517,10 +541,29 @@ function App() {
       // Provide more specific error message based on the error type
       let errorMessage = 'Failed to send your message. Please try again later or contact me directly via email.';
       
-      if (error.message && error.message.includes('Network Error')) {
-        errorMessage = 'Network error. Please check your internet connection and try again.';
-      } else if (error.status === 401 || error.status === 403) {
-        errorMessage = 'Authentication error with email service. Please contact me directly via email.';
+      if (error.message) {
+        console.log('Error message:', error.message);
+        
+        if (error.message.includes('Network Error')) {
+          errorMessage = 'Network error. Please check your internet connection and try again.';
+        } else if (error.message.includes('invalid service_id')) {
+          errorMessage = 'Email service configuration error. Please contact me directly via email.';
+          console.error('Invalid service ID being used');
+        } else if (error.message.includes('invalid template_id')) {
+          errorMessage = 'Email template configuration error. Please contact me directly via email.';
+          console.error('Invalid template ID being used');
+        } else if (error.message.includes('rate limit')) {
+          errorMessage = 'Too many messages sent. Please try again in a few minutes.';
+        }
+      }
+      
+      if (error.status) {
+        console.log('Error status:', error.status);
+        if (error.status === 401 || error.status === 403) {
+          errorMessage = 'Authentication error with email service. Please contact me directly via email.';
+        } else if (error.status === 429) {
+          errorMessage = 'Too many messages sent. Please try again in a few minutes.';
+        }
       }
       
       setFormStatus({
