@@ -1,0 +1,178 @@
+/* CPU and Hardware   /* CPU Core Animation */
+.cpu-core {
+  position: absolute;
+  width: 50px;
+  height: 50px;
+  border-radius: 6px;
+  border: 1px solid rgba(6, 182, 212, 0.8);
+  background: linear-gradient(45deg, rgba(8, 47, 73, 0.8) 0%, rgba(6, 182, 212, 0.1) 100%);
+  box-shadow: 0 0 15px rgba(6, 182, 212, 0.3), inset 0 0 15px rgba(6, 182, 212, 0.2);
+  animation: cpu-pulse 3s infinite;
+  z-index: 5; /* Increase z-index to ensure visibility */
+}Animation Styles */
+
+/* CPU Grid Pattern */
+.cpu-grid {
+  background-image: 
+    linear-gradient(to right, rgba(6, 182, 212, 0.15) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(6, 182, 212, 0.15) 1px, transparent 1px);
+  background-size: 20px 20px;
+  position: absolute;
+  inset: 0;
+  opacity: 0.5;
+  animation: grid-pulse 8s infinite;
+  z-index: 3;
+}
+
+@keyframes grid-pulse {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 0.6; }
+}
+
+/* CPU Connection Lines */
+.cpu-connection-line {
+  position: absolute;
+  background-color: rgba(6, 182, 212, 0.5);
+  box-shadow: 0 0 8px rgba(6, 182, 212, 0.7);
+  transform-origin: center;
+  z-index: 8;
+  animation: connection-pulse 4s infinite;
+}
+
+@keyframes connection-pulse {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 0.9; }
+}
+
+/* CPU Core Animation */
+.cpu-core {
+  position: absolute;
+  width: 50px;
+  height: 50px;
+  border-radius: 6px;
+  border: 2px solid rgba(6, 182, 212, 0.9);
+  background: linear-gradient(45deg, rgba(8, 47, 73, 0.8) 0%, rgba(6, 182, 212, 0.15) 100%);
+  box-shadow: 0 0 20px rgba(6, 182, 212, 0.5), inset 0 0 15px rgba(6, 182, 212, 0.3);
+  animation: cpu-pulse 3s infinite;
+  z-index: 10; /* Higher z-index to ensure visibility */
+}
+
+.cpu-core::before, .cpu-core::after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 6px;
+  background: transparent;
+  border: 1px dashed rgba(6, 182, 212, 0.4);
+  animation: cpu-rotate 10s linear infinite;
+  opacity: 0.5;
+}
+
+.cpu-core::after {
+  animation-direction: reverse;
+  animation-duration: 15s;
+}
+
+/* Memory Module Animation */
+.memory-module {
+  position: absolute;
+  width: 80px;
+  height: 20px;
+  border-radius: 4px;
+  background: linear-gradient(90deg, rgba(8, 47, 73, 0.9) 0%, rgba(6, 182, 212, 0.3) 100%);
+  border: 2px solid rgba(6, 182, 212, 0.8);
+  box-shadow: 0 0 15px rgba(6, 182, 212, 0.5), inset 0 0 10px rgba(6, 182, 212, 0.2);
+  z-index: 9;
+}
+
+.memory-module::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 0;
+  background: linear-gradient(90deg, rgba(6, 182, 212, 0.1) 0%, rgba(6, 182, 212, 0.4) 100%);
+  animation: memory-access 4s ease-in-out infinite;
+}
+
+/* Data Flow Animation */
+.data-flow {
+  position: absolute;
+  width: 12px; /* Further increased size */
+  height: 12px; /* Further increased size */
+  border-radius: 50%;
+  background-color: rgba(6, 182, 212, 1); /* Maximum opacity */
+  filter: blur(4px); /* More blur for enhanced glow */
+  box-shadow: 0 0 15px rgba(6, 182, 212, 1), 0 0 25px rgba(6, 182, 212, 0.7); /* Double glow effect */
+  z-index: 12; /* Higher z-index to ensure visibility above other elements */
+}
+
+/* Animation Keyframes */
+@keyframes cpu-pulse {
+  0%, 100% { opacity: 0.7; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.05); }
+}
+
+@keyframes cpu-rotate {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes memory-access {
+  0%, 100% { width: 0; opacity: 0.5; }
+  50% { width: 100%; opacity: 1; }
+}
+
+@keyframes data-flow-animation {
+  0% { 
+    opacity: 0;
+    transform: translateX(0) translateY(0) scale(0.5); 
+  }
+  50% { 
+    opacity: 1;
+    transform: translateX(var(--tx, 100px)) translateY(var(--ty, 0)) scale(1); 
+  }
+  100% { 
+    opacity: 0;
+    transform: translateX(var(--tx, 200px)) translateY(var(--ty, 0)) scale(0.5); 
+  }
+}
+
+/* IC Chip Animation */
+.ic-chip {
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  background-color: rgba(8, 47, 73, 0.95);
+  border: 2px solid rgba(6, 182, 212, 0.8);
+  border-radius: 3px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding: 4px;
+  box-shadow: 0 0 15px rgba(6, 182, 212, 0.5), inset 0 0 8px rgba(6, 182, 212, 0.3);
+  z-index: 9;
+  animation: chip-glow 5s infinite;
+}
+
+@keyframes chip-glow {
+  0%, 100% { box-shadow: 0 0 10px rgba(6, 182, 212, 0.4), inset 0 0 8px rgba(6, 182, 212, 0.2); }
+  50% { box-shadow: 0 0 20px rgba(6, 182, 212, 0.7), inset 0 0 12px rgba(6, 182, 212, 0.4); }
+}
+
+.ic-chip::before {
+  content: '';
+  width: 70%;
+  height: 1px;
+  background-color: rgba(6, 182, 212, 0.8);
+  box-shadow: 0 0 5px rgba(6, 182, 212, 0.8);
+  animation: chip-scan 2s infinite;
+}
+
+@keyframes chip-scan {
+  0%, 100% { transform: translateY(-8px); opacity: 0.3; }
+  50% { transform: translateY(8px); opacity: 1; }
+}

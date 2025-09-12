@@ -1,14 +1,19 @@
 import { useState, useEffect, useContext } from 'react';
 import './RotatingGearsCursor.css';
 import { ThemeContext } from '../main.jsx';
+import useIsMobile from '../hooks/useIsMobile';
 
 const RotatingGearsCursor = () => {
   const { theme } = useContext(ThemeContext);
+  const isMobile = useIsMobile();
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const [isVisible, setIsVisible] = useState(false); // Start invisible and show after mount
   const [isClicking, setIsClicking] = useState(false);
   const [isHovering, setIsHovering] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
+
+  // Don't render on mobile devices
+  if (isMobile) return null;
 
   // Handle initial mount
   useEffect(() => {
@@ -89,6 +94,15 @@ const RotatingGearsCursor = () => {
   // Don't render if not visible
   if (!isVisible) return null;
 
+  // Set theme-appropriate colors
+  const fillColor = theme === 'dark' 
+    ? 'rgba(6, 182, 212, 0.15)'   // Cyan in dark mode
+    : 'rgba(59, 130, 246, 0.15)'; // Blue in light mode
+  
+  const strokeColor = theme === 'dark'
+    ? 'rgba(6, 182, 212, 0.9)'    // Cyan in dark mode
+    : 'rgba(59, 130, 246, 0.9)';  // Blue in light mode
+
   return (
     <div 
       className={`gear-cursor ${isHovering ? 'hovering' : ''} ${isClicking ? 'clicking' : ''} ${isVisible ? 'visible' : 'hidden'}`}
@@ -103,8 +117,8 @@ const RotatingGearsCursor = () => {
         className="main-gear" 
         xmlns="http://www.w3.org/2000/svg" 
         viewBox="0 0 24 24" 
-        fill="rgba(6, 182, 212, 0.15)"
-        stroke="rgba(6, 182, 212, 0.9)"
+        fill={fillColor}
+        stroke={strokeColor}
         strokeWidth="1.5"
       >
         <circle cx="12" cy="12" r="3"/>

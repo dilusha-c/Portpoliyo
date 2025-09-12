@@ -6,6 +6,8 @@ const CircuitPaths = ({ theme }) => {
       <svg 
         className="absolute inset-0 w-full h-full" 
         style={{ opacity: 0.35 }}
+        viewBox="0 0 1000 1000"
+        preserveAspectRatio="none"
       >
         {/* Horizontal lines */}
         <motion.line 
@@ -88,9 +90,9 @@ const CircuitPaths = ({ theme }) => {
           ))
         )}
         
-        {/* Curved connections */}
+        {/* Curved connections - Using viewBox coordinates instead of percentages */}
         <motion.path 
-          d="M 20% 30% Q 40% 10% 60% 30% T 80% 30%"
+          d="M 200 300 Q 400 100 600 300 T 800 300"
           stroke={theme === 'dark' ? 'rgba(6, 182, 212, 0.8)' : 'rgba(59, 130, 246, 0.8)'}
           strokeWidth="0.5"
           fill="none"
@@ -99,7 +101,7 @@ const CircuitPaths = ({ theme }) => {
           transition={{ duration: 3, repeat: Infinity, repeatType: 'loop', repeatDelay: 2 }}
         />
         <motion.path 
-          d="M 80% 70% Q 60% 90% 40% 70% T 20% 70%"
+          d="M 800 700 Q 600 900 400 700 T 200 700"
           stroke={theme === 'dark' ? 'rgba(6, 182, 212, 0.8)' : 'rgba(59, 130, 246, 0.8)'}
           strokeWidth="0.5"
           fill="none"

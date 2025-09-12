@@ -1,0 +1,24 @@
+/* Skills section styling to ensure consistent card heights */
+.grid-cols-1.md\:grid-cols-2.gap-8 > div {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Force both skill category containers to have the same height in robotic mode */
+.grid-cols-1.md\:grid-cols-2.gap-8 > div > div:first-child {
+  min-height: 65px;
+  display: flex;
+  align-items: center;
+}
+
+/* Ensure the skill sections have consistent heights */
+.grid-cols-1.md\:grid-cols-2.gap-8 > div > .space-y-4 {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Make sure the skill items grow to fill available space */
+.grid-cols-1.md\:grid-cols-2.gap-8 > div > .space-y-4 > div {
+  flex: 1;
+}

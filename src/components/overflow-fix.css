@@ -1,0 +1,39 @@
+/* Fix for horizontal scrolling issues */
+html, 
+body {
+  overflow-x: hidden;
+  max-width: 100%;
+}
+
+/* Ensure all containers are properly sized */
+.container {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Fix any potentially overflowing elements */
+img, 
+svg, 
+video {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Ensure sections don't cause overflow */
+section, 
+div, 
+main, 
+header, 
+footer {
+  max-width: 100vw;
+  box-sizing: border-box;
+}
+
+/* Fix for mobile devices */
+@media (max-width: 640px) {
+  * {
+    box-sizing: border-box;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+  }
+}

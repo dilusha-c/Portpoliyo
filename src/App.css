@@ -69,6 +69,11 @@
 }*/
 html {
   scroll-behavior: smooth;
+  overflow-x: hidden;
+}
+
+body {
+  overflow-x: hidden;
 }
 
 #root {
@@ -105,4 +110,37 @@ html {
 .gear-cursor-active input[type="button"]:hover,
 .gear-cursor-active .clickable:hover {
   cursor: pointer !important;
+}
+
+/* Robot animations for contact section */
+@keyframes typing {
+  from { width: 0 }
+  to { width: 100% }
+}
+
+.animate-typing {
+  overflow: hidden;
+  white-space: nowrap;
+  display: inline-block;
+  width: 0;
+  animation: typing 3s steps(20, end) forwards;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 0.2; }
+  50% { opacity: 1; }
+}
+
+.animate-blink {
+  animation: blink 1.5s infinite;
+}
+
+@keyframes shimmer {
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.animate-\[shimmer_2s_infinite\] {
+  animation: shimmer 2s infinite;
 }

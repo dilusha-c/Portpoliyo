@@ -12,6 +12,7 @@ import CircuitPaths from './components/CircuitPaths'
 import LeftRobotDecoration from './components/LeftRobotDecoration'
 import RobotBackgroundDecoration from './components/RobotBackgroundDecoration'
 import HumanRobotDecoration from './components/HumanRobotDecoration'
+import FlyingDrone from './components/FlyingDrone'
 
 import './App.css'
 import './components/PublicationsScanner.css'
@@ -19,6 +20,10 @@ import './components/FuturisticText.css'
 import './components/keyframe-animations.css'
 import './components/SectionDivider.css'
 import './components/SkillsModal.css'
+import './components/HardwareAnimations.css'
+import './components/HonorsAwards.css'
+import './components/Education.css'
+import './components/overflow-fix.css'
 import { ThemeContext } from './main.jsx'
 
 // Import project images
@@ -34,8 +39,11 @@ function App() {
   const [showBootScreen, setShowBootScreen] = useState(false)
   const [portfolioVisible, setPortfolioVisible] = useState(false)
   const [showSkillsModal, setShowSkillsModal] = useState(false)
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const controls = useAnimation()
-  const { scrollYProgress } = useScroll()
+  const { scrollYProgress } = useScroll({
+    offset: ["start start", "end end"]
+  })
   
   // Always show boot screen on every page refresh
   useEffect(() => {
@@ -67,14 +75,28 @@ function App() {
     }
   }, [showSkillsModal]);
 
-  // Detect scroll position for navbar transparency
+  // Detect scroll position for navbar transparency and progress tracking
   useEffect(() => {
     const handleScroll = () => {
       setScrollY(window.scrollY)
+      if (mobileMenuOpen) {
+        setMobileMenuOpen(false)
+      }
+      
+      // Manual progress calculation as a fallback for scrollYProgress
+      const windowHeight = document.documentElement.scrollHeight - window.innerHeight
+      if (windowHeight > 0) {
+        const progress = window.scrollY / windowHeight
+        // We don't need to set this manually if scrollYProgress from Framer Motion is working
+        // This is just a fallback approach if needed
+        
+        // The progress is used by both left and right bars with origin-right and origin-left respectively
+        // so they grow outward from the center
+      }
     }
     window.addEventListener('scroll', handleScroll)
     return () => window.removeEventListener('scroll', handleScroll)
-  }, [])
+  }, [mobileMenuOpen])
   
   // Close modal when user scrolls the page
   useEffect(() => {
@@ -86,6 +108,30 @@ function App() {
       return () => window.removeEventListener('scroll', handleScrollForModal)
     }
   }, [showSkillsModal])
+  
+  // Close mobile menu when clicking outside
+  useEffect(() => {
+    if (mobileMenuOpen) {
+      const handleClickOutside = (event) => {
+        const mobileMenu = document.querySelector('.mobile-menu');
+        const mobileMenuButton = document.querySelector('.mobile-menu-button');
+        
+        if (
+          mobileMenu && 
+          !mobileMenu.contains(event.target) && 
+          mobileMenuButton && 
+          !mobileMenuButton.contains(event.target)
+        ) {
+          setMobileMenuOpen(false);
+        }
+      }
+      
+      document.addEventListener('mousedown', handleClickOutside);
+      return () => {
+        document.removeEventListener('mousedown', handleClickOutside);
+      }
+    }
+  }, [mobileMenuOpen])
 
   // Animate skills when they come into view
   useEffect(() => {
@@ -137,7 +183,7 @@ function App() {
   
   return (
     <>
-      {/* Custom rotating gears cursor */}
+      {/* Custom rotating gears cursor - automatically disabled on mobile devices */}
       {roboticMode && <RotatingGearsCursor />}
       
       {/* Boot screen for first-time visitors */}
@@ -204,153 +250,153 @@ function App() {
                 <div className="p-6 grid grid-cols-1 md:grid-cols-3 gap-6">
                   {/* Skills Categories */}
                   <div className={`${theme === 'dark' ? 'bg-slate-800' : 'bg-slate-50'} p-4 rounded-lg`}>
-                    <h4 className="text-lg font-semibold mb-3 text-cyan-500">Cloud & Infrastructure</h4>
+                    <h4 className={`text-lg font-semibold mb-3 ${theme === 'dark' ? 'text-cyan-500' : 'text-blue-700'}`}>Cloud & Infrastructure</h4>
                     <ul className="space-y-2">
                       <li className="flex items-center gap-2">
                         <span className={`h-2 w-2 rounded-full ${theme === 'dark' ? 'bg-cyan-400' : 'bg-blue-500'}`}></span>
-                        <span>Virtualization & Cloud</span>
+                        <span className={`${theme === 'dark' ? 'text-gray-300' : 'text-slate-800 font-medium'}`}>Virtualization & Cloud</span>
                       </li>
                       <li className="flex items-center gap-2">
                         <span className={`h-2 w-2 rounded-full ${theme === 'dark' ? 'bg-cyan-400' : 'bg-blue-500'}`}></span>
-                        <span>Docker & Containerization</span>
+                        <span className={`${theme === 'dark' ? 'text-gray-300' : 'text-slate-800 font-medium'}`}>Docker & Containerization</span>
                       </li>
                       <li className="flex items-center gap-2">
                         <span className={`h-2 w-2 rounded-full ${theme === 'dark' ? 'bg-cyan-400' : 'bg-blue-500'}`}></span>
-                        <span>AWS Services</span>
+                        <span className={`${theme === 'dark' ? 'text-gray-300' : 'text-slate-800 font-medium'}`}>AWS Services</span>
                       </li>
                       <li className="flex items-center gap-2">
                         <span className={`h-2 w-2 rounded-full ${theme === 'dark' ? 'bg-cyan-400' : 'bg-blue-500'}`}></span>
-                        <span>CI/CD Pipelines</span>
+                        <span className={`${theme === 'dark' ? 'text-gray-300' : 'text-slate-800 font-medium'}`}>CI/CD Pipelines</span>
                       </li>
                     </ul>
                   </div>
                   
                   <div className={`${theme === 'dark' ? 'bg-slate-800' : 'bg-slate-50'} p-4 rounded-lg`}>
-                    <h4 className="text-lg font-semibold mb-3 text-cyan-500">AI & Machine Learning</h4>
+                    <h4 className={`text-lg font-semibold mb-3 ${theme === 'dark' ? 'text-cyan-500' : 'text-blue-700'}`}>AI & Machine Learning</h4>
                     <ul className="space-y-2">
                       <li className="flex items-center gap-2">
                         <span className={`h-2 w-2 rounded-full ${theme === 'dark' ? 'bg-cyan-400' : 'bg-blue-500'}`}></span>
-                        <span>Machine Learning</span>
+                        <span className={`${theme === 'dark' ? 'text-gray-300' : 'text-slate-800 font-medium'}`}>Machine Learning</span>
                       </li>
                       <li className="flex items-center gap-2">
                         <span className={`h-2 w-2 rounded-full ${theme === 'dark' ? 'bg-cyan-400' : 'bg-blue-500'}`}></span>
-                        <span>Deep Learning</span>
+                        <span className={`${theme === 'dark' ? 'text-gray-300' : 'text-slate-800 font-medium'}`}>Deep Learning</span>
                       </li>
                       <li className="flex items-center gap-2">
                         <span className={`h-2 w-2 rounded-full ${theme === 'dark' ? 'bg-cyan-400' : 'bg-blue-500'}`}></span>
-                        <span>Supervised Learning</span>
+                        <span className={`${theme === 'dark' ? 'text-gray-300' : 'text-slate-800 font-medium'}`}>Supervised Learning</span>
                       </li>
                       <li className="flex items-center gap-2">
                         <span className={`h-2 w-2 rounded-full ${theme === 'dark' ? 'bg-cyan-400' : 'bg-blue-500'}`}></span>
-                        <span>Artificial Neural Networks</span>
+                        <span className={`${theme === 'dark' ? 'text-gray-300' : 'text-slate-800 font-medium'}`}>Artificial Neural Networks</span>
                       </li>
                       <li className="flex items-center gap-2">
                         <span className={`h-2 w-2 rounded-full ${theme === 'dark' ? 'bg-cyan-400' : 'bg-blue-500'}`}></span>
-                        <span>TensorFlow</span>
+                        <span className={`${theme === 'dark' ? 'text-gray-300' : 'text-slate-800 font-medium'}`}>TensorFlow</span>
                       </li>
                       <li className="flex items-center gap-2">
                         <span className={`h-2 w-2 rounded-full ${theme === 'dark' ? 'bg-cyan-400' : 'bg-blue-500'}`}></span>
-                        <span>Computer Vision</span>
+                        <span className={`${theme === 'dark' ? 'text-gray-300' : 'text-slate-800 font-medium'}`}>Computer Vision</span>
                       </li>
                     </ul>
                   </div>
                   
                   <div className={`${theme === 'dark' ? 'bg-slate-800' : 'bg-slate-50'} p-4 rounded-lg`}>
-                    <h4 className="text-lg font-semibold mb-3 text-cyan-500">Development & Design</h4>
+                    <h4 className={`text-lg font-semibold mb-3 ${theme === 'dark' ? 'text-cyan-500' : 'text-blue-700'}`}>Development & Design</h4>
                     <ul className="space-y-2">
                       <li className="flex items-center gap-2">
                         <span className={`h-2 w-2 rounded-full ${theme === 'dark' ? 'bg-cyan-400' : 'bg-blue-500'}`}></span>
-                        <span>User Experience (UX)</span>
+                        <span className={`${theme === 'dark' ? 'text-gray-300' : 'text-slate-800 font-medium'}`}>User Experience (UX)</span>
                       </li>
                       <li className="flex items-center gap-2">
                         <span className={`h-2 w-2 rounded-full ${theme === 'dark' ? 'bg-cyan-400' : 'bg-blue-500'}`}></span>
-                        <span>Tailwind CSS</span>
+                        <span className={`${theme === 'dark' ? 'text-gray-300' : 'text-slate-800 font-medium'}`}>Tailwind CSS</span>
                       </li>
                       <li className="flex items-center gap-2">
                         <span className={`h-2 w-2 rounded-full ${theme === 'dark' ? 'bg-cyan-400' : 'bg-blue-500'}`}></span>
-                        <span>RESTful APIs</span>
+                        <span className={`${theme === 'dark' ? 'text-gray-300' : 'text-slate-800 font-medium'}`}>RESTful APIs</span>
                       </li>
                       <li className="flex items-center gap-2">
                         <span className={`h-2 w-2 rounded-full ${theme === 'dark' ? 'bg-cyan-400' : 'bg-blue-500'}`}></span>
-                        <span>MySQL</span>
+                        <span className={`${theme === 'dark' ? 'text-gray-300' : 'text-slate-800 font-medium'}`}>MySQL</span>
                       </li>
                       <li className="flex items-center gap-2">
                         <span className={`h-2 w-2 rounded-full ${theme === 'dark' ? 'bg-cyan-400' : 'bg-blue-500'}`}></span>
-                        <span>Spring Boot</span>
+                        <span className={`${theme === 'dark' ? 'text-gray-300' : 'text-slate-800 font-medium'}`}>Spring Boot</span>
                       </li>
                       <li className="flex items-center gap-2">
                         <span className={`h-2 w-2 rounded-full ${theme === 'dark' ? 'bg-cyan-400' : 'bg-blue-500'}`}></span>
-                        <span>Algorithms & Data Structures</span>
+                        <span className={`${theme === 'dark' ? 'text-gray-300' : 'text-slate-800 font-medium'}`}>Algorithms & Data Structures</span>
                       </li>
                     </ul>
                   </div>
                   
                   <div className={`${theme === 'dark' ? 'bg-slate-800' : 'bg-slate-50'} p-4 rounded-lg`}>
-                    <h4 className="text-lg font-semibold mb-3 text-cyan-500">Programming Languages</h4>
+                    <h4 className={`text-lg font-semibold mb-3 ${theme === 'dark' ? 'text-cyan-500' : 'text-blue-700'}`}>Programming Languages</h4>
                     <ul className="space-y-2">
                       <li className="flex items-center gap-2">
                         <span className={`h-2 w-2 rounded-full ${theme === 'dark' ? 'bg-cyan-400' : 'bg-blue-500'}`}></span>
-                        <span>Java</span>
+                        <span className={`${theme === 'dark' ? 'text-gray-300' : 'text-slate-800 font-medium'}`}>Java</span>
                       </li>
                       <li className="flex items-center gap-2">
                         <span className={`h-2 w-2 rounded-full ${theme === 'dark' ? 'bg-cyan-400' : 'bg-blue-500'}`}></span>
-                        <span>Python</span>
+                        <span className={`${theme === 'dark' ? 'text-gray-300' : 'text-slate-800 font-medium'}`}>Python</span>
                       </li>
                       <li className="flex items-center gap-2">
                         <span className={`h-2 w-2 rounded-full ${theme === 'dark' ? 'bg-cyan-400' : 'bg-blue-500'}`}></span>
-                        <span>C</span>
+                        <span className={`${theme === 'dark' ? 'text-gray-300' : 'text-slate-800 font-medium'}`}>C</span>
                       </li>
                       <li className="flex items-center gap-2">
                         <span className={`h-2 w-2 rounded-full ${theme === 'dark' ? 'bg-cyan-400' : 'bg-blue-500'}`}></span>
-                        <span>JavaScript</span>
+                        <span className={`${theme === 'dark' ? 'text-gray-300' : 'text-slate-800 font-medium'}`}>JavaScript</span>
                       </li>
                       <li className="flex items-center gap-2">
                         <span className={`h-2 w-2 rounded-full ${theme === 'dark' ? 'bg-cyan-400' : 'bg-blue-500'}`}></span>
-                        <span>TypeScript</span>
+                        <span className={`${theme === 'dark' ? 'text-gray-300' : 'text-slate-800 font-medium'}`}>TypeScript</span>
                       </li>
                     </ul>
                   </div>
                   
                   <div className={`${theme === 'dark' ? 'bg-slate-800' : 'bg-slate-50'} p-4 rounded-lg`}>
-                    <h4 className="text-lg font-semibold mb-3 text-cyan-500">Robotics & IoT</h4>
+                    <h4 className={`text-lg font-semibold mb-3 ${theme === 'dark' ? 'text-cyan-500' : 'text-blue-700'}`}>Robotics & IoT</h4>
                     <ul className="space-y-2">
                       <li className="flex items-center gap-2">
                         <span className={`h-2 w-2 rounded-full ${theme === 'dark' ? 'bg-cyan-400' : 'bg-blue-500'}`}></span>
-                        <span>Arduino Programming</span>
+                        <span className={`${theme === 'dark' ? 'text-gray-300' : 'text-slate-800 font-medium'}`}>Arduino Programming</span>
                       </li>
                       <li className="flex items-center gap-2">
                         <span className={`h-2 w-2 rounded-full ${theme === 'dark' ? 'bg-cyan-400' : 'bg-blue-500'}`}></span>
-                        <span>Sensor Integration</span>
+                        <span className={`${theme === 'dark' ? 'text-gray-300' : 'text-slate-800 font-medium'}`}>Sensor Integration</span>
                       </li>
                       <li className="flex items-center gap-2">
                         <span className={`h-2 w-2 rounded-full ${theme === 'dark' ? 'bg-cyan-400' : 'bg-blue-500'}`}></span>
-                        <span>Drone Technology</span>
+                        <span className={`${theme === 'dark' ? 'text-gray-300' : 'text-slate-800 font-medium'}`}>Drone Technology</span>
                       </li>
                       <li className="flex items-center gap-2">
                         <span className={`h-2 w-2 rounded-full ${theme === 'dark' ? 'bg-cyan-400' : 'bg-blue-500'}`}></span>
-                        <span>Embedded Systems</span>
+                        <span className={`${theme === 'dark' ? 'text-gray-300' : 'text-slate-800 font-medium'}`}>Embedded Systems</span>
                       </li>
                     </ul>
                   </div>
                   
                   <div className={`${theme === 'dark' ? 'bg-slate-800' : 'bg-slate-50'} p-4 rounded-lg`}>
-                    <h4 className="text-lg font-semibold mb-3 text-cyan-500">Tools & Frameworks</h4>
+                    <h4 className={`text-lg font-semibold mb-3 ${theme === 'dark' ? 'text-cyan-500' : 'text-blue-700'}`}>Tools & Frameworks</h4>
                     <ul className="space-y-2">
                       <li className="flex items-center gap-2">
                         <span className={`h-2 w-2 rounded-full ${theme === 'dark' ? 'bg-cyan-400' : 'bg-blue-500'}`}></span>
-                        <span>Git & Version Control</span>
+                        <span className={`${theme === 'dark' ? 'text-gray-300' : 'text-slate-800 font-medium'}`}>Git & Version Control</span>
                       </li>
                       <li className="flex items-center gap-2">
                         <span className={`h-2 w-2 rounded-full ${theme === 'dark' ? 'bg-cyan-400' : 'bg-blue-500'}`}></span>
-                        <span>React.js</span>
+                        <span className={`${theme === 'dark' ? 'text-gray-300' : 'text-slate-800 font-medium'}`}>React.js</span>
                       </li>
                       <li className="flex items-center gap-2">
                         <span className={`h-2 w-2 rounded-full ${theme === 'dark' ? 'bg-cyan-400' : 'bg-blue-500'}`}></span>
-                        <span>Node.js</span>
+                        <span className={`${theme === 'dark' ? 'text-gray-300' : 'text-slate-800 font-medium'}`}>Node.js</span>
                       </li>
                       <li className="flex items-center gap-2">
                         <span className={`h-2 w-2 rounded-full ${theme === 'dark' ? 'bg-cyan-400' : 'bg-blue-500'}`}></span>
-                        <span>JUnit Testing</span>
+                        <span className={`${theme === 'dark' ? 'text-gray-300' : 'text-slate-800 font-medium'}`}>JUnit Testing</span>
                       </li>
                     </ul>
                   </div>
@@ -400,37 +446,101 @@ function App() {
             animate={{ opacity: 1 }}
             transition={{ duration: 0.8 }}
           >
-            {/* Progress bar */}
-            <motion.div 
-              className="fixed top-0 left-0 right-0 h-1 bg-gradient-to-r from-cyan-500 via-blue-500 to-purple-600 z-50"
-              style={{ scaleX: scrollYProgress }}
-            />
+            {/* Progress bar - grows from middle to edges */}
+            <div className="fixed top-0 z-50 h-1.5 overflow-hidden left-0 right-0">
+              {/* Subtle gradient overlay for the whole progress bar area */}
+              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent pointer-events-none"></div>
+              
+              {/* Center connection point - no visible dot */}
+              <div className="absolute left-1/2 right-1/2 top-0 bottom-0"></div>
+              
+              {/* Left side progress bar - full width */}
+              <motion.div 
+                className="absolute top-0 right-1/2 bottom-0 w-1/2 bg-gradient-to-r from-indigo-600 via-blue-500 to-cyan-500 origin-right shadow-md shadow-blue-500/20 progress-bar-glow"
+                style={{ 
+                  scaleX: scrollYProgress,
+                  right: "50%"  // Ensure it's anchored to the center
+                }}
+                initial={{ scaleX: 0 }}
+                transition={{ type: "spring", stiffness: 100, damping: 30, restDelta: 0.001 }}
+              />
+              
+              {/* Right side progress bar - full width */}
+              <motion.div 
+                className="absolute top-0 left-1/2 bottom-0 w-1/2 bg-gradient-to-r from-cyan-500 via-blue-500 to-indigo-600 origin-left shadow-md shadow-blue-500/20 progress-bar-glow"
+                style={{ 
+                  scaleX: scrollYProgress,
+                  left: "50%" // Ensure it's anchored to the center
+                }}
+                initial={{ scaleX: 0 }}
+                transition={{ type: "spring", stiffness: 100, damping: 30, restDelta: 0.001 }}
+              />
+            </div>
 
             {/* Navigation */}
             <motion.nav 
               className={`fixed w-full z-40 transition-all duration-300 ${
                 scrollY > 10 
-                  ? 'bg-white/10 dark:bg-slate-900/70 backdrop-blur-xl shadow-lg' 
+                  ? 'bg-white/10 dark:bg-slate-900/70 backdrop-blur-xl shadow-xl' 
                   : 'bg-transparent'
               }`}
               initial={{ opacity: 0, y: -20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
             >
-              <div className="container mx-auto flex justify-between items-center p-4">
-                <motion.h1 
-                  className="text-2xl font-bold bg-gradient-to-r from-cyan-500 to-blue-500 bg-clip-text text-transparent"
-                  whileHover={{ scale: 1.05 }}
-                >
-                  Dilusha Chamika
-                </motion.h1>
-                <div className="hidden md:flex space-x-8">
-                  {['Home', 'About', 'Projects', 'Publications', 'Certificates', 'Contact'].map((item) => (
+              <div className="container mx-auto flex items-center justify-between py-4 sm:py-5 px-4 md:px-8">
+                {/* Logo and Name - Left on all screens */}
+                <div className="flex items-center flex-shrink-0 md:mr-3">
+                  <motion.img 
+                    src="./src/assets/logo.png"
+                    alt="Dilusha Chamika Logo" 
+                    className="h-10 sm:h-12 lg:h-14 mr-3"
+                    whileHover={{ scale: 1.1, rotate: 5 }}
+                    initial={{ opacity: 0, scale: 0.8 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ duration: 0.3 }}
+                  />
+                  <motion.h1 
+                    className="text-xl sm:text-2xl md:text-2xl lg:text-3xl font-bold bg-gradient-to-r from-cyan-500 to-blue-500 bg-clip-text text-transparent"
+                    whileHover={{ scale: 1.05 }}
+                  >
+                    Dilusha Chamika
+                  </motion.h1>
+                </div>
+                
+                
+                {/* Mobile menu button - Right side on mobile */}
+                <div className="block md:hidden">
+                  <motion.button 
+                    className={`mobile-menu-button p-2.5 rounded-lg ${
+                      theme === 'dark' 
+                        ? 'bg-gradient-to-r from-slate-700 to-slate-800 text-white border border-slate-600' 
+                        : 'bg-gradient-to-r from-slate-200 to-slate-100 text-slate-800 border border-slate-300'
+                    } focus:outline-none shadow-md`}
+                    onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                    whileTap={{ scale: 0.95 }}
+                    whileHover={{ scale: 1.05 }}
+                  >
+                    {!mobileMenuOpen ? (
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16m-7 6h7" />
+                      </svg>
+                    ) : (
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                      </svg>
+                    )}
+                  </motion.button>
+                </div>
+                
+                {/* Desktop navigation */}
+                <div className="hidden md:flex space-x-1 lg:space-x-4 xl:space-x-8 justify-center mx-auto">
+                  {['Home', 'About', 'Projects', 'Publications', 'Certificates', 'Awards', 'Contact'].map((item) => (
                     <motion.a
                       key={item}
                       href={`#${item.toLowerCase()}`}
-                      className="hover:text-cyan-400 transition-colors"
-                      whileHover={{ scale: 1.1 }}
+                      className={`px-2 lg:px-3 py-1.5 rounded-lg text-sm lg:text-base hover:text-cyan-400 ${theme === 'dark' ? 'hover:bg-slate-800/60' : 'hover:bg-slate-100/60'} transition-colors font-medium whitespace-nowrap`}
+                      whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
                     >
                       {item}
@@ -438,17 +548,21 @@ function App() {
                   ))}
                 </div>
                 
-                <div className="flex items-center space-x-2">
+                {/* Desktop theme buttons - hidden on mobile */}
+                <div className="hidden md:flex items-center space-x-2 md:space-x-3 md:ml-2">
                   <motion.button
                     onClick={toggleRoboticMode}
-                    className={`p-2 rounded-full ${
+                    className={`p-1.5 md:p-2 rounded-full ${
                       theme === 'dark' 
-                        ? roboticMode ? 'bg-cyan-900/50 text-cyan-400' : 'bg-slate-800 text-gray-400' 
-                        : roboticMode ? 'bg-cyan-100 text-cyan-600' : 'bg-slate-200 text-gray-600'
+                        ? roboticMode ? 'bg-gradient-to-r from-cyan-700 to-blue-800 text-cyan-300 shadow-lg shadow-cyan-500/30' : 'bg-slate-800 text-gray-400' 
+                        : roboticMode ? 'bg-gradient-to-r from-cyan-400 to-blue-500 text-white shadow-lg shadow-blue-500/20' : 'bg-slate-200 text-gray-600'
                     } hover:scale-110 transition-all relative ${
                       roboticMode ? 'robot-border' : ''
                     }`}
-                    whileHover={{ scale: 1.1 }}
+                    whileHover={{ 
+                      scale: 1.1, 
+                      boxShadow: roboticMode ? '0 0 15px rgba(8, 145, 178, 0.5)' : '0 0 5px rgba(100, 116, 139, 0.3)' 
+                    }}
                     whileTap={{ scale: 0.9 }}
                     title="Toggle Robotic Theme"
                   >
@@ -476,20 +590,236 @@ function App() {
                   
                   <motion.button
                     onClick={toggleTheme}
-                    className={`p-2 rounded-full ${theme === 'dark' ? 'bg-slate-800' : 'bg-slate-200'} hover:scale-110 transition-all`}
-                    whileHover={{ scale: 1.1 }}
+                    className={`p-1.5 md:p-2 rounded-full ${
+                      theme === 'dark' 
+                        ? 'bg-gradient-to-r from-cyan-700 to-blue-800 text-cyan-300 shadow-lg shadow-cyan-500/30' 
+                        : 'bg-gradient-to-r from-cyan-400 to-blue-500 text-white shadow-lg shadow-blue-500/20'
+                    } hover:scale-110 transition-all relative ${theme === 'dark' ? 'theme-border-dark' : 'theme-border-light'}`}
+                    whileHover={{ 
+                      scale: 1.1, 
+                      boxShadow: '0 0 15px rgba(8, 145, 178, 0.5)'
+                    }}
                     whileTap={{ scale: 0.9 }}
                     title={theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
                   >
-                    {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
+                    {theme === 'dark' && (
+                      <span className="absolute inset-0 theme-glow opacity-70 rounded-full -z-10"></span>
+                    )}
+                    {theme === 'dark' ? <Sun size={20} className="text-cyan-300 animate-pulse" /> : <Moon size={20} />}
+                    <motion.span 
+                      className={`absolute inset-0 border rounded-full ${theme === 'dark' ? 'border-cyan-400/50' : 'border-blue-400/50'}`}
+                      animate={{ 
+                        scale: [1, 1.2, 1], 
+                        opacity: [0.7, 0.2, 0.7] 
+                      }}
+                      transition={{ 
+                        duration: 2,
+                        repeat: Infinity
+                      }}
+                    />
                   </motion.button>
                 </div>
               </div>
+              
+              {/* Mobile menu */}
+              <AnimatePresence>
+                {mobileMenuOpen && (
+                  <motion.div 
+                    className={`mobile-menu md:hidden fixed inset-x-0 top-[70px] z-40 ${
+                      theme === 'dark' 
+                        ? 'bg-slate-900/95 backdrop-blur-lg text-white border-b border-slate-700/50' 
+                        : 'bg-white/95 backdrop-blur-lg text-slate-900 border-b border-slate-200/50'
+                    } shadow-xl`}
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: 'auto' }}
+                    exit={{ opacity: 0, height: 0 }}
+                    transition={{ duration: 0.3, ease: 'easeInOut' }}
+                  >
+                    <div className="container mx-auto py-5 px-6">
+                      <div className="flex flex-col space-y-1">
+                        {['Home', 'About', 'Projects', 'Publications', 'Certificates', 'Awards', 'Contact'].map((item) => (
+                          <motion.a
+                            key={item}
+                            href={`#${item.toLowerCase()}`}
+                            onClick={() => setMobileMenuOpen(false)}
+                            className={`py-3 px-4 rounded-lg text-lg font-medium ${
+                              theme === 'dark' 
+                                ? 'hover:bg-slate-800 hover:text-cyan-400' 
+                                : 'hover:bg-slate-100 hover:text-blue-600'
+                            } transition-colors`}
+                            whileHover={{ x: 10 }}
+                            whileTap={{ scale: 0.98 }}
+                            initial={{ opacity: 0, x: -20 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{
+                              delay: 0.05 * ['Home', 'About', 'Projects', 'Publications', 'Certificates', 'Awards', 'Contact'].indexOf(item)
+                            }}
+                          >
+                            {item}
+                          </motion.a>
+                        ))}
+                        
+                        <div className={`h-px w-full my-2 ${theme === 'dark' ? 'bg-slate-700/50' : 'bg-slate-200/50'}`}></div>
+                        
+                        <div className="flex items-center justify-between py-3 px-4">
+                          <span className="font-medium">Theme Settings</span>
+                          <div className="flex items-center space-x-4">
+                            <motion.button
+                              onClick={toggleRoboticMode}
+                              className={`p-2 rounded-full ${
+                                theme === 'dark' 
+                                  ? roboticMode ? 'bg-gradient-to-r from-cyan-700 to-blue-800 text-cyan-300' : 'bg-slate-800 text-gray-400' 
+                                  : roboticMode ? 'bg-gradient-to-r from-cyan-400 to-blue-500 text-white' : 'bg-slate-200 text-gray-600'
+                              } relative ${roboticMode ? 'robot-border shadow-lg shadow-cyan-500/30' : ''}`}
+                              whileTap={{ scale: 0.9 }}
+                            >
+                              <Cpu size={20} className={roboticMode ? 'animate-pulse' : ''} />
+                              {roboticMode && (
+                                <motion.span 
+                                  className="absolute inset-0 border border-cyan-400/50 rounded-full"
+                                  animate={{ 
+                                    scale: [1, 1.2, 1], 
+                                    opacity: [0.7, 0.2, 0.7] 
+                                  }}
+                                  transition={{ 
+                                    duration: 2,
+                                    repeat: Infinity
+                                  }}
+                                />
+                              )}
+                            </motion.button>
+                            
+                            <motion.button
+                              onClick={toggleTheme}
+                              className={`p-2 rounded-full ${
+                                theme === 'dark' 
+                                  ? 'bg-gradient-to-r from-cyan-700 to-blue-800 text-cyan-300 shadow-lg shadow-cyan-500/30' 
+                                  : 'bg-gradient-to-r from-cyan-400 to-blue-500 text-white shadow-lg shadow-blue-500/20'
+                              } relative ${theme === 'dark' ? 'theme-border-dark' : 'theme-border-light'}`}
+                              whileTap={{ scale: 0.9 }}
+                            >
+                              {theme === 'dark' && (
+                                <span className="absolute inset-0 theme-glow opacity-70 rounded-full -z-10"></span>
+                              )}
+                              {theme === 'dark' ? <Sun size={20} className="text-cyan-300 animate-pulse" /> : <Moon size={20} />}
+                              <motion.span 
+                                className={`absolute inset-0 border rounded-full ${theme === 'dark' ? 'border-cyan-400/50' : 'border-blue-400/50'}`}
+                                animate={{ 
+                                  scale: [1, 1.2, 1], 
+                                  opacity: [0.7, 0.2, 0.7] 
+                                }}
+                                transition={{ 
+                                  duration: 2,
+                                  repeat: Infinity
+                                }}
+                              />
+                            </motion.button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    {roboticMode && (
+                      <>
+                        <div className="absolute left-0 top-1/3 h-[1px] w-full bg-gradient-to-r from-transparent via-cyan-500/30 to-transparent"></div>
+                        <div className="absolute left-0 bottom-0 h-[1px] w-full bg-gradient-to-r from-transparent via-cyan-500/30 to-transparent"></div>
+                      </>
+                    )}
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </motion.nav>
 
             {/* Hero Section */}
             <section id="home" className="relative pt-32 pb-20 px-4 overflow-hidden">
-              <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 animate-gradient-x -z-10" />
+              {/* Toggle buttons for robotic theme and dark mode - moved down to avoid menu overlap */}
+              <motion.button
+                onClick={toggleRoboticMode}
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.5, duration: 0.5 }}
+                className={`absolute top-12 left-4 md:top-12 md:left-8 z-30 flex items-center gap-2 py-2.5 px-5 rounded-lg ${
+                  theme === 'dark' 
+                    ? roboticMode 
+                      ? 'bg-gradient-to-r from-cyan-600 to-blue-700 text-cyan-200 border border-cyan-500' 
+                      : 'bg-slate-800 text-gray-400 border border-slate-700' 
+                    : roboticMode 
+                      ? 'bg-gradient-to-r from-cyan-400 to-blue-500 text-white border border-blue-500' 
+                      : 'bg-slate-200 text-gray-600 border border-slate-300'
+                } transition-all shadow-lg shadow-cyan-500/30 hover:shadow-cyan-500/50`}
+                whileHover={{ 
+                  scale: 1.05, 
+                  boxShadow: roboticMode ? '0 0 20px rgba(8, 145, 178, 0.5)' : '0 0 10px rgba(100, 116, 139, 0.3)' 
+                }}
+                whileTap={{ scale: 0.95 }}
+                title="Toggle Robotic Theme"
+              >
+                <div className="relative">
+                  <Cpu 
+                    size={20} 
+                    className={roboticMode 
+                      ? `${theme === 'dark' ? 'text-cyan-300' : 'text-white'} animate-pulse` 
+                      : `${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`
+                    } 
+                  />
+                  {roboticMode && (
+                    <div className="absolute -inset-1 rounded-full bg-cyan-400 opacity-30 blur-sm -z-10"></div>
+                  )}
+                </div>
+                <span className={`text-sm font-bold ${
+                  roboticMode
+                    ? theme === 'dark' ? 'text-cyan-300' : 'text-white'
+                    : theme === 'dark' ? 'text-gray-400' : 'text-gray-600'
+                }`}>
+                  {roboticMode ? 'Robotic: ON' : 'Robotic: OFF'}
+                </span>
+                {roboticMode && (
+                  <motion.div 
+                    className="absolute inset-0 border border-cyan-400/50 rounded-lg"
+                    animate={{ 
+                      scale: [1, 1.05, 1], 
+                      opacity: [0.7, 0.2, 0.7] 
+                    }}
+                    transition={{ 
+                      duration: 2,
+                      repeat: Infinity
+                    }}
+                  />
+                )}
+              </motion.button>
+              
+              <motion.button
+                onClick={toggleTheme}
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.5, duration: 0.5 }}
+                className={`absolute top-12 right-4 md:top-12 md:right-8 z-30 flex items-center gap-2 py-2.5 px-5 rounded-lg ${
+                  theme === 'dark' 
+                    ? 'bg-slate-800 text-gray-400 border border-slate-700' 
+                    : 'bg-gradient-to-r from-cyan-400 to-blue-500 text-white border border-blue-500' 
+                } transition-all shadow-lg shadow-blue-500/30 hover:shadow-blue-500/50`}
+                whileHover={{ scale: 1.05, boxShadow: '0 0 20px rgba(59, 130, 246, 0.5)' }}
+                whileTap={{ scale: 0.95 }}
+                title={theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
+              >
+                <div className="relative">
+                  {theme === 'dark' ? (
+                    <Sun size={20} className="text-white animate-pulse" />
+                  ) : (
+                    <Moon size={20} className="text-white" />
+                  )}
+                  <div className={`absolute -inset-1 rounded-full ${theme === 'dark' ? 'bg-blue-400' : 'bg-indigo-400'} opacity-30 blur-sm -z-10`}></div>
+                </div>
+                <span className="text-sm font-bold text-white">
+                  {theme === 'dark' ? 'Light Mode' : 'Dark Mode'}
+                </span>
+              </motion.button>
+
+              <div className={`absolute inset-0 ${
+                theme === 'dark'
+                  ? 'bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900'
+                  : 'bg-gradient-to-br from-slate-200 via-slate-100 to-slate-300'
+              } animate-gradient-x -z-10`} />
               
               {/* Grid pattern background */}
               {roboticMode && (
@@ -516,7 +846,7 @@ function App() {
               {/* Circuit Paths */}
               {roboticMode && <CircuitPaths theme={theme} />}
               
-              {/* Left Side Robot Decoration */}
+              {/* Left Side Robot Decoration - Only in Hero Section */}
               {roboticMode && <LeftRobotDecoration theme={theme} />}
               
               <motion.div 
@@ -542,13 +872,12 @@ function App() {
                     transition={{ type: "spring", stiffness: 300 }}
                   >
                     <motion.span 
-                      className="intro-word animate-float-text"
+                      className="intro-word animate-float-text animate-hello-color-shift"
                       data-text="Hello,"
                       style={{ 
-                        color: '#fff',
                         position: 'relative',
                         display: 'inline-block',
-                        textShadow: '0 0 8px rgba(255, 255, 255, 0.5)'
+                        letterSpacing: '1px'
                       }}
                       initial={{ opacity: 0, y: -20 }}
                       animate={{ 
@@ -561,13 +890,12 @@ function App() {
                     </motion.span>
                     
                     <motion.span 
-                      className="intro-word animate-pulse-glow"
+                      className="intro-word animate-pulse-glow animate-hello-color-shift"
                       data-text="I'm"
                       style={{ 
-                        color: '#fff',
                         position: 'relative',
                         display: 'inline-block',
-                        textShadow: '0 0 8px rgba(255, 255, 255, 0.5)'
+                        letterSpacing: '1px'
                       }}
                       initial={{ opacity: 0, y: -20 }}
                       animate={{ 
@@ -591,11 +919,9 @@ function App() {
                     transition={{ type: "spring", stiffness: 300 }}
                   >
                     <motion.span 
-                      className="hero-text-word inline-block cursor-default relative font-bold name-glow-effect animate-color-shift"
+                      className={`hero-text-word inline-block cursor-default relative font-bold name-glow-effect`}
                       data-text="Dilusha"
                       style={{ 
-                        color: '#06b6d4',
-                        textShadow: '0 0 12px rgba(6, 182, 212, 0.7), 0 0 20px rgba(6, 182, 212, 0.3)',
                         letterSpacing: '2px'
                       }}
                       initial={{ opacity: 0, scale: 0.8 }}
@@ -610,15 +936,13 @@ function App() {
                         }
                       }}
                     >
-                      <span>Dilusha</span>
+                      <span className={roboticMode ? 'animate-robotic-text-glow' : 'animate-name-color-shift'}>Dilusha</span>
                     </motion.span>
                     
                     <motion.span 
-                      className="hero-text-word inline-block cursor-default relative font-bold name-glow-effect animate-letter-spacing animate-color-shift"
+                      className={`hero-text-word inline-block cursor-default relative font-bold name-glow-effect animate-letter-spacing`}
                       data-text="Chamika"
                       style={{ 
-                        color: '#3b82f6',
-                        textShadow: '0 0 12px rgba(59, 130, 246, 0.7), 0 0 20px rgba(59, 130, 246, 0.3)',
                         letterSpacing: '2px'
                       }}
                       initial={{ opacity: 0, scale: 0.8 }}
@@ -633,7 +957,7 @@ function App() {
                         }
                       }}
                     >
-                      <span>Chamika</span>
+                      <span className={roboticMode ? 'animate-robotic-text-glow' : 'animate-name-color-shift'}>Chamika</span>
                       
                       {/* Digital circuit layer that appears on hover */}
                       <motion.span 
@@ -643,7 +967,7 @@ function App() {
                     </motion.span>
                   </motion.div>
                 </motion.h2>
-                <div className="text-xl md:text-2xl text-gray-300 mb-8 h-10">
+                <div className={`text-xl md:text-2xl ${theme === 'dark' ? 'text-gray-300' : 'text-slate-800 font-semibold'} mb-8 h-10`}>
                   <TypeAnimation
                     sequence={[
                       'Software Developer',
@@ -659,20 +983,22 @@ function App() {
                   />
                 </div>
                 <div className="flex flex-wrap gap-4 justify-center">
-                  <motion.button 
-                    className="bg-gradient-to-r from-cyan-500 to-blue-500 text-white font-bold py-3 px-8 rounded-lg shadow-lg hover:shadow-cyan-500/50 transition-all"
-                    whileHover={{ scale: 1.05, boxShadow: "0 0 15px rgba(34, 211, 238, 0.5)" }}
+                  <motion.a 
+                    href="#certificates"
+                    className="bg-gradient-to-r from-slate-600 to-slate-700 text-white font-bold py-3 px-8 rounded-lg shadow-lg hover:shadow-slate-500/50 transition-all"
+                    whileHover={{ scale: 1.05, boxShadow: "0 0 15px rgba(100, 116, 139, 0.5)" }}
                     whileTap={{ scale: 0.95 }}
                   >
-                    Download Resume
-                  </motion.button>
-                  <motion.button 
-                    className="bg-white/10 backdrop-blur-md border border-white/20 text-white font-bold py-3 px-8 rounded-lg shadow-lg hover:bg-white/20 transition-all"
-                    whileHover={{ scale: 1.05 }}
+                    My Certificates
+                  </motion.a>
+                  <motion.a 
+                    href="#projects"
+                    className="bg-gradient-to-r from-gray-600 to-gray-700 text-white font-bold py-3 px-8 rounded-lg shadow-lg hover:shadow-gray-500/50 transition-all"
+                    whileHover={{ scale: 1.05, boxShadow: "0 0 15px rgba(107, 114, 128, 0.5)" }}
                     whileTap={{ scale: 0.95 }}
                   >
                     My Projects
-                  </motion.button>
+                  </motion.a>
                 </div>
                 
                 <motion.div 
@@ -680,7 +1006,7 @@ function App() {
                   animate={{ y: [0, 10, 0] }}
                   transition={{ duration: 1.5, repeat: Infinity }}
                 >
-                  <a href="#about" className="text-white/50 hover:text-white">
+                  <a href="#about" className={`${theme === 'dark' ? 'text-white/50 hover:text-white' : 'text-slate-700 hover:text-slate-900'}`}>
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="animate-bounce"><path d="m6 9 6 6 6-6"></path></svg>
                   </a>
                 </motion.div>
@@ -826,7 +1152,8 @@ function App() {
                     
                     <div className="flex flex-wrap gap-4">
                       <motion.a 
-                        href="#"
+                        href="./src/assets/cv.pdf"
+                        download="Dilusha_Chamika_CV.pdf"
                         className={`border-2 ${theme === 'dark' ? 'border-cyan-400 text-cyan-400 hover:bg-cyan-400' : 'border-blue-500 text-blue-500 hover:bg-blue-500'} hover:text-slate-900 font-bold py-2 px-6 rounded-lg transition-colors flex items-center gap-2`}
                         whileHover={{ scale: 1.05, boxShadow: "0 0 15px rgba(34, 211, 238, 0.3)" }}
                         whileTap={{ scale: 0.95 }}
@@ -849,9 +1176,177 @@ function App() {
               </div>
             </section>
             
+            {/* Education Section */}
+            <section id="education" className={`py-10 px-4 ${theme === 'dark' ? 'bg-slate-800/50' : 'bg-white'} transition-colors duration-300 relative overflow-hidden border-t ${theme === 'dark' ? 'border-slate-700' : 'border-slate-200'}`}>
+              {/* Flying Drones - only visible in robotic mode */}
+              {roboticMode && (
+                <>
+                  <FlyingDrone theme={theme} />
+                  <div className="absolute top-20 right-0 z-10">
+                    <motion.div
+                      animate={{
+                        x: [0, -300, 0],
+                        y: [0, -15, 10, -5, 0],
+                        rotate: [0, -3, 2, -1, 0],
+                      }}
+                      transition={{
+                        x: { 
+                          duration: 18, 
+                          repeat: Infinity,
+                          repeatType: 'loop',
+                          ease: 'easeInOut'
+                        },
+                        y: { 
+                          duration: 7, 
+                          repeat: Infinity,
+                          repeatType: 'loop',
+                          ease: 'easeInOut'
+                        },
+                        rotate: { 
+                          duration: 9, 
+                          repeat: Infinity,
+                          repeatType: 'loop',
+                          ease: 'easeInOut'
+                        }
+                      }}
+                      className="pointer-events-none"
+                    >
+                      <FlyingDrone theme={theme} />
+                    </motion.div>
+                  </div>
+                </>
+              )}
+              
+              <div className="container mx-auto relative z-10 max-w-4xl">
+                {roboticMode && (
+                  <div className="absolute inset-0 pointer-events-none opacity-10">
+                    <div className="grid-pattern" style={{
+                      position: 'absolute',
+                      inset: 0,
+                      backgroundImage: `
+                        linear-gradient(to right, ${theme === 'dark' ? 'rgba(6, 182, 212, 0.2)' : 'rgba(2, 132, 199, 0.15)'} 1px, transparent 1px),
+                        linear-gradient(to bottom, ${theme === 'dark' ? 'rgba(6, 182, 212, 0.2)' : 'rgba(2, 132, 199, 0.15)'} 1px, transparent 1px)
+                      `,
+                      backgroundSize: '20px 20px'
+                    }}></div>
+                  </div>
+                )}
+                
+                <motion.div 
+                  className="flex flex-col md:flex-row items-center gap-6 p-6 md:p-8 rounded-2xl bg-opacity-50 backdrop-blur-sm"
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.6 }}
+                  style={{
+                    backgroundColor: theme === 'dark' 
+                      ? roboticMode ? 'rgba(15, 23, 42, 0.7)' : 'rgba(30, 41, 59, 0.7)'
+                      : roboticMode ? 'rgba(241, 245, 249, 0.7)' : 'rgba(248, 250, 252, 0.7)',
+                    border: `1px solid ${theme === 'dark' 
+                      ? roboticMode ? 'rgba(6, 182, 212, 0.3)' : 'rgba(51, 65, 85, 0.5)'
+                      : roboticMode ? 'rgba(14, 165, 233, 0.3)' : 'rgba(226, 232, 240, 0.8)'}`
+                  }}
+                >
+                  {/* SLIIT Logo */}
+                  <motion.div 
+                    className="w-24 h-24 md:w-32 md:h-32 flex-shrink-0 relative"
+                    whileHover={{ scale: 1.05 }}
+                  >
+                    <img 
+                      src="./src/assets/sliit.png" 
+                      alt="SLIIT Logo" 
+                      className={`w-full h-full object-contain ${theme === 'dark' ? 'filter brightness-110' : ''}`}
+                    />
+                    {roboticMode && (
+                      <div className="absolute inset-0 pointer-events-none">
+                        <div className="absolute inset-0 border-2 border-cyan-400/30 rounded-full pulse-border"></div>
+                        <div className="absolute inset-0 flex items-center justify-center">
+                          <div className="w-1/2 h-1/2 rounded-full bg-cyan-400/10 animate-pulse"></div>
+                        </div>
+                      </div>
+                    )}
+                  </motion.div>
+                  
+                  {/* Education Info */}
+                  <div className={`flex-grow ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'}`}>
+                    <h3 className={`text-xl md:text-2xl font-bold mb-1 ${roboticMode ? 'text-cyan-400' : theme === 'dark' ? 'text-white' : 'text-slate-900'}`}>
+                      Sri Lanka Institute of Information Technology
+                    </h3>
+                    <p className="mb-1 font-medium">BSc (Hons), Computer Systems Engineering</p>
+                    <p className="mb-2 text-sm opacity-80">Nov 2023 - Nov 2027</p>
+                    <div className="flex items-center">
+                      <div className={`mr-2 px-3 py-1 rounded-full text-sm font-medium inline-flex items-center ${
+                        theme === 'dark' 
+                          ? roboticMode ? 'bg-cyan-900/30 text-cyan-400 border border-cyan-700' : 'bg-slate-700 text-cyan-400'
+                          : roboticMode ? 'bg-blue-100 text-blue-800 border border-blue-200' : 'bg-blue-100 text-blue-700'
+                      }`}>
+                        <span className="mr-1">GPA:</span> 3.65
+                      </div>
+                      
+                    </div>
+                  </div>
+                </motion.div>
+              </div>
+            </section>
+            
             {/* Skills Section */}
-            <section id="skills" className={`py-16 px-4 ${theme === 'dark' ? 'bg-slate-800' : 'bg-slate-100'} transition-colors duration-300 relative`}>
-              {roboticMode && <RobotDecorator type="digital-rain" />}
+            <section id="skills" className={`py-16 px-4 ${theme === 'dark' ? 'bg-slate-800' : 'bg-slate-100'} transition-colors duration-300 relative overflow-hidden`}>
+              {/* Circuit pattern background - only shown in robotic theme */}
+              {roboticMode && (
+                <div className="absolute inset-0 pointer-events-none">
+                  {/* Main circuit board grid */}
+                  <div className="absolute inset-0" style={{
+                    backgroundImage: `
+                      linear-gradient(to right, ${theme === 'dark' ? 'rgba(6, 182, 212, 0.1)' : 'rgba(59, 130, 246, 0.05)'} 1px, transparent 1px),
+                      linear-gradient(to bottom, ${theme === 'dark' ? 'rgba(6, 182, 212, 0.1)' : 'rgba(59, 130, 246, 0.05)'} 1px, transparent 1px)
+                    `,
+                    backgroundSize: '40px 40px'
+                  }}></div>
+                  
+                  {/* Circuit paths - horizontal */}
+                  <div className="absolute top-1/4 left-0 right-0 h-[1px]" 
+                    style={{background: `linear-gradient(to right, transparent, ${theme === 'dark' ? 'rgba(6, 182, 212, 0.4)' : 'rgba(59, 130, 246, 0.3)'}, transparent)`}}>
+                  </div>
+                  <div className="absolute top-3/4 left-0 right-0 h-[1px]" 
+                    style={{background: `linear-gradient(to right, transparent, ${theme === 'dark' ? 'rgba(6, 182, 212, 0.4)' : 'rgba(59, 130, 246, 0.3)'}, transparent)`}}>
+                  </div>
+                  
+                  {/* Circuit paths - vertical */}
+                  <div className="absolute top-0 bottom-0 w-[1px] left-1/4" 
+                    style={{background: `linear-gradient(to bottom, transparent, ${theme === 'dark' ? 'rgba(6, 182, 212, 0.4)' : 'rgba(59, 130, 246, 0.3)'}, transparent)`}}>
+                  </div>
+                  <div className="absolute top-0 bottom-0 w-[1px] right-1/4" 
+                    style={{background: `linear-gradient(to bottom, transparent, ${theme === 'dark' ? 'rgba(6, 182, 212, 0.4)' : 'rgba(59, 130, 246, 0.3)'}, transparent)`}}>
+                  </div>
+                  
+                  {/* Circuit nodes */}
+                  <div className="absolute top-1/4 left-1/4 w-4 h-4 rounded-full" 
+                    style={{background: theme === 'dark' ? 'rgba(6, 182, 212, 0.3)' : 'rgba(59, 130, 246, 0.2)', boxShadow: `0 0 10px ${theme === 'dark' ? 'rgba(6, 182, 212, 0.5)' : 'rgba(59, 130, 246, 0.4)'}`}}>
+                  </div>
+                  <div className="absolute top-1/4 right-1/4 w-4 h-4 rounded-full" 
+                    style={{background: theme === 'dark' ? 'rgba(6, 182, 212, 0.3)' : 'rgba(59, 130, 246, 0.2)', boxShadow: `0 0 10px ${theme === 'dark' ? 'rgba(6, 182, 212, 0.5)' : 'rgba(59, 130, 246, 0.4)'}`}}>
+                  </div>
+                  <div className="absolute top-3/4 left-1/4 w-4 h-4 rounded-full" 
+                    style={{background: theme === 'dark' ? 'rgba(6, 182, 212, 0.3)' : 'rgba(59, 130, 246, 0.2)', boxShadow: `0 0 10px ${theme === 'dark' ? 'rgba(6, 182, 212, 0.5)' : 'rgba(59, 130, 246, 0.4)'}`}}>
+                  </div>
+                  <div className="absolute top-3/4 right-1/4 w-4 h-4 rounded-full" 
+                    style={{background: theme === 'dark' ? 'rgba(6, 182, 212, 0.3)' : 'rgba(59, 130, 246, 0.2)', boxShadow: `0 0 10px ${theme === 'dark' ? 'rgba(6, 182, 212, 0.5)' : 'rgba(59, 130, 246, 0.4)'}`}}>
+                  </div>
+                  
+                  {/* Diagonal circuit traces */}
+                  <svg className="absolute inset-0 w-full h-full" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M0,0 C50%,50% 50%,50% 100%,100%" 
+                      stroke={theme === 'dark' ? 'rgba(6, 182, 212, 0.2)' : 'rgba(59, 130, 246, 0.1)'} 
+                      strokeWidth="1" 
+                      fill="none" />
+                    <path d="M100%,0 C50%,50% 50%,50% 0,100%" 
+                      stroke={theme === 'dark' ? 'rgba(6, 182, 212, 0.2)' : 'rgba(59, 130, 246, 0.1)'} 
+                      strokeWidth="1" 
+                      fill="none" />
+                  </svg>
+                </div>
+              )}
+              
               <div className="container mx-auto relative z-10">
                 <RoboticSectionTitle>
                   My Skills
@@ -860,9 +1355,21 @@ function App() {
                 <div className="max-w-3xl mx-auto">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                     <div>
-                      <h3 className={`text-xl font-bold mb-4 ${theme === 'dark' ? 'text-cyan-400' : 'text-blue-600'}`}>
-                        Programming & Development
-                      </h3>
+                      <div className={`relative ${theme === 'dark' ? 'bg-slate-700/80' : 'bg-slate-200/80'} p-3 mb-6 rounded-md ${roboticMode ? `border-l-4 ${theme === 'dark' ? 'border-cyan-400' : 'border-blue-500'}` : ''}`}>
+                        <h3 className={`text-xl font-bold ${theme === 'dark' ? 'text-cyan-400' : 'text-blue-600'} flex items-center whitespace-nowrap`}>
+                          {roboticMode && (
+                            <span className={`inline-block w-3 h-3 mr-2 rounded-full ${theme === 'dark' ? 'bg-cyan-400' : 'bg-blue-500'}`}></span>
+                          )}
+                          {roboticMode ? 'Programming' : 'Programming & Development'}
+                        </h3>
+                        {/* Circuit decoration - only in robotic mode */}
+                        {roboticMode && (
+                          <div className="absolute top-0 right-0 w-8 h-8">
+                            <div className={`w-4 h-[1px] ${theme === 'dark' ? 'bg-cyan-400/50' : 'bg-blue-500/50'} absolute top-0 right-0`}></div>
+                            <div className={`w-[1px] h-4 ${theme === 'dark' ? 'bg-cyan-400/50' : 'bg-blue-500/50'} absolute top-0 right-0`}></div>
+                          </div>
+                        )}
+                      </div>
                       <motion.div 
                         className="space-y-4"
                         variants={stagger}
@@ -871,19 +1378,55 @@ function App() {
                         viewport={{ once: true }}
                       >
                         {skills.slice(0, 4).map((skill, index) => (
-                          <motion.div key={index} variants={fadeInUp} className="mb-2">
-                            <div className="flex justify-between mb-1">
-                              <span className="font-medium">{skill.name}</span>
-                              <span>{skill.level}%</span>
+                          <motion.div 
+                            key={index} 
+                            variants={fadeInUp} 
+                            className={`mb-4 p-3 rounded-md relative ${theme === 'dark' ? 'bg-slate-700/60' : 'bg-slate-200/60'}`}
+                            whileHover={{
+                              boxShadow: theme === 'dark' 
+                                ? '0 0 12px rgba(6, 182, 212, 0.3)' 
+                                : '0 0 12px rgba(59, 130, 246, 0.2)'
+                            }}
+                          >
+                            <div className="flex justify-between mb-2">
+                              <span className="font-medium flex items-center gap-2">
+                                {/* Small circuit node icon */}
+                                <span className={`inline-block w-2 h-2 rounded-full ${theme === 'dark' ? 'bg-cyan-400' : 'bg-blue-400'}`}></span>
+                                {skill.name}
+                              </span>
+                              <span className={`${theme === 'dark' ? 'text-cyan-300' : 'text-blue-500'} font-mono`}>{skill.level}%</span>
                             </div>
-                            <div className={`w-full h-2 rounded-full ${theme === 'dark' ? 'bg-slate-700' : 'bg-slate-300'}`}>
+                            <div className={`w-full h-3 rounded-full ${theme === 'dark' ? 'bg-slate-800' : 'bg-slate-300'} p-0.5`}>
                               <motion.div 
-                                className="h-full rounded-full bg-gradient-to-r from-cyan-500 to-blue-500"
+                                className={`h-full rounded-full bg-gradient-to-r ${
+                                  theme === 'dark' ? 'from-cyan-600 to-cyan-400' : 'from-blue-600 to-blue-400'
+                                } relative`}
                                 initial={{ width: 0 }}
                                 whileInView={{ width: `${skill.level}%` }}
                                 viewport={{ once: true }}
                                 transition={{ duration: 1, delay: 0.2 * index }}
-                              />
+                              >
+                                {/* Small light dots along the progress bar */}
+                                {[...Array(Math.floor(skill.level / 20))].map((_, i) => (
+                                  <span 
+                                    key={i}
+                                    className={`absolute top-1/2 -translate-y-1/2 w-1 h-1 rounded-full ${
+                                      theme === 'dark' ? 'bg-cyan-200' : 'bg-white'
+                                    }`}
+                                    style={{ left: `${(i + 1) * 20}%` }}
+                                  ></span>
+                                ))}
+                              </motion.div>
+                            </div>
+                            
+                            {/* Circuit corners for the tech feel */}
+                            <div className="absolute top-0 left-0 w-2 h-2">
+                              <div className="w-full h-[1px] bg-gradient-to-r from-transparent to-current opacity-30"></div>
+                              <div className="w-[1px] h-full bg-gradient-to-b from-transparent to-current opacity-30"></div>
+                            </div>
+                            <div className="absolute top-0 right-0 w-2 h-2">
+                              <div className="w-full h-[1px] bg-gradient-to-l from-transparent to-current opacity-30"></div>
+                              <div className="w-[1px] h-full bg-gradient-to-b from-transparent to-current opacity-30"></div>
                             </div>
                           </motion.div>
                         ))}
@@ -891,9 +1434,21 @@ function App() {
                     </div>
                     
                     <div>
-                      <h3 className={`text-xl font-bold mb-4 ${theme === 'dark' ? 'text-cyan-400' : 'text-blue-600'}`}>
-                        AI & Tools
-                      </h3>
+                      <div className={`relative ${theme === 'dark' ? 'bg-slate-700/80' : 'bg-slate-200/80'} p-3 mb-6 rounded-md ${roboticMode ? `border-l-4 ${theme === 'dark' ? 'border-cyan-400' : 'border-blue-500'}` : ''}`}>
+                        <h3 className={`text-xl font-bold ${theme === 'dark' ? 'text-cyan-400' : 'text-blue-600'} flex items-center`}>
+                          {roboticMode && (
+                            <span className={`inline-block w-3 h-3 mr-2 rounded-full ${theme === 'dark' ? 'bg-cyan-400' : 'bg-blue-500'}`}></span>
+                          )}
+                          AI & Tools
+                        </h3>
+                        {/* Circuit decoration - only in robotic mode */}
+                        {roboticMode && (
+                          <div className="absolute top-0 right-0 w-8 h-8">
+                            <div className={`w-4 h-[1px] ${theme === 'dark' ? 'bg-cyan-400/50' : 'bg-blue-500/50'} absolute top-0 right-0`}></div>
+                            <div className={`w-[1px] h-4 ${theme === 'dark' ? 'bg-cyan-400/50' : 'bg-blue-500/50'} absolute top-0 right-0`}></div>
+                          </div>
+                        )}
+                      </div>
                       <motion.div 
                         className="space-y-4"
                         variants={stagger}
@@ -902,19 +1457,55 @@ function App() {
                         viewport={{ once: true }}
                       >
                         {skills.slice(4).map((skill, index) => (
-                          <motion.div key={index} variants={fadeInUp} className="mb-2">
-                            <div className="flex justify-between mb-1">
-                              <span className="font-medium">{skill.name}</span>
-                              <span>{skill.level}%</span>
+                          <motion.div 
+                            key={index} 
+                            variants={fadeInUp} 
+                            className={`mb-4 p-3 rounded-md relative ${theme === 'dark' ? 'bg-slate-700/60' : 'bg-slate-200/60'}`}
+                            whileHover={{
+                              boxShadow: theme === 'dark' 
+                                ? '0 0 12px rgba(6, 182, 212, 0.3)' 
+                                : '0 0 12px rgba(59, 130, 246, 0.2)'
+                            }}
+                          >
+                            <div className="flex justify-between mb-2">
+                              <span className="font-medium flex items-center gap-2">
+                                {/* Small circuit node icon */}
+                                <span className={`inline-block w-2 h-2 rounded-full ${theme === 'dark' ? 'bg-cyan-400' : 'bg-blue-400'}`}></span>
+                                {skill.name}
+                              </span>
+                              <span className={`${theme === 'dark' ? 'text-cyan-300' : 'text-blue-500'} font-mono`}>{skill.level}%</span>
                             </div>
-                            <div className={`w-full h-2 rounded-full ${theme === 'dark' ? 'bg-slate-700' : 'bg-slate-300'}`}>
+                            <div className={`w-full h-3 rounded-full ${theme === 'dark' ? 'bg-slate-800' : 'bg-slate-300'} p-0.5`}>
                               <motion.div 
-                                className="h-full rounded-full bg-gradient-to-r from-cyan-500 to-blue-500"
+                                className={`h-full rounded-full bg-gradient-to-r ${
+                                  theme === 'dark' ? 'from-cyan-600 to-cyan-400' : 'from-blue-600 to-blue-400'
+                                } relative`}
                                 initial={{ width: 0 }}
                                 whileInView={{ width: `${skill.level}%` }}
                                 viewport={{ once: true }}
                                 transition={{ duration: 1, delay: 0.2 * index }}
-                              />
+                              >
+                                {/* Small light dots along the progress bar */}
+                                {[...Array(Math.floor(skill.level / 20))].map((_, i) => (
+                                  <span 
+                                    key={i}
+                                    className={`absolute top-1/2 -translate-y-1/2 w-1 h-1 rounded-full ${
+                                      theme === 'dark' ? 'bg-cyan-200' : 'bg-white'
+                                    }`}
+                                    style={{ left: `${(i + 1) * 20}%` }}
+                                  ></span>
+                                ))}
+                              </motion.div>
+                            </div>
+                            
+                            {/* Circuit corners for the tech feel */}
+                            <div className="absolute top-0 left-0 w-2 h-2">
+                              <div className="w-full h-[1px] bg-gradient-to-r from-transparent to-current opacity-30"></div>
+                              <div className="w-[1px] h-full bg-gradient-to-b from-transparent to-current opacity-30"></div>
+                            </div>
+                            <div className="absolute top-0 right-0 w-2 h-2">
+                              <div className="w-full h-[1px] bg-gradient-to-l from-transparent to-current opacity-30"></div>
+                              <div className="w-[1px] h-full bg-gradient-to-b from-transparent to-current opacity-30"></div>
                             </div>
                           </motion.div>
                         ))}
@@ -929,39 +1520,80 @@ function App() {
                     whileInView="visible"
                     viewport={{ once: true }}
                   >
-                    <motion.button
-                      onClick={() => setShowSkillsModal(true)}
-                      className={`px-8 py-3 rounded-lg ${
-                        theme === 'dark'
-                          ? 'bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500'
-                          : 'bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-400 hover:to-cyan-400'
-                      } text-white font-semibold shadow-lg transition-all ${
-                        roboticMode ? 'relative overflow-hidden border border-cyan-500' : ''
-                      }`}
-                      whileHover={{ 
-                        scale: 1.05, 
-                        boxShadow: "0 0 15px rgba(34, 211, 238, 0.5)" 
-                      }}
-                      whileTap={{ scale: 0.95 }}
-                    >
-                      {roboticMode ? (
+                    <motion.div className="relative">
+                      {/* Circuit connection lines to button - only in robotic mode */}
+                      {roboticMode && (
                         <>
-                          <span className="flex items-center gap-2 relative z-10">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                              <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
-                              <line x1="7" y1="12" x2="17" y2="12"/>
-                              <line x1="12" y1="7" x2="12" y2="17"/>
-                            </svg>
-                            VIEW_SKILL.DATA
-                          </span>
-                          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-cyan-500/20 to-transparent -translate-x-full animate-[shimmer_2s_infinite]"></div>
-                          <div className="absolute top-0 right-0 h-full w-1 bg-cyan-400/30"></div>
-                          <div className="absolute bottom-0 left-0 h-1 w-full bg-cyan-400/30"></div>
+                          <div className={`absolute left-1/2 -top-10 w-[1px] h-10 ${theme === 'dark' ? 'bg-cyan-400/30' : 'bg-blue-400/30'}`}></div>
+                          <div className={`absolute left-1/2 top-full w-[1px] h-4 ${theme === 'dark' ? 'bg-cyan-400/30' : 'bg-blue-400/30'}`}></div>
+                          <div className={`absolute top-1/2 -left-10 h-[1px] w-10 ${theme === 'dark' ? 'bg-cyan-400/30' : 'bg-blue-400/30'}`}></div>
+                          <div className={`absolute top-1/2 -right-10 h-[1px] w-10 ${theme === 'dark' ? 'bg-cyan-400/30' : 'bg-blue-400/30'}`}></div>
+                          
+                          {/* Circuit nodes */}
+                          <div className={`absolute left-1/2 -top-10 w-3 h-3 rounded-full transform -translate-x-1/2 ${theme === 'dark' ? 'bg-cyan-500/40' : 'bg-blue-500/40'}`}></div>
+                          <div className={`absolute -left-10 top-1/2 w-3 h-3 rounded-full transform -translate-y-1/2 ${theme === 'dark' ? 'bg-cyan-500/40' : 'bg-blue-500/40'}`}></div>
+                          <div className={`absolute -right-10 top-1/2 w-3 h-3 rounded-full transform -translate-y-1/2 ${theme === 'dark' ? 'bg-cyan-500/40' : 'bg-blue-500/40'}`}></div>
                         </>
-                      ) : (
-                        "View Detailed Skills"
                       )}
-                    </motion.button>
+                      
+                      <motion.button
+                        onClick={() => setShowSkillsModal(true)}
+                        className={`px-10 py-4 rounded-lg ${
+                          theme === 'dark'
+                            ? 'bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500'
+                            : 'bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-400 hover:to-cyan-400'
+                        } text-white font-semibold shadow-lg transition-all relative overflow-hidden`}
+                        whileHover={{ 
+                          scale: 1.05, 
+                          boxShadow: theme === 'dark' 
+                            ? "0 0 20px rgba(34, 211, 238, 0.6)" 
+                            : "0 0 20px rgba(59, 130, 246, 0.6)" 
+                        }}
+                        whileTap={{ scale: 0.95 }}
+                      >
+                        {/* Circuit pattern overlay */}
+                        <div className="absolute inset-0 opacity-20" style={{
+                          backgroundImage: `
+                            linear-gradient(to right, rgba(255, 255, 255, 0.1) 1px, transparent 1px),
+                            linear-gradient(to bottom, rgba(255, 255, 255, 0.1) 1px, transparent 1px)
+                          `,
+                          backgroundSize: '10px 10px'
+                        }}></div>
+                        
+                        {/* Corner circuit decorations */}
+                        <div className="absolute top-0 left-0 w-4 h-4">
+                          <div className="w-3 h-[1px] bg-white/40 absolute top-0 left-0"></div>
+                          <div className="w-[1px] h-3 bg-white/40 absolute top-0 left-0"></div>
+                        </div>
+                        <div className="absolute top-0 right-0 w-4 h-4">
+                          <div className="w-3 h-[1px] bg-white/40 absolute top-0 right-0"></div>
+                          <div className="w-[1px] h-3 bg-white/40 absolute top-0 right-0"></div>
+                        </div>
+                        <div className="absolute bottom-0 left-0 w-4 h-4">
+                          <div className="w-3 h-[1px] bg-white/40 absolute bottom-0 left-0"></div>
+                          <div className="w-[1px] h-3 bg-white/40 absolute bottom-0 left-0"></div>
+                        </div>
+                        <div className="absolute bottom-0 right-0 w-4 h-4">
+                          <div className="w-3 h-[1px] bg-white/40 absolute bottom-0 right-0"></div>
+                          <div className="w-[1px] h-3 bg-white/40 absolute bottom-0 right-0"></div>
+                        </div>
+                        
+                        {/* Button content */}
+                        <span className="flex items-center gap-3 relative z-10">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                            <circle cx="12" cy="12" r="10"/>
+                            <line x1="2" y1="12" x2="22" y2="12"/>
+                            <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+                          </svg>
+                          {roboticMode ? 'VIEW_SKILL.DATA' : 'View Detailed Skills'}
+                          
+                          <span className={`inline-block w-2 h-2 rounded-full ${theme === 'dark' ? 'bg-cyan-300' : 'bg-white'} animate-pulse`}></span>
+                        </span>
+                        
+                        {/* Animated shimmer effect */}
+                        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full animate-[shimmer_2s_infinite]"></div>
+                      </motion.button>
+                    </motion.div>
                   </motion.div>
                 </div>
               </div>
@@ -1002,8 +1634,8 @@ function App() {
             </div>
             
             {/* Projects Section */}
-            <section id="projects" className={`py-20 px-4 ${theme === 'dark' ? 'bg-slate-900' : 'bg-white'} transition-colors duration-300 relative`}>
-              {roboticMode && <RobotDecorator type="circuit" />}
+            <section id="projects" className={`py-20 px-4 ${theme === 'dark' ? 'bg-slate-900' : 'bg-white'} transition-colors duration-300 relative overflow-hidden`}>
+              {/* No hardware decorations for projects section */}
               <div className="container mx-auto relative z-10">
                 <RoboticSectionTitle>
                   My Projects
@@ -1430,13 +2062,280 @@ function App() {
               </div>
             </section>
 
+            {/* Honors & Awards Section */}
+            <section id="awards" className={`py-20 px-4 ${theme === 'dark' ? 'bg-slate-800' : 'bg-slate-50'} transition-colors duration-300 relative`}>
+              <div className="container mx-auto relative z-10">
+                <RoboticSectionTitle>
+                  Honors & Awards
+                </RoboticSectionTitle>
+                
+                <div className="relative mt-10 px-4">
+                  {/* Left Arrow */}
+                  <button 
+                    className="absolute left-0 top-1/2 transform -translate-y-1/2 z-20 bg-gray-800/50 hover:bg-gray-800/70 text-white p-2 rounded-full md:hidden"
+                    onClick={() => {
+                      const container = document.querySelector('#awards-container');
+                      container.scrollBy({ left: -300, behavior: 'smooth' });
+                    }}
+                    aria-label="Scroll left"
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+                  </button>
+                  
+                  {/* Right Arrow */}
+                  <button 
+                    className="absolute right-0 top-1/2 transform -translate-y-1/2 z-20 bg-gray-800/50 hover:bg-gray-800/70 text-white p-2 rounded-full md:hidden"
+                    onClick={() => {
+                      const container = document.querySelector('#awards-container');
+                      container.scrollBy({ left: 300, behavior: 'smooth' });
+                    }}
+                    aria-label="Scroll right"
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+                  </button>
+
+                  {/* Cards Container with Horizontal Scrolling */}
+                  <div 
+                    id="awards-container"
+                    className="flex gap-6 overflow-x-auto md:overflow-visible scrollbar-hide snap-x snap-mandatory pb-6"
+                  >
+                    {/* Card 1 - CODEFEST 2024 */}
+                    <motion.div 
+                      className={`${theme === 'dark' ? 'bg-slate-700' : 'bg-white'} rounded-xl shadow-lg overflow-hidden flex-shrink-0 w-full md:w-1/3 snap-center ${roboticMode ? 'robotic-card' : ''}`}
+                      whileHover={{ y: -5, boxShadow: '0 10px 25px rgba(0, 0, 0, 0.2)' }}
+                      initial={{ opacity: 0, y: 20 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.5 }}
+                    >
+                      <div className="relative h-48">
+                        <img 
+                          src="./src/assets/award/CODEFEST.jpg" 
+                          alt="CODEFEST 2024 Award" 
+                          className="w-full h-full object-cover object-center"
+                        />
+                        {roboticMode && (
+                          <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-cyan-500/20 to-transparent pointer-events-none scanner-overlay">
+                            <div className="scan-line"></div>
+                          </div>
+                        )}
+                      </div>
+                      <div className="p-6">
+                        <div className="flex items-center mb-3">
+                          <span className={`text-2xl mr-2 ${roboticMode ? 'text-cyan-400' : theme === 'dark' ? 'text-yellow-500' : 'text-amber-500'}`}>🏆</span>
+                          <h3 className={`font-bold text-xl ${theme === 'dark' ? 'text-white' : 'text-slate-800'}`}>Finalist at CODEFEST 2024 – Algothon!</h3>
+                        </div>
+                        <p className={`text-sm ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'} mb-3`}>
+                          Issued by Sri Lanka Institute of Information Technology · Jan 2025
+                        </p>
+                        <p className={`${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'} mb-4 text-sm`}>
+                          Excited to share that Team ENIGMA—comprising Sandil Perera, Hesara Perera, and myself—emerged as Finalists in the Algothon under the Tertiary Category at CODEFEST 2024, organized by SLIIT, Faculty of Computing. It was an incredible experience tackling complex algorithmic challenges, collaborating as a team, and pushing our problem-solving skills to the next level.
+                        </p>
+                        <div className={`mt-4 inline-block px-3 py-1 rounded-full text-xs font-medium ${theme === 'dark' ? 'bg-slate-600 text-white' : 'bg-slate-200 text-slate-800'}`}>
+                          Certificate
+                        </div>
+                      </div>
+                    </motion.div>
+                    
+                    {/* Card 2 - Dean's List */}
+                    <motion.div 
+                      className={`${theme === 'dark' ? 'bg-slate-700' : 'bg-white'} rounded-xl shadow-lg overflow-hidden flex-shrink-0 w-full md:w-1/3 snap-center`}
+                      whileHover={{ y: -5, boxShadow: '0 10px 25px rgba(0, 0, 0, 0.2)' }}
+                      initial={{ opacity: 0, y: 20 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.5, delay: 0.15 }}
+                    >
+                      <div className="relative h-48">
+                        <img 
+                          src="./src/assets/award/Dean's List 1.jpg" 
+                          alt="Dean's List Award" 
+                          className="w-full h-full object-cover object-center"
+                        />
+                        {roboticMode && (
+                          <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-cyan-500/20 to-transparent pointer-events-none scanner-overlay">
+                            <div className="scan-line"></div>
+                          </div>
+                        )}
+                      </div>
+                      <div className="p-6">
+                        <div className="flex items-center mb-3">
+                          <span className={`text-2xl mr-2 ${roboticMode ? 'text-cyan-400' : theme === 'dark' ? 'text-yellow-500' : 'text-amber-500'}`}>🏆</span>
+                          <h3 className={`font-bold text-xl ${theme === 'dark' ? 'text-white' : 'text-slate-800'}`}>Dean's List - Year 01 Semester 01 (3.7)</h3>
+                        </div>
+                        <p className={`text-sm ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'} mb-3`}>
+                          Issued by SLIIT · Oct 2024
+                        </p>
+                        <p className={`${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'} mb-4 text-sm`}>
+                          I am pleased to announce that I have been named to the Dean's List for Semester 1, achieving a GPA of 3.7 in my Computer Science program at SLIIT. This recognition reflects my commitment to academic rigor and pursuit of excellence.
+                        </p>
+                        <div className={`mt-4 inline-block px-3 py-1 rounded-full text-xs font-medium ${theme === 'dark' ? 'bg-slate-600 text-white' : 'bg-slate-200 text-slate-800'}`}>
+                          Certification
+                        </div>
+                      </div>
+                    </motion.div>
+                    
+                    {/* Card 3 - SliitXtreme 3.0 */}
+                    <motion.div 
+                      className={`${theme === 'dark' ? 'bg-slate-700' : 'bg-white'} rounded-xl shadow-lg overflow-hidden flex-shrink-0 w-full md:w-1/3 snap-center ${roboticMode ? 'robotic-card' : ''}`}
+                      whileHover={{ y: -5, boxShadow: '0 10px 25px rgba(0, 0, 0, 0.2)' }}
+                      initial={{ opacity: 0, y: 20 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.5, delay: 0.3 }}
+                    >
+                      <div className="relative h-48">
+                        <img 
+                          src="./src/assets/award/SliitXtreme 1.jpg" 
+                          alt="SliitXtreme 3.0 Award" 
+                          className="w-full h-full object-cover object-center"
+                        />
+                        {roboticMode && (
+                          <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-cyan-500/20 to-transparent pointer-events-none scanner-overlay">
+                            <div className="scan-line"></div>
+                          </div>
+                        )}
+                      </div>
+                      <div className="p-6">
+                        <div className="flex items-center mb-3">
+                          <span className={`text-2xl mr-2 ${roboticMode ? 'text-cyan-400' : theme === 'dark' ? 'text-yellow-500' : 'text-amber-500'}`}>🏆</span>
+                          <h3 className={`font-bold text-xl ${theme === 'dark' ? 'text-white' : 'text-slate-800'}`}>5th Place - SliitXtreme 3.0</h3>
+                        </div>
+                        <p className={`text-sm ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'} mb-3`}>
+                          Issued by IEEE Computer Society of SLIIT
+                        </p>
+                        <p className={`${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'} mb-4 text-sm`}>
+                          As part of Team ENIGMA, I contributed to securing the 5th position at SLIITXtreme 3.0. This collaborative effort highlighted our team's ability to work together and solve complex coding challenges.
+                        </p>
+                        <div className={`mt-4 inline-block px-3 py-1 rounded-full text-xs font-medium ${theme === 'dark' ? 'bg-slate-600 text-white' : 'bg-slate-200 text-slate-800'}`}>
+                          Award Ceremony
+                        </div>
+                      </div>
+                    </motion.div>
+                  </div>
+                </div>
+              </div>
+            </section>
+
             {/* Contact Section */}
-            <section id="contact" className={`py-20 px-4 ${theme === 'dark' ? 'bg-slate-800' : 'bg-slate-100'} transition-colors duration-300 relative`}>
-              {roboticMode && <RobotDecorator type="scanner" />}
+            <section id="contact" className={`py-20 px-4 ${theme === 'dark' ? 'bg-slate-800' : 'bg-slate-100'} transition-colors duration-300 relative overflow-hidden`}>
+              {/* CPU and Hardware Components Background - Only visible in robotic theme */}
+              {roboticMode && <RobotDecorator type="hardware" section="contact" />}
+              
+              {/* Additional Robotic Pattern Background - Only shown in robotic theme */}
+              {roboticMode && (
+                <div className="absolute inset-0 pointer-events-none">
+                  {/* Main circuit board grid */}
+                  <div className="absolute inset-0" style={{
+                    backgroundImage: `
+                      linear-gradient(to right, ${theme === 'dark' ? 'rgba(6, 182, 212, 0.1)' : 'rgba(59, 130, 246, 0.05)'} 1px, transparent 1px),
+                      linear-gradient(to bottom, ${theme === 'dark' ? 'rgba(6, 182, 212, 0.1)' : 'rgba(59, 130, 246, 0.05)'} 1px, transparent 1px)
+                    `,
+                    backgroundSize: '30px 30px'
+                  }}></div>
+                  
+                  {/* Circuit paths - horizontal */}
+                  <div className="absolute top-1/3 left-0 right-0 h-[1px]" 
+                    style={{background: `linear-gradient(to right, transparent, ${theme === 'dark' ? 'rgba(6, 182, 212, 0.4)' : 'rgba(59, 130, 246, 0.3)'}, transparent)`}}>
+                  </div>
+                  <div className="absolute top-2/3 left-0 right-0 h-[1px]" 
+                    style={{background: `linear-gradient(to right, transparent, ${theme === 'dark' ? 'rgba(6, 182, 212, 0.4)' : 'rgba(59, 130, 246, 0.3)'}, transparent)`}}>
+                  </div>
+                  
+                  {/* Circuit paths - vertical */}
+                  <div className="absolute top-0 bottom-0 w-[1px] left-1/3" 
+                    style={{background: `linear-gradient(to bottom, transparent, ${theme === 'dark' ? 'rgba(6, 182, 212, 0.4)' : 'rgba(59, 130, 246, 0.3)'}, transparent)`}}>
+                  </div>
+                  <div className="absolute top-0 bottom-0 w-[1px] right-1/3" 
+                    style={{background: `linear-gradient(to bottom, transparent, ${theme === 'dark' ? 'rgba(6, 182, 212, 0.4)' : 'rgba(59, 130, 246, 0.3)'}, transparent)`}}>
+                  </div>
+                  
+                  {/* Circuit nodes */}
+                  <div className="absolute top-1/3 left-1/3 w-3 h-3 rounded-full" 
+                    style={{background: theme === 'dark' ? 'rgba(6, 182, 212, 0.3)' : 'rgba(59, 130, 246, 0.2)', boxShadow: `0 0 10px ${theme === 'dark' ? 'rgba(6, 182, 212, 0.5)' : 'rgba(59, 130, 246, 0.4)'}`}}>
+                  </div>
+                  <div className="absolute top-1/3 right-1/3 w-3 h-3 rounded-full" 
+                    style={{background: theme === 'dark' ? 'rgba(6, 182, 212, 0.3)' : 'rgba(59, 130, 246, 0.2)', boxShadow: `0 0 10px ${theme === 'dark' ? 'rgba(6, 182, 212, 0.5)' : 'rgba(59, 130, 246, 0.4)'}`}}>
+                  </div>
+                  <div className="absolute top-2/3 left-1/3 w-3 h-3 rounded-full" 
+                    style={{background: theme === 'dark' ? 'rgba(6, 182, 212, 0.3)' : 'rgba(59, 130, 246, 0.2)', boxShadow: `0 0 10px ${theme === 'dark' ? 'rgba(6, 182, 212, 0.5)' : 'rgba(59, 130, 246, 0.4)'}`}}>
+                  </div>
+                  <div className="absolute top-2/3 right-1/3 w-3 h-3 rounded-full" 
+                    style={{background: theme === 'dark' ? 'rgba(6, 182, 212, 0.3)' : 'rgba(59, 130, 246, 0.2)', boxShadow: `0 0 10px ${theme === 'dark' ? 'rgba(6, 182, 212, 0.5)' : 'rgba(59, 130, 246, 0.4)'}`}}>
+                  </div>
+                  
+                  {/* Diagonal circuit traces */}
+                  <svg className="absolute inset-0 w-full h-full" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M0,0 C50%,50% 50%,50% 100%,100%" 
+                      stroke={theme === 'dark' ? 'rgba(6, 182, 212, 0.2)' : 'rgba(59, 130, 246, 0.1)'} 
+                      strokeWidth="1" 
+                      fill="none" />
+                    <path d="M100%,0 C50%,50% 50%,50% 0,100%" 
+                      stroke={theme === 'dark' ? 'rgba(6, 182, 212, 0.2)' : 'rgba(59, 130, 246, 0.1)'} 
+                      strokeWidth="1" 
+                      fill="none" />
+                  </svg>
+                </div>
+              )}
+              
               <div className="container mx-auto relative z-10">
                 <RoboticSectionTitle>
                   Contact Me
                 </RoboticSectionTitle>
+                
+                {/* Robot decoration - only in robotic mode */}
+                {roboticMode && (
+                  <div className="absolute right-0 -top-16 md:right-10 lg:right-20 z-10 w-40 h-40 opacity-70 pointer-events-none">
+                    {/* Robot head */}
+                    <div className="relative">
+                      <div className="w-20 h-20 rounded-lg border-2 border-cyan-400 flex items-center justify-center"
+                        style={{ 
+                          background: 'linear-gradient(135deg, rgba(8, 47, 73, 0.8) 0%, rgba(6, 182, 212, 0.2) 100%)',
+                          boxShadow: '0 0 15px rgba(6, 182, 212, 0.5)'
+                        }}
+                      >
+                        {/* Robot eyes */}
+                        <div className="flex gap-3">
+                          <div className="w-3 h-3 rounded-full bg-cyan-400 animate-pulse"></div>
+                          <div className="w-3 h-3 rounded-full bg-cyan-400 animate-pulse" 
+                            style={{ animationDelay: '0.5s' }}></div>
+                        </div>
+                        
+                        {/* Robot antenna */}
+                        <div className="absolute -top-5 left-1/2 transform -translate-x-1/2 w-1 h-5 bg-cyan-400">
+                          <div className="absolute -top-2 left-1/2 transform -translate-x-1/2 w-3 h-3 rounded-full bg-cyan-500 animate-pulse"></div>
+                        </div>
+                      </div>
+                      
+                      {/* Robot body */}
+                      <div className="w-16 h-8 mt-1 mx-auto border-2 border-cyan-400 rounded"
+                        style={{ 
+                          background: 'linear-gradient(135deg, rgba(8, 47, 73, 0.8) 0%, rgba(6, 182, 212, 0.2) 100%)',
+                        }}
+                      >
+                        {/* Body lights */}
+                        <div className="flex justify-center gap-2 mt-1">
+                          <div className="w-1.5 h-1.5 rounded-full bg-cyan-400"></div>
+                          <div className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-blink"></div>
+                          <div className="w-1.5 h-1.5 rounded-full bg-cyan-400"></div>
+                        </div>
+                      </div>
+                      
+                      {/* Speech bubble with binary */}
+                      <div className="absolute -left-24 top-2 w-24 h-16 bg-slate-800 border border-cyan-500 rounded p-2 flex items-center justify-center">
+                        <div className="text-xs text-cyan-400 font-mono overflow-hidden">
+                          <div className="animate-typing whitespace-nowrap">
+                            01001000 01101001
+                          </div>
+                          <div className="animate-typing whitespace-nowrap" style={{ animationDelay: '1s' }}>
+                            01001101 01110011 01100111
+                          </div>
+                        </div>
+                        <div className="absolute right-0 top-1/2 transform translate-x-1/2 rotate-45 w-3 h-3 bg-slate-800 border-r border-t border-cyan-500"></div>
+                      </div>
+                    </div>
+                  </div>
+                )}
                 
                 <div className="max-w-3xl mx-auto">
                   <motion.div 
@@ -1444,16 +2343,47 @@ function App() {
                       theme === 'dark' 
                         ? 'bg-slate-900' 
                         : 'bg-white'
-                    } p-8 rounded-lg shadow-lg`}
+                    } p-8 rounded-lg shadow-lg ${roboticMode ? 'border border-cyan-500 relative' : ''}`}
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ duration: 0.5 }}
                   >
+                    {roboticMode && (
+                      <>
+                        {/* Corner robot circuit decorations */}
+                        <div className="absolute top-0 left-0 w-5 h-5">
+                          <div className="w-3 h-[1px] bg-cyan-500 absolute top-0 left-0"></div>
+                          <div className="w-[1px] h-3 bg-cyan-500 absolute top-0 left-0"></div>
+                        </div>
+                        <div className="absolute top-0 right-0 w-5 h-5">
+                          <div className="w-3 h-[1px] bg-cyan-500 absolute top-0 right-0"></div>
+                          <div className="w-[1px] h-3 bg-cyan-500 absolute top-0 right-0"></div>
+                        </div>
+                        <div className="absolute bottom-0 left-0 w-5 h-5">
+                          <div className="w-3 h-[1px] bg-cyan-500 absolute bottom-0 left-0"></div>
+                          <div className="w-[1px] h-3 bg-cyan-500 absolute bottom-0 left-0"></div>
+                        </div>
+                        <div className="absolute bottom-0 right-0 w-5 h-5">
+                          <div className="w-3 h-[1px] bg-cyan-500 absolute bottom-0 right-0"></div>
+                          <div className="w-[1px] h-3 bg-cyan-500 absolute bottom-0 right-0"></div>
+                        </div>
+                        
+                        {/* Top communication node */}
+                        <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
+                          <div className="w-6 h-6 rounded-full bg-slate-900 border border-cyan-500 flex items-center justify-center">
+                            <div className="w-2 h-2 rounded-full bg-cyan-500 animate-pulse"></div>
+                          </div>
+                        </div>
+                      </>
+                    )}
                     <form className="space-y-6">
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
-                          <label htmlFor="name" className={`block ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'} mb-2`}>Name</label>
+                          <label htmlFor="name" className={`block ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'} mb-2 ${roboticMode ? 'font-mono flex items-center' : ''}`}>
+                            {roboticMode && <span className="inline-block w-2 h-2 bg-cyan-500 rounded-full mr-2"></span>}
+                            {roboticMode ? 'USER_NAME' : 'Name'}
+                          </label>
                           <motion.input 
                             type="text" 
                             id="name" 
@@ -1463,13 +2393,16 @@ function App() {
                                 : 'bg-slate-50 border-slate-200 text-slate-900'
                             } border rounded-lg px-4 py-3 focus:outline-none focus:ring-2 ${
                               theme === 'dark' ? 'focus:ring-cyan-500' : 'focus:ring-blue-500'
-                            }`}
+                            } ${roboticMode ? 'font-mono border-cyan-500' : ''}`}
                             placeholder="Your name" 
                             whileFocus={{ scale: 1.01 }}
                           />
                         </div>
                         <div>
-                          <label htmlFor="email" className={`block ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'} mb-2`}>Email</label>
+                          <label htmlFor="email" className={`block ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'} mb-2 ${roboticMode ? 'font-mono flex items-center' : ''}`}>
+                            {roboticMode && <span className="inline-block w-2 h-2 bg-cyan-500 rounded-full mr-2"></span>}
+                            {roboticMode ? 'USER_EMAIL' : 'Email'}
+                          </label>
                           <motion.input 
                             type="email" 
                             id="email" 
@@ -1479,7 +2412,7 @@ function App() {
                                 : 'bg-slate-50 border-slate-200 text-slate-900'
                             } border rounded-lg px-4 py-3 focus:outline-none focus:ring-2 ${
                               theme === 'dark' ? 'focus:ring-cyan-500' : 'focus:ring-blue-500'
-                            }`}
+                            } ${roboticMode ? 'font-mono border-cyan-500' : ''}`}
                             placeholder="your.email@example.com"
                             whileFocus={{ scale: 1.01 }}
                           />
@@ -1487,7 +2420,10 @@ function App() {
                       </div>
                       
                       <div>
-                        <label htmlFor="subject" className={`block ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'} mb-2`}>Subject</label>
+                        <label htmlFor="subject" className={`block ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'} mb-2 ${roboticMode ? 'font-mono flex items-center' : ''}`}>
+                          {roboticMode && <span className="inline-block w-2 h-2 bg-cyan-500 rounded-full mr-2"></span>}
+                          {roboticMode ? 'MESSAGE_SUBJECT' : 'Subject'}
+                        </label>
                         <motion.input 
                           type="text" 
                           id="subject" 
@@ -1497,14 +2433,17 @@ function App() {
                               : 'bg-slate-50 border-slate-200 text-slate-900'
                           } border rounded-lg px-4 py-3 focus:outline-none focus:ring-2 ${
                             theme === 'dark' ? 'focus:ring-cyan-500' : 'focus:ring-blue-500'
-                          }`}
+                          } ${roboticMode ? 'font-mono border-cyan-500' : ''}`}
                           placeholder="Subject of your message"
                           whileFocus={{ scale: 1.01 }}
                         />
                       </div>
                       
                       <div>
-                        <label htmlFor="message" className={`block ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'} mb-2`}>Message</label>
+                        <label htmlFor="message" className={`block ${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'} mb-2 ${roboticMode ? 'font-mono flex items-center' : ''}`}>
+                          {roboticMode && <span className="inline-block w-2 h-2 bg-cyan-500 rounded-full mr-2"></span>}
+                          {roboticMode ? 'MESSAGE_CONTENT' : 'Message'}
+                        </label>
                         <motion.textarea 
                           id="message" 
                           rows="5" 
@@ -1514,23 +2453,55 @@ function App() {
                               : 'bg-slate-50 border-slate-200 text-slate-900'
                           } border rounded-lg px-4 py-3 focus:outline-none focus:ring-2 ${
                             theme === 'dark' ? 'focus:ring-cyan-500' : 'focus:ring-blue-500'
-                          }`}
-                          placeholder="Your message here..."
+                          } ${roboticMode ? 'font-mono border-cyan-500 relative' : ''}`}
+                          placeholder={roboticMode ? "ENTER_MESSAGE_HERE..." : "Your message here..."}
                           whileFocus={{ scale: 1.01 }}
                         ></motion.textarea>
                       </div>
                       
                       <motion.button 
                         type="submit" 
-                        className="w-full bg-gradient-to-r from-cyan-500 to-blue-500 text-white font-bold py-3 px-6 rounded-lg shadow-lg transition-all"
+                        className={`w-full bg-gradient-to-r from-cyan-500 to-blue-500 text-white font-bold py-3 px-6 rounded-lg shadow-lg transition-all ${
+                          roboticMode ? 'border border-cyan-400 relative overflow-hidden' : ''
+                        }`}
                         whileHover={{ scale: 1.02, boxShadow: "0 0 15px rgba(34, 211, 238, 0.5)" }}
                         whileTap={{ scale: 0.98 }}
                       >
-                        Send Message
+                        {roboticMode && (
+                          <>
+                            {/* Circuit pattern overlay */}
+                            <div className="absolute inset-0 opacity-20" style={{
+                              backgroundImage: `
+                                linear-gradient(to right, rgba(255, 255, 255, 0.1) 1px, transparent 1px),
+                                linear-gradient(to bottom, rgba(255, 255, 255, 0.1) 1px, transparent 1px)
+                              `,
+                              backgroundSize: '10px 10px'
+                            }}></div>
+                            
+                            {/* Animated shimmer effect */}
+                            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full animate-[shimmer_2s_infinite]"></div>
+                            
+                            <span className="flex items-center justify-center gap-2 relative z-10">
+                              <span className="inline-block w-2 h-2 rounded-full bg-cyan-200 animate-pulse"></span>
+                              SEND_MESSAGE
+                              <span className="inline-block w-2 h-2 rounded-full bg-cyan-200 animate-pulse"></span>
+                            </span>
+                          </>
+                        )}
+                        {!roboticMode && "Send Message"}
                       </motion.button>
                     </form>
                     
-                    <div className="mt-10 pt-8 border-t border-slate-700">
+                    <div className={`mt-10 pt-8 border-t ${theme === 'dark' ? 'border-slate-700' : 'border-slate-200'} ${roboticMode ? 'relative' : ''}`}>
+                      {roboticMode && (
+                        <div className="absolute left-1/2 -top-3 transform -translate-x-1/2 bg-slate-900 px-3 py-1 border border-cyan-500 rounded-md">
+                          <span className="text-xs text-cyan-400 font-mono flex items-center gap-1">
+                            <span className="inline-block w-1.5 h-1.5 rounded-full bg-cyan-500"></span>
+                            CONTACT_OPTIONS
+                            <span className="inline-block w-1.5 h-1.5 rounded-full bg-cyan-500"></span>
+                          </span>
+                        </div>
+                      )}
                       <div className="flex flex-wrap justify-center gap-8">
                         <motion.a 
                           href="https://www.linkedin.com/in/dilusha-chamika/"
@@ -1538,12 +2509,22 @@ function App() {
                           rel="noopener noreferrer"
                           className={`flex items-center gap-2 ${
                             theme === 'dark' ? 'text-gray-300 hover:text-cyan-400' : 'text-gray-600 hover:text-blue-500'
-                          } transition-colors`}
-                          whileHover={{ scale: 1.1 }}
+                          } transition-colors ${
+                            roboticMode ? 'border border-cyan-500 px-3 py-2 rounded-md relative' : ''
+                          }`}
+                          whileHover={{ 
+                            scale: roboticMode ? 1.05 : 1.1,
+                            boxShadow: roboticMode ? "0 0 10px rgba(6, 182, 212, 0.5)" : "none"
+                          }}
                           whileTap={{ scale: 0.9 }}
                         >
-                          <Linkedin size={20} />
-                          <span>LinkedIn</span>
+                          {roboticMode && (
+                            <span className="absolute -top-1 -left-1 w-2 h-2 rounded-full bg-cyan-500"></span>
+                          )}
+                          <Linkedin size={20} className={roboticMode ? 'text-cyan-400' : ''} />
+                          <span className={roboticMode ? 'font-mono text-cyan-400' : ''}>
+                            {roboticMode ? 'LINKEDIN_PROFILE' : 'LinkedIn'}
+                          </span>
                         </motion.a>
                         
                         <motion.a 
@@ -1552,24 +2533,44 @@ function App() {
                           rel="noopener noreferrer"
                           className={`flex items-center gap-2 ${
                             theme === 'dark' ? 'text-gray-300 hover:text-cyan-400' : 'text-gray-600 hover:text-blue-500'
-                          } transition-colors`}
-                          whileHover={{ scale: 1.1 }}
+                          } transition-colors ${
+                            roboticMode ? 'border border-cyan-500 px-3 py-2 rounded-md relative' : ''
+                          }`}
+                          whileHover={{ 
+                            scale: roboticMode ? 1.05 : 1.1,
+                            boxShadow: roboticMode ? "0 0 10px rgba(6, 182, 212, 0.5)" : "none"
+                          }}
                           whileTap={{ scale: 0.9 }}
                         >
-                          <Github size={20} />
-                          <span>GitHub</span>
+                          {roboticMode && (
+                            <span className="absolute -top-1 -left-1 w-2 h-2 rounded-full bg-cyan-500"></span>
+                          )}
+                          <Github size={20} className={roboticMode ? 'text-cyan-400' : ''} />
+                          <span className={roboticMode ? 'font-mono text-cyan-400' : ''}>
+                            {roboticMode ? 'GITHUB_REPO' : 'GitHub'}
+                          </span>
                         </motion.a>
                         
                         <motion.a 
-                          href="mailto:contact@example.com"
+                          href="mailto:dilushachamika@gmail.com"
                           className={`flex items-center gap-2 ${
                             theme === 'dark' ? 'text-gray-300 hover:text-cyan-400' : 'text-gray-600 hover:text-blue-500'
-                          } transition-colors`}
-                          whileHover={{ scale: 1.1 }}
+                          } transition-colors ${
+                            roboticMode ? 'border border-cyan-500 px-3 py-2 rounded-md relative' : ''
+                          }`}
+                          whileHover={{ 
+                            scale: roboticMode ? 1.05 : 1.1,
+                            boxShadow: roboticMode ? "0 0 10px rgba(6, 182, 212, 0.5)" : "none"
+                          }}
                           whileTap={{ scale: 0.9 }}
                         >
-                          <Mail size={20} />
-                          <span>Email</span>
+                          {roboticMode && (
+                            <span className="absolute -top-1 -left-1 w-2 h-2 rounded-full bg-cyan-500"></span>
+                          )}
+                          <Mail size={20} className={roboticMode ? 'text-cyan-400' : ''} />
+                          <span className={roboticMode ? 'font-mono text-cyan-400' : ''}>
+                            {roboticMode ? 'EMAIL_COM' : 'Email'}
+                          </span>
                         </motion.a>
                       </div>
                     </div>

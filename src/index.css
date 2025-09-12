@@ -8,8 +8,14 @@
 
 /* Sci-fi theme custom styles */
 @layer base {
+  html {
+    overflow-x: hidden;
+  }
+  
   body {
     @apply bg-cyberpunk-background text-white font-sans;
+    overflow-x: hidden;
+    width: 100%;
   }
   
   /* Only apply default cursor when not in gear cursor mode */
