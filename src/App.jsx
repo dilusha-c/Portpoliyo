@@ -40,6 +40,9 @@ import codefestAwardImg from './assets/award/CODEFEST.jpg'
 import deansListAwardImg from './assets/award/Dean\'s List 1.jpg'
 import sliitXtremeAwardImg from './assets/award/SliitXtreme 1.jpg'
 
+// Import CV/Resume
+import cvPdf from './assets/cv.pdf'
+
 function App() {
   const { theme, roboticMode, toggleTheme, toggleRoboticMode } = useContext(ThemeContext)
   const [scrollY, setScrollY] = useState(0)
@@ -154,6 +157,33 @@ function App() {
       top: 0,
       behavior: 'smooth'
     })
+  }
+  
+  // Scroll to section function
+  const scrollToSection = (sectionId) => {
+    const section = document.getElementById(sectionId);
+    if (section) {
+      // Prevent default scroll behavior
+      event.preventDefault();
+      
+      // Get the element's position relative to the viewport
+      const rect = section.getBoundingClientRect();
+      
+      // Account for fixed header if needed (adjust the value based on your header height)
+      const headerOffset = 80;
+      
+      // Calculate the absolute position on the page
+      const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+      const top = rect.top + scrollTop - headerOffset;
+      
+      window.scrollTo({
+        top: top,
+        behavior: 'smooth'
+      });
+      
+      // Update URL without causing a page reload
+      history.pushState(null, null, `#${sectionId}`);
+    }
   }
 
   const fadeInUp = {
@@ -543,15 +573,18 @@ function App() {
                 {/* Desktop navigation */}
                 <div className="hidden md:flex space-x-1 lg:space-x-4 xl:space-x-8 justify-center mx-auto">
                   {['Home', 'About', 'Projects', 'Publications', 'Certificates', 'Awards', 'Contact'].map((item) => (
-                    <motion.a
+                    <motion.button
                       key={item}
-                      href={`#${item.toLowerCase()}`}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        scrollToSection(item.toLowerCase());
+                      }}
                       className={`px-2 lg:px-3 py-1.5 rounded-lg text-sm lg:text-base hover:text-cyan-400 ${theme === 'dark' ? 'hover:bg-slate-800/60' : 'hover:bg-slate-100/60'} transition-colors font-medium whitespace-nowrap`}
                       whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
                     >
                       {item}
-                    </motion.a>
+                    </motion.button>
                   ))}
                 </div>
                 
@@ -645,15 +678,18 @@ function App() {
                     <div className="container mx-auto py-5 px-6">
                       <div className="flex flex-col space-y-1">
                         {['Home', 'About', 'Projects', 'Publications', 'Certificates', 'Awards', 'Contact'].map((item) => (
-                          <motion.a
+                          <motion.button
                             key={item}
-                            href={`#${item.toLowerCase()}`}
-                            onClick={() => setMobileMenuOpen(false)}
+                            onClick={(e) => {
+                              e.preventDefault();
+                              scrollToSection(item.toLowerCase());
+                              setMobileMenuOpen(false);
+                            }}
                             className={`py-3 px-4 rounded-lg text-lg font-medium ${
                               theme === 'dark' 
                                 ? 'hover:bg-slate-800 hover:text-cyan-400' 
                                 : 'hover:bg-slate-100 hover:text-blue-600'
-                            } transition-colors`}
+                            } transition-colors w-full text-left`}
                             whileHover={{ x: 10 }}
                             whileTap={{ scale: 0.98 }}
                             initial={{ opacity: 0, x: -20 }}
@@ -663,7 +699,7 @@ function App() {
                             }}
                           >
                             {item}
-                          </motion.a>
+                          </motion.button>
                         ))}
                         
                         <div className={`h-px w-full my-2 ${theme === 'dark' ? 'bg-slate-700/50' : 'bg-slate-200/50'}`}></div>
@@ -990,22 +1026,28 @@ function App() {
                   />
                 </div>
                 <div className="flex flex-wrap gap-4 justify-center">
-                  <motion.a 
-                    href="#certificates"
+                  <motion.button 
+                    onClick={(e) => {
+                      e.preventDefault();
+                      scrollToSection('certificates');
+                    }}
                     className="bg-gradient-to-r from-slate-600 to-slate-700 text-white font-bold py-3 px-8 rounded-lg shadow-lg hover:shadow-slate-500/50 transition-all"
                     whileHover={{ scale: 1.05, boxShadow: "0 0 15px rgba(100, 116, 139, 0.5)" }}
                     whileTap={{ scale: 0.95 }}
                   >
                     My Certificates
-                  </motion.a>
-                  <motion.a 
-                    href="#projects"
+                  </motion.button>
+                  <motion.button 
+                    onClick={(e) => {
+                      e.preventDefault();
+                      scrollToSection('projects');
+                    }}
                     className="bg-gradient-to-r from-gray-600 to-gray-700 text-white font-bold py-3 px-8 rounded-lg shadow-lg hover:shadow-gray-500/50 transition-all"
                     whileHover={{ scale: 1.05, boxShadow: "0 0 15px rgba(107, 114, 128, 0.5)" }}
                     whileTap={{ scale: 0.95 }}
                   >
                     My Projects
-                  </motion.a>
+                  </motion.button>
                 </div>
                 
                 <motion.div 
@@ -1013,9 +1055,15 @@ function App() {
                   animate={{ y: [0, 10, 0] }}
                   transition={{ duration: 1.5, repeat: Infinity }}
                 >
-                  <a href="#about" className={`${theme === 'dark' ? 'text-white/50 hover:text-white' : 'text-slate-700 hover:text-slate-900'}`}>
+                  <button 
+                    onClick={(e) => {
+                      e.preventDefault();
+                      scrollToSection('about');
+                    }} 
+                    className={`${theme === 'dark' ? 'text-white/50 hover:text-white' : 'text-slate-700 hover:text-slate-900'} cursor-pointer`}
+                  >
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="animate-bounce"><path d="m6 9 6 6 6-6"></path></svg>
-                  </a>
+                  </button>
                 </motion.div>
               </motion.div>
             </section>
@@ -1159,7 +1207,7 @@ function App() {
                     
                     <div className="flex flex-wrap gap-4">
                       <motion.a 
-                        href="./src/assets/cv.pdf"
+                        href={cvPdf}
                         download="Dilusha_Chamika_CV.pdf"
                         className={`border-2 ${theme === 'dark' ? 'border-cyan-400 text-cyan-400 hover:bg-cyan-400' : 'border-blue-500 text-blue-500 hover:bg-blue-500'} hover:text-slate-900 font-bold py-2 px-6 rounded-lg transition-colors flex items-center gap-2`}
                         whileHover={{ scale: 1.05, boxShadow: "0 0 15px rgba(34, 211, 238, 0.3)" }}
@@ -1168,15 +1216,18 @@ function App() {
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
                         Download CV
                       </motion.a>
-                      <motion.a 
-                        href="#contact"
+                      <motion.button 
+                        onClick={(e) => {
+                          e.preventDefault();
+                          scrollToSection('contact');
+                        }}
                         className={`${theme === 'dark' ? 'bg-slate-700 hover:bg-slate-600' : 'bg-slate-200 hover:bg-slate-300'} text-inherit font-bold py-2 px-6 rounded-lg transition-colors flex items-center gap-2`}
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
                       >
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
                         Contact Me
-                      </motion.a>
+                      </motion.button>
                     </div>
                   </motion.div>
                 </div>

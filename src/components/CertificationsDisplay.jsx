@@ -6,6 +6,22 @@ import { X, Filter } from 'lucide-react';
 import { createPortal } from 'react-dom';
 import './CertificationsScanner.css';
 
+// Import certification images
+import machineLearningImg from '../assets/certifications/Machine Learning.png';
+import networkTechnicianImg from '../assets/certifications/Network Technician Career.png';
+import pythonProgrammingImg from '../assets/certifications/Python Programming.png';
+import networkAddressingImg from '../assets/certifications/Network Addressing and Basic Troubleshooting.png';
+import advancedLearningImg from '../assets/certifications/Advanced Learning Algorithms.png';
+import computerHardwareImg from '../assets/certifications/Computer Hardware Basics.png';
+import endpointSecurityImg from '../assets/certifications/Endpoint Security.png';
+import introCybersecurityImg from '../assets/certifications/Introduction to Cybersecurity.png';
+import networkingBasicsImg from '../assets/certifications/Networking Basics.png';
+import networkingDevicesImg from '../assets/certifications/Networking Devices and Initial Configuration.png';
+import pythonForBeginnersImg from '../assets/certifications/Python for Beginners.jpg';
+import supervisedMLImg from '../assets/certifications/Supervised Machine Learning.png';
+import unsupervisedMLImg from '../assets/certifications/Unsupervised Learning, Recommenders,.png';
+import networkSupportImg from '../assets/certifications/Network Support and Security.png';
+
 const CertificationsDisplay = ({ theme }) => {
   const { roboticMode } = useContext(ThemeContext);
   const [showMore, setShowMore] = useState(false);
@@ -30,7 +46,7 @@ const CertificationsDisplay = ({ theme }) => {
       year: "July 2025",
       featured: true,
       category: "Machine Learning & Artificial Intelligence",
-      imageUrl: "./src/assets/certifications/Machine Learning.png",
+      imageUrl: machineLearningImg,
       verifyUrl: "https://www.coursera.org/account/accomplishments/specialization/RXZHOBN9VT3G",
       credentialId: "RXZHOBN9VT3G"
     },
@@ -41,7 +57,7 @@ const CertificationsDisplay = ({ theme }) => {
       year: "July 2025",
       featured: true,
       category: "Networking",
-      imageUrl: "./src/assets/certifications/Network Technician Career.png",
+      imageUrl: networkTechnicianImg,
       verifyUrl: "https://www.credly.com/badges/178fca33-76b1-4a37-8c7e-54c58632ce85/linked_in_profile"
     },
     {
@@ -51,7 +67,7 @@ const CertificationsDisplay = ({ theme }) => {
       year: "2025",
       featured: true,
       category: "Programming & Development",
-      imageUrl: "./src/assets/certifications/Python Programming.png",
+      imageUrl: pythonProgrammingImg,
       verifyUrl: "https://open.uom.lk/lms/mod/customcert/verify_certificate.php",
       credentialId: "oMH9LB43vl"
     },
@@ -62,7 +78,7 @@ const CertificationsDisplay = ({ theme }) => {
       year: "July 2025",
       featured: true,
       category: "Networking",
-      imageUrl: "./src/assets/certifications/Network Addressing and Basic Troubleshooting.png",
+      imageUrl: networkAddressingImg,
       verifyUrl: "https://www.credly.com/badges/1f86229e-67e7-47ca-8e6b-35bd4ba4bcbd/linked_in_profile"
     },
     // Additional certificates (not featured - will only show in popup)
@@ -73,7 +89,7 @@ const CertificationsDisplay = ({ theme }) => {
       year: "2025",
       featured: false,
       category: "Programming & Development",
-      imageUrl: "./src/assets/certifications/Python Programming.png", // Using existing image as placeholder
+      imageUrl: pythonForBeginnersImg, // Using actual image
       verifyUrl: "https://open.uom.lk/lms/mod/customcert/verify_certificate.php",
       credentialId: "XZ5PzjiA8h"
     },
@@ -84,7 +100,7 @@ const CertificationsDisplay = ({ theme }) => {
       year: "December 2024",
       featured: false,
       category: "Networking",
-      imageUrl: "./src/assets/certifications/Network Addressing and Basic Troubleshooting.png", // Using existing image as placeholder
+      imageUrl: networkingBasicsImg, // Using actual image
       verifyUrl: "https://www.credly.com/badges/34838485-265b-4bd2-89a9-ad801ebbfd54/linked_in_profile"
     },
     {
@@ -94,7 +110,7 @@ const CertificationsDisplay = ({ theme }) => {
       year: "December 2024",
       featured: false,
       category: "Cybersecurity",
-      imageUrl: "./src/assets/certifications/Network Addressing and Basic Troubleshooting.png", // Using existing image as placeholder
+      imageUrl: introCybersecurityImg, // Using actual image
       verifyUrl: "https://www.credly.com/badges/560680a1-6111-4d9d-981e-0e03393652b9/linked_in_profile"
     },
     {
@@ -104,7 +120,7 @@ const CertificationsDisplay = ({ theme }) => {
       year: "December 2024",
       featured: false,
       category: "Hardware & Systems",
-      imageUrl: "./src/assets/certifications/Network Addressing and Basic Troubleshooting.png", // Using existing image as placeholder
+      imageUrl: computerHardwareImg, // Using actual image
       verifyUrl: "https://www.credly.com/badges/4eccea92-3f13-4a37-b3c8-d92bfcfeba0a/linked_in_profile"
     },
     {
@@ -114,7 +130,7 @@ const CertificationsDisplay = ({ theme }) => {
       year: "April 2025",
       featured: false,
       category: "Machine Learning & Artificial Intelligence",
-      imageUrl: "./src/assets/certifications/Machine Learning.png", // Using existing image as placeholder
+      imageUrl: supervisedMLImg, // Using actual image
       verifyUrl: "https://www.coursera.org/account/accomplishments/verify/I45GXQQBSC5Z",
       credentialId: "I45GXQQBSC5Z"
     },
@@ -125,7 +141,7 @@ const CertificationsDisplay = ({ theme }) => {
       year: "June 2025",
       featured: false,
       category: "Machine Learning & Artificial Intelligence",
-      imageUrl: "./src/assets/certifications/Machine Learning.png", // Using existing image as placeholder
+      imageUrl: advancedLearningImg, // Using actual image
       verifyUrl: "https://www.coursera.org/account/accomplishments/records/EF66Q4ALMHWF",
       credentialId: "EF66Q4ALMHWF"
     },
@@ -136,7 +152,7 @@ const CertificationsDisplay = ({ theme }) => {
       year: "July 2025",
       featured: false,
       category: "Machine Learning & Artificial Intelligence",
-      imageUrl: "./src/assets/certifications/Machine Learning.png", // Using existing image as placeholder
+      imageUrl: unsupervisedMLImg, // Using actual image
       verifyUrl: "https://www.coursera.org/account/accomplishments/records/6P89GUDLPVIZ",
       credentialId: "6P89GUDLPVIZ"
     },
@@ -147,7 +163,7 @@ const CertificationsDisplay = ({ theme }) => {
       year: "July 2025",
       featured: false,
       category: "Networking",
-      imageUrl: "./src/assets/certifications/Network Technician Career.png", // Using existing image as placeholder
+      imageUrl: networkingDevicesImg, // Using actual image
       verifyUrl: "https://www.credly.com/badges/9f0a16a1-e2c5-4b12-b90e-1947ad035077/public_url"
     },
     {
@@ -157,7 +173,7 @@ const CertificationsDisplay = ({ theme }) => {
       year: "July 2025",
       featured: false,
       category: "Networking",
-      imageUrl: "./src/assets/certifications/Network Technician Career.png", // Using existing image as placeholder
+      imageUrl: networkSupportImg, // Using actual image
       verifyUrl: "https://www.credly.com/badges/42c4c480-d55e-46df-ae89-7cd02c02a811/linked_in_profile"
     },
     {
@@ -167,7 +183,7 @@ const CertificationsDisplay = ({ theme }) => {
       year: "August 2025",
       featured: false,
       category: "Cybersecurity",
-      imageUrl: "./src/assets/certifications/Network Addressing and Basic Troubleshooting.png", // Using existing image as placeholder
+      imageUrl: endpointSecurityImg, // Using actual image
       verifyUrl: "https://www.credly.com/badges/3d6c192f-ed41-43f1-9418-4611a2005b04/linked_in_profile"
     }
   ];
@@ -868,7 +884,7 @@ const CertificationsDisplay = ({ theme }) => {
                     className="w-full h-auto object-contain"
                     onError={(e) => {
                       e.target.onerror = null;
-                      e.target.src = "./src/assets/certifications/Machine Learning.png";
+                      e.target.src = machineLearningImg;
                       console.log("Certificate image failed to load, using fallback image");
                     }}
                   />
