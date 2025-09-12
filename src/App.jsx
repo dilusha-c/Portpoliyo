@@ -32,6 +32,13 @@ import gymSyncImg from './assets/GymSync.jpg'
 import zaveImg from './assets/Zave UI Design.jpg'
 import landmineRobotImg from './assets/robo.jpg'
 import profileImg from './assets/Profile.jpg'
+import logoImg from './assets/logo.png'
+import sliitImg from './assets/sliit.png'
+
+// Import award images
+import codefestAwardImg from './assets/award/CODEFEST.jpg'
+import deansListAwardImg from './assets/award/Dean\'s List 1.jpg'
+import sliitXtremeAwardImg from './assets/award/SliitXtreme 1.jpg'
 
 function App() {
   const { theme, roboticMode, toggleTheme, toggleRoboticMode } = useContext(ThemeContext)
@@ -492,7 +499,7 @@ function App() {
                 {/* Logo and Name - Left on all screens */}
                 <div className="flex items-center flex-shrink-0 md:mr-3">
                   <motion.img 
-                    src="./src/assets/logo.png"
+                    src={logoImg}
                     alt="Dilusha Chamika Logo" 
                     className="h-10 sm:h-12 lg:h-14 mr-3"
                     whileHover={{ scale: 1.1, rotate: 5 }}
@@ -1253,7 +1260,7 @@ function App() {
                     whileHover={{ scale: 1.05 }}
                   >
                     <img 
-                      src="./src/assets/sliit.png" 
+                      src={sliitImg} 
                       alt="SLIIT Logo" 
                       className={`w-full h-full object-contain ${theme === 'dark' ? 'filter brightness-110' : ''}`}
                     />
@@ -2110,7 +2117,7 @@ function App() {
                     >
                       <div className="relative h-48">
                         <img 
-                          src="./src/assets/award/CODEFEST.jpg" 
+                          src={codefestAwardImg} 
                           alt="CODEFEST 2024 Award" 
                           className="w-full h-full object-cover object-center"
                         />
@@ -2148,7 +2155,7 @@ function App() {
                     >
                       <div className="relative h-48">
                         <img 
-                          src="./src/assets/award/Dean's List 1.jpg" 
+                          src={deansListAwardImg} 
                           alt="Dean's List Award" 
                           className="w-full h-full object-cover object-center"
                         />
@@ -2186,7 +2193,7 @@ function App() {
                     >
                       <div className="relative h-48">
                         <img 
-                          src="./src/assets/award/SliitXtreme 1.jpg" 
+                          src={sliitXtremeAwardImg} 
                           alt="SliitXtreme 3.0 Award" 
                           className="w-full h-full object-cover object-center"
                         />
