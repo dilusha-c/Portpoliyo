@@ -738,8 +738,15 @@ function App() {
       {/* SafeMobileDetect ensures mobile display works correctly */}
       <SafeMobileDetect />
       
-      {/* Custom rotating gears cursor - only enabled on desktop in robotic mode */}
-      {roboticMode && !isMobile && <RotatingGearsCursor />}
+      {/* Static gear icon instead of animated cursor */}
+      {roboticMode && !isMobile && (
+        <div style={{position: 'fixed', left: 24, bottom: 24, zIndex: 99999, pointerEvents: 'none'}}>
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#06b6d4" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <circle cx="12" cy="12" r="3" fill="#06b6d4" />
+            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09c0 .66.38 1.25 1 1.51a1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82c.13.63.68 1.09 1.31 1.09H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09c-.63 0-1.18.46-1.31 1.09z" />
+          </svg>
+        </div>
+      )}
       
       {/* Boot screen for first-time visitors */}
       {showBootScreen && <BootScreen onComplete={handleBootComplete} />}
@@ -2008,15 +2015,14 @@ function App() {
                   </div>
                   
                   {/* Diagonal circuit traces */}
-                  <svg className="absolute inset-0 w-full h-full" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M0,0 C50%,50% 50%,50% 100%,100%" 
+                  <svg className="absolute inset-0 w-full h-full" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+                    {/* Fixed SVG path format using lines instead of paths with percentage values */}
+                    <line x1="0" y1="0" x2="100%" y2="100%" 
                       stroke={theme === 'dark' ? 'rgba(6, 182, 212, 0.2)' : 'rgba(59, 130, 246, 0.1)'} 
-                      strokeWidth="1" 
-                      fill="none" />
-                    <path d="M100%,0 C50%,50% 50%,50% 0,100%" 
+                      strokeWidth="1" />
+                    <line x1="100%" y1="0" x2="0" y2="100%" 
                       stroke={theme === 'dark' ? 'rgba(6, 182, 212, 0.2)' : 'rgba(59, 130, 246, 0.1)'} 
-                      strokeWidth="1" 
-                      fill="none" />
+                      strokeWidth="1" />
                   </svg>
                 </div>
               )}
@@ -2954,15 +2960,14 @@ function App() {
                   </div>
                   
                   {/* Diagonal circuit traces */}
-                  <svg className="absolute inset-0 w-full h-full" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M0,0 C50%,50% 50%,50% 100%,100%" 
+                  <svg className="absolute inset-0 w-full h-full" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+                    {/* Fixed SVG path format using lines instead of paths with percentage values */}
+                    <line x1="0" y1="0" x2="100%" y2="100%" 
                       stroke={theme === 'dark' ? 'rgba(6, 182, 212, 0.2)' : 'rgba(59, 130, 246, 0.1)'} 
-                      strokeWidth="1" 
-                      fill="none" />
-                    <path d="M100%,0 C50%,50% 50%,50% 0,100%" 
+                      strokeWidth="1" />
+                    <line x1="100%" y1="0" x2="0" y2="100%" 
                       stroke={theme === 'dark' ? 'rgba(6, 182, 212, 0.2)' : 'rgba(59, 130, 246, 0.1)'} 
-                      strokeWidth="1" 
-                      fill="none" />
+                      strokeWidth="1" />
                   </svg>
                 </div>
               )}
