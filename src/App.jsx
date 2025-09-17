@@ -3,6 +3,7 @@ import { motion, useScroll, useAnimation, AnimatePresence } from 'framer-motion'
 import { TypeAnimation } from 'react-type-animation'
 import { Sun, Moon, ArrowUp, Github, Linkedin, Mail, ExternalLink, Cpu } from 'lucide-react'
 import emailjs from '@emailjs/browser'
+import { SpeedInsights } from '@vercel/speed-insights/next';
 import { Analytics } from "@vercel/analytics/react"
 import BootScreen from './components/BootScreen'
 import CertificationsDisplay from './components/CertificationsDisplay'
@@ -3385,6 +3386,7 @@ function App() {
         )}
       </AnimatePresence>
       <Analytics />
+      <SpeedInsights />
     </>
   )
 }
