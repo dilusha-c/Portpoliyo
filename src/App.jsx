@@ -3,6 +3,7 @@ import { motion, useScroll, useAnimation, AnimatePresence } from 'framer-motion'
 import { TypeAnimation } from 'react-type-animation'
 import { Sun, Moon, ArrowUp, Github, Linkedin, Mail, ExternalLink, Cpu } from 'lucide-react'
 import emailjs from '@emailjs/browser'
+import { Analytics } from "@vercel/analytics/react"
 import BootScreen from './components/BootScreen'
 import CertificationsDisplay from './components/CertificationsDisplay'
 import RobotDecorator from './components/RobotDecorator'
@@ -3383,6 +3384,7 @@ function App() {
           </motion.div>
         )}
       </AnimatePresence>
+      <Analytics />
     </>
   )
 }
