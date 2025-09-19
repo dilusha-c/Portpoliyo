@@ -534,9 +534,9 @@ function App() {
       
       // Using Email.js to send emails
       const templateParams = {
-        from_name: contactFormData.name,
-        from_email: contactFormData.email,
-        subject: contactFormData.subject || 'Portfolio Contact Form',
+        name: contactFormData.name,
+        email: contactFormData.email,
+        title: contactFormData.subject || 'Portfolio Contact Form',
         message: contactFormData.message,
         to_name: 'Portfolio Owner', // Add recipient name
         reply_to: contactFormData.email // Ensure replies go back to sender
