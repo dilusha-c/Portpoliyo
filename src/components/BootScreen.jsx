@@ -22,7 +22,7 @@ const BootScreen = ({ onComplete }) => {
       style={{ isolation: 'isolate' }}
       initial={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      transition={{ duration: 1 }}
+      transition={{ duration: 0 }}
       key="bootscreen-container"
     >
           {/* Grid background - contained within boot screen */}
@@ -36,7 +36,7 @@ const BootScreen = ({ onComplete }) => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 0.05 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 1 }}
+            transition={{ duration: 0 }}
           ></motion.div>
           
           {/* Enhanced glow effect */}
@@ -45,7 +45,7 @@ const BootScreen = ({ onComplete }) => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 1 }}
+            transition={{ duration: 0 }}
           ></motion.div>
           
           {/* Digital particles */}
@@ -54,7 +54,7 @@ const BootScreen = ({ onComplete }) => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 1 }}
+            transition={{ duration: 0 }}
           >
             {[...Array(15)].map((_, i) => (
               <motion.div
@@ -85,7 +85,7 @@ const BootScreen = ({ onComplete }) => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 0.2 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 1 }}
+            transition={{ duration: 0 }}
           >
             <svg width="100%" height="100%" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
               <pattern id="circuitPattern" patternUnits="userSpaceOnUse" width="20" height="20" patternTransform="rotate(45)">
