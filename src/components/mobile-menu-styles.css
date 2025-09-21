@@ -1,0 +1,85 @@
+.mobile-menu {
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.2) !important;
+}
+
+.mobile-menu button {
+  position: relative;
+  overflow: hidden;
+}
+
+.mobile-menu button::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(to right, transparent, rgba(6, 182, 212, 0.3), transparent);
+  opacity: 0.7;
+}
+
+.dark .mobile-menu {
+  background-color: rgba(15, 23, 42, 0.98) !important;
+}
+
+.light .mobile-menu {
+  background-color: rgba(255, 255, 255, 0.98) !important;
+}
+
+/* Enhanced mobile menu animations */
+@keyframes menuGlow {
+  0% {
+    box-shadow: 0 0 5px rgba(6, 182, 212, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 15px rgba(6, 182, 212, 0.5);
+  }
+  100% {
+    box-shadow: 0 0 5px rgba(6, 182, 212, 0.3);
+  }
+}
+
+.dark .mobile-menu {
+  animation: menuGlow 3s infinite;
+}
+
+/* Menu item hover effects */
+.mobile-menu button:hover {
+  transform: translateX(10px);
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(6, 182, 212, 0.2);
+}
+
+.light .mobile-menu button:hover {
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
+}
+
+/* Menu item active state */
+.mobile-menu button:active {
+  transform: scale(0.98);
+  transition: transform 0.2s ease;
+}
+
+/* Enhanced hover styles for desktop menu */
+@media (min-width: 768px) {
+  .nav-button-hover:hover {
+    box-shadow: 0 4px 12px rgba(6, 182, 212, 0.2);
+  }
+  
+  .light .nav-button-hover:hover {
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
+  }
+}
+
+/* Enhanced menu shadow glow effect */
+.menu-shadow-glow {
+  box-shadow: 
+    0 10px 25px -5px rgba(0, 0, 0, 0.3),
+    0 0 20px rgba(6, 182, 212, 0.2);
+}
+
+.light .menu-shadow-glow {
+  box-shadow: 
+    0 10px 25px -5px rgba(0, 0, 0, 0.15),
+    0 0 20px rgba(59, 130, 246, 0.2);
+}

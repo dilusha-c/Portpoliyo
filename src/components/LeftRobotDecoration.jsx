@@ -4,17 +4,17 @@ import PropTypes from 'prop-types';
 const LeftRobotDecoration = ({ theme }) => {
   return (
     <motion.div
-      className="fixed left-0 top-1/4 h-1/2 w-32 md:w-48 lg:w-64 pointer-events-none z-0"
-      initial={{ x: -100, opacity: 0 }}
-      animate={{ x: 0, opacity: 0.4 }}
-      transition={{ duration: 1.5, delay: 0.5 }}
+  className="fixed left-0 top-1/4 h-1/2 w-32 md:w-48 lg:w-64 pointer-events-none z-10"
+  initial={{ x: -100, opacity: 0 }}
+  animate={{ x: 0, opacity: 1 }}
+  transition={{ duration: 1.5, delay: 0.5 }}
     >
       {/* Robot head */}
       <svg 
         viewBox="0 0 100 200" 
         className="w-full h-full"
         style={{ 
-          filter: `drop-shadow(0 0 10px ${theme === 'dark' ? 'rgba(6, 182, 212, 0.6)' : 'rgba(59, 130, 246, 0.6)'})`
+          filter: `drop-shadow(0 0 15px ${theme === 'dark' ? 'rgba(6, 182, 212, 0.8)' : 'rgba(59, 130, 246, 0.8)'}) drop-shadow(0 0 5px ${theme === 'dark' ? 'rgba(6, 182, 212, 0.9)' : 'rgba(59, 130, 246, 0.9)'})`
         }}
       >
         {/* Robot body structure */}

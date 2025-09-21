@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import PropTypes from 'prop-types';
 
-const BinaryMatrix = () => {
+const BinaryMatrix = ({ heroSection = false }) => {
   const [matrix, setMatrix] = useState([]);
   
   // Create the initial binary matrix
@@ -68,7 +69,7 @@ const BinaryMatrix = () => {
   }, []);
 
   return (
-    <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden opacity-30">
+    <div className={`absolute inset-0 pointer-events-none -z-10 overflow-hidden ${heroSection ? 'opacity-50' : 'opacity-30'}`}>
       {matrix.map((row, i) => (
         <div key={`row-${i}`} className="flex justify-center">
           {row.map((cell) => (
@@ -76,16 +77,18 @@ const BinaryMatrix = () => {
               key={cell.key}
               className="text-cyan-400 font-mono text-sm sm:text-base md:text-lg select-none"
               style={{ 
-                opacity: cell.opacity * 1.5, // Increase opacity
+                opacity: heroSection ? cell.opacity * 2 : cell.opacity * 1.5, // Increased opacity for hero section
                 margin: '0 10px',
-                textShadow: '0 0 8px rgba(6, 182, 212, 0.9)'
+                textShadow: heroSection ? '0 0 12px rgba(6, 182, 212, 0.9)' : '0 0 8px rgba(6, 182, 212, 0.9)'
               }}
               initial={{ opacity: 0 }}
               animate={{ 
-                opacity: [cell.opacity, cell.opacity * 1.5, cell.opacity], 
+                opacity: heroSection 
+                  ? [cell.opacity * 1.2, cell.opacity * 2, cell.opacity * 1.2]
+                  : [cell.opacity, cell.opacity * 1.5, cell.opacity], 
               }}
               transition={{ 
-                duration: 2,
+                duration: heroSection ? 1.5 : 2,
                 delay: cell.delay,
                 repeat: Infinity,
                 repeatType: 'loop'
@@ -98,6 +101,10 @@ const BinaryMatrix = () => {
       ))}
     </div>
   );
+};
+
+BinaryMatrix.propTypes = {
+  heroSection: PropTypes.bool
 };
 
 export default BinaryMatrix;

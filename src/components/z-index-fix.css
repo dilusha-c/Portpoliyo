@@ -1,0 +1,51 @@
+/* Z-index stacking context fixes */
+
+/* Create proper z-index stacking context for the entire application */
+#root {
+  isolation: isolate;
+}
+
+/* Ensure mobile menu is always on top */
+.mobile-menu, 
+.mobile-menu-backdrop {
+  z-index: 2147483647 !important; /* Maximum z-index value */
+  position: fixed !important;
+}
+
+/* Make sure content sections have proper stacking order */
+section {
+  position: relative;
+  z-index: 1 !important;
+}
+
+/* Force all sections to be under mobile menu */
+#about, #education, #skills, #projects, #publications, #certificates, #awards, #contact {
+  z-index: 1 !important;
+  position: relative !important;
+}
+
+/* Set proper z-index for elements that should be on top */
+.fixed-navbar {
+  position: fixed !important;
+  z-index: 2147483640 !important; /* High but below mobile menu */
+}
+
+/* Image/skill modals should be below mobile menu but above content */
+.modal-overlay {
+  z-index: 2147483630 !important;
+}
+
+/* Ensure buttons in mobile menu are clickable */
+.mobile-menu button,
+.mobile-menu a {
+  position: relative;
+  z-index: 2147483647 !important;
+}
+
+/* Fix for Safari and iOS */
+@supports (-webkit-touch-callout: none) {
+  .mobile-menu {
+    transform: translateZ(0);
+    will-change: transform;
+  }
+}

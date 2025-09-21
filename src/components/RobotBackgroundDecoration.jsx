@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 // Performance-optimized static decoration
 const RobotBackgroundDecoration = ({ theme }) => {
   return (
-    <div className="absolute inset-0 overflow-hidden pointer-events-none">
+    <div className="absolute inset-0 overflow-hidden pointer-events-none -z-10">
       {/* Robot silhouette in the background (static version) */}
       <div 
         className="absolute right-0 bottom-0 opacity-5 w-[600px] h-[600px]"

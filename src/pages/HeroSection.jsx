@@ -4,6 +4,7 @@ import { Sun, Moon, Cpu } from 'lucide-react'
 import PropTypes from 'prop-types'
 import CircuitPaths from '../components/CircuitPaths'
 import LeftRobotDecoration from '../components/LeftRobotDecoration'
+import BinaryMatrix from '../components/BinaryMatrix'
 
 const HeroSection = ({ theme, roboticMode, scrollToSection, smoothScrollToSection, toggleTheme, toggleRoboticMode }) => {
   return (
@@ -14,7 +15,7 @@ const HeroSection = ({ theme, roboticMode, scrollToSection, smoothScrollToSectio
         initial={{ opacity: 0, x: -20 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ delay: 0.5, duration: 0.5 }}
-        className={`absolute top-12 left-4 md:top-12 md:left-8 z-30 flex items-center gap-2 py-2.5 px-5 rounded-lg ${
+        className={`absolute top-20 left-4 md:top-20 md:left-8 z-30 flex items-center gap-2 py-2.5 px-5 rounded-lg ${
           theme === 'dark'
             ? roboticMode
               ? 'bg-gradient-to-r from-cyan-600 to-blue-700 text-cyan-200 border border-cyan-500'
@@ -69,7 +70,7 @@ const HeroSection = ({ theme, roboticMode, scrollToSection, smoothScrollToSectio
         initial={{ opacity: 0, x: 20 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ delay: 0.5, duration: 0.5 }}
-        className={`absolute top-12 right-4 md:top-12 md:right-8 z-30 flex items-center gap-2 py-2.5 px-5 rounded-lg ${
+        className={`absolute top-20 right-4 md:top-20 md:right-8 z-30 flex items-center gap-2 py-2.5 px-5 rounded-lg ${
           theme === 'dark'
             ? 'bg-slate-800 text-gray-400 border border-slate-700'
             : 'bg-gradient-to-r from-cyan-400 to-blue-500 text-white border border-blue-500'
@@ -116,7 +117,22 @@ const HeroSection = ({ theme, roboticMode, scrollToSection, smoothScrollToSectio
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-blue-500/20 to-transparent rounded-full blur-3xl top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"></div>
       </div>
 
-      {/* Binary Matrix Background - REMOVED: Now applied globally in App.jsx */}
+      {/* Binary Matrix Background - Enhanced visibility for Hero section */}
+      {roboticMode && <BinaryMatrix heroSection={true} />}
+      
+      {/* Additional robotic background elements for better visibility */}
+      {roboticMode && (
+        <div className="absolute inset-0 pointer-events-none">
+          <div className="absolute inset-0 bg-gradient-to-b from-cyan-900/10 via-transparent to-cyan-900/10"></div>
+          <div className="absolute top-0 left-0 w-32 h-32 border-t-2 border-l-2 border-cyan-400/50"></div>
+          <div className="absolute top-0 right-0 w-32 h-32 border-t-2 border-r-2 border-cyan-400/50"></div>
+          <div className="absolute bottom-0 left-0 w-32 h-32 border-b-2 border-l-2 border-cyan-400/50"></div>
+          <div className="absolute bottom-0 right-0 w-32 h-32 border-b-2 border-r-2 border-cyan-400/50"></div>
+          <div className="absolute inset-x-0 top-[30%] h-[1px] bg-gradient-to-r from-transparent via-cyan-400/50 to-transparent"></div>
+          <div className="absolute inset-y-0 left-[30%] w-[1px] bg-gradient-to-b from-transparent via-cyan-400/50 to-transparent"></div>
+          <div className="absolute inset-y-0 right-[30%] w-[1px] bg-gradient-to-b from-transparent via-cyan-400/50 to-transparent"></div>
+        </div>
+      )}
 
       {/* Circuit Paths */}
       {roboticMode && <CircuitPaths theme={theme} />}
@@ -125,11 +141,21 @@ const HeroSection = ({ theme, roboticMode, scrollToSection, smoothScrollToSectio
       {roboticMode && <LeftRobotDecoration theme={theme} />}
 
       <motion.div
-        className="container mx-auto text-center z-10"
+        className="container mx-auto text-center z-10 relative"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8 }}
       >
+        {/* Blur background for hero text */}
+        <div className={`absolute left-1/2 top-0 transform -translate-x-1/2 w-[95%] sm:w-[92%] md:w-[95%] lg:w-[98%] xl:w-full h-[110%] pb-16
+          ${theme === 'dark' 
+              ? roboticMode 
+                  ? 'bg-slate-800/40 backdrop-blur-sm border border-cyan-500/30' 
+                  : 'bg-slate-800/30 backdrop-blur-sm' 
+              : roboticMode 
+                  ? 'bg-white/50 backdrop-blur-sm border border-blue-400/20' 
+                  : 'bg-white/40 backdrop-blur-sm'
+          } rounded-2xl -z-10`}></div>
         <motion.h2
           className="text-5xl md:text-7xl font-bold mb-4 flex flex-wrap justify-center items-center gap-x-4 gap-y-2"
           animate={{
@@ -139,10 +165,10 @@ const HeroSection = ({ theme, roboticMode, scrollToSection, smoothScrollToSectio
         >
           {/* Animated words for "Hello, I'm Dilusha Chamika" */}
           <motion.div
-            className="flex items-center space-x-3 intro-group"
+            className="flex items-center space-x-3 intro-group px-6 py-2 rounded-lg"
             whileHover={{
               scale: 1.05,
-              className: "flex items-center space-x-3 intro-group intro-group-active"
+              className: "flex items-center space-x-3 intro-group intro-group-active px-6 py-2 rounded-lg"
             }}
             transition={{ type: "spring", stiffness: 300 }}
           >
@@ -184,12 +210,12 @@ const HeroSection = ({ theme, roboticMode, scrollToSection, smoothScrollToSectio
           </motion.div>
 
           <motion.div
-            className="inline-flex gap-4 name-group"
+            className="inline-flex gap-4 name-group px-6 py-2 rounded-lg mt-2"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1, transition: { duration: 0.5, delay: 0.3 } }}
             whileHover={{
               scale: 1.05,
-              className: "inline-flex gap-4 name-group name-group-active"
+              className: "inline-flex gap-4 name-group name-group-active px-6 py-2 rounded-lg mt-2"
             }}
             transition={{ type: "spring", stiffness: 300 }}
           >
@@ -242,7 +268,11 @@ const HeroSection = ({ theme, roboticMode, scrollToSection, smoothScrollToSectio
             </motion.span>
           </motion.div>
         </motion.h2>
-        <div className={`text-xl md:text-2xl ${theme === 'dark' ? 'text-gray-300' : 'text-slate-800 font-semibold'} mb-8 h-10`}>
+        <div className={`text-xl md:text-2xl ${theme === 'dark' ? 'text-gray-300' : 'text-slate-800 font-semibold'} mb-8 h-10 px-4 py-1 rounded-lg inline-block ${
+          theme === 'dark' 
+            ? roboticMode ? 'bg-slate-800/60 backdrop-blur-sm border border-cyan-600/20' : 'bg-slate-800/40 backdrop-blur-sm'
+            : roboticMode ? 'bg-white/60 backdrop-blur-sm border border-blue-400/20' : 'bg-white/50 backdrop-blur-sm'
+        }`}>
           <TypeAnimation
             sequence={[
               'Software Developer',

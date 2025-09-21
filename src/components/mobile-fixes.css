@@ -19,7 +19,7 @@
   
   /* Fix for z-index stacking issues on mobile */
   .mobile-menu {
-    z-index: 1000 !important;
+    z-index: 2147483647 !important;
   }
   
   /* Ensure elements are properly sized on small screens */

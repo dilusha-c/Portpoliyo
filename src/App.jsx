@@ -26,6 +26,7 @@ import './components/Education.css'
 import './components/overflow-fix.css'
 import './components/mobile-fixes.css'
 import './components/mobile-critical-fix.css'
+import './components/mobile-menu-styles.css'
 import { ThemeContext } from './contexts/ThemeContext'
 
 import HeroSection from './pages/HeroSection'
@@ -447,7 +448,7 @@ function App() {
         document.removeEventListener('keydown', handleEscapeKey);
       }
     }
-  }, [imageModal.isOpen, handleEscapeKey]); // Removed closeImageModal from dependencies
+  }, [imageModal.isOpen, handleEscapeKey, closeImageModal]); // closeImageModal added to dependencies
   
   // Cross-browser scroll function that works reliably
   const smoothScrollToSection = (sectionId) => {
@@ -740,7 +741,7 @@ function App() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="!fixed inset-0 bg-black backdrop-blur-md flex items-center justify-center p-4 modal-overlay overflow-hidden touch-none !z-[999999]"
+              className="!fixed inset-0 bg-black backdrop-blur-md flex items-center justify-center p-4 modal-overlay overflow-hidden touch-none !z-[2000000]"
               style={{ zIndex: 99999 }}
               onClick={() => setShowSkillsModal(false)}
               onTouchEnd={(e) => {
@@ -766,7 +767,7 @@ function App() {
                     : 'bg-white border border-slate-200'
                 } max-w-sm sm:max-w-2xl md:max-w-4xl w-full max-h-[80vh] overflow-y-auto rounded-lg shadow-2xl ${
                   roboticMode ? 'robot-border' : ''
-                } mx-4 sm:mx-6 md:mx-auto pointer-events-auto !bg-opacity-100 !z-[1000000]`}
+                } mx-4 sm:mx-6 md:mx-auto pointer-events-auto !bg-opacity-100 !z-[2000000]`}
                 onClick={e => e.stopPropagation()}
                 onTouchEnd={e => e.stopPropagation()}
               >
@@ -998,7 +999,7 @@ function App() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="!fixed inset-0 bg-black backdrop-blur-md flex items-center justify-center p-4 modal-overlay overflow-hidden touch-none !z-[999999]"
+            className="!fixed inset-0 bg-black backdrop-blur-md flex items-center justify-center p-4 modal-overlay overflow-hidden touch-none !z-[2000000]"
             style={{ zIndex: 99999 }}
             onClick={closeImageModal}
             onTouchEnd={(e) => {
@@ -1021,7 +1022,7 @@ function App() {
                 theme === 'dark'
                   ? 'bg-slate-900 border border-cyan-900'
                   : 'bg-white border border-slate-200'
-              } ${roboticMode ? 'robot-border' : ''} !z-[1000000]`}
+              } ${roboticMode ? 'robot-border' : ''} !z-[2000000]`}
               onClick={e => e.stopPropagation()}
               onTouchEnd={e => e.stopPropagation()}
             >
@@ -1168,7 +1169,7 @@ function App() {
             transition={{ duration: 0.8 }}
           >
             {/* Binary Matrix Background - Applied globally when robotic mode is active */}
-            {roboticMode && <BinaryMatrix />}
+            {roboticMode && <BinaryMatrix />} {/* This is the global matrix effect */}
             {/* Progress bar - grows from middle to edges */}
             <div className="fixed top-0 z-50 h-1.5 overflow-hidden left-0 right-0">
               {/* Subtle gradient overlay for the whole progress bar area */}
@@ -1204,20 +1205,25 @@ function App() {
             <motion.nav 
               className={`fixed w-full z-40 transition-all duration-300 ${
                 scrollY > 10 
-                  ? 'bg-white/10 dark:bg-slate-900/70 backdrop-blur-xl shadow-xl' 
-                  : 'bg-transparent'
+                  ? theme === 'dark'
+                    ? 'bg-slate-900/90 backdrop-blur-xl border-b border-cyan-800/50 shadow-lg shadow-cyan-900/20' 
+                    : 'bg-white/90 backdrop-blur-xl border-b border-blue-200/50 shadow-lg shadow-blue-900/10'
+                  : theme === 'dark'
+                    ? 'bg-slate-900/70 backdrop-blur-md border-b border-cyan-800/30'
+                    : 'bg-white/70 backdrop-blur-md border-b border-blue-200/30'
               }`}
               initial={{ opacity: 0, y: -20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
             >
-              <div className="container mx-auto flex items-center justify-between py-4 sm:py-5 px-4 md:px-8">
+              <div className="container max-w-[1920px] mx-auto flex items-center justify-between py-4 sm:py-5 px-4 md:px-8">
                 {/* Logo and Name - Left on all screens */}
                 <div className="flex items-center flex-shrink-0 md:mr-3">
                   <motion.img 
                     src={logoImg}
                     alt="Dilusha Chamika Logo" 
-                    className="h-10 sm:h-12 lg:h-14 mr-3"
+                    className="h-10 sm:h-12 lg:h-14 mr-0 ml-0"
+                    style={{marginLeft: 0, marginRight: 0}}
                     whileHover={{ scale: 1.1, rotate: 5 }}
                     initial={{ opacity: 0, scale: 0.8 }}
                     animate={{ opacity: 1, scale: 1 }}
@@ -1235,11 +1241,11 @@ function App() {
                 {/* Mobile menu button - Right side on mobile */}
                 <div className="block md:hidden">
                   <motion.button 
-                    className={`mobile-menu-button p-2.5 rounded-lg ${
+                    className={`mobile-menu-button p-3 rounded-lg ${
                       theme === 'dark' 
-                        ? 'bg-gradient-to-r from-slate-700 to-slate-800 text-white border border-slate-600' 
-                        : 'bg-gradient-to-r from-slate-200 to-slate-100 text-slate-800 border border-slate-300'
-                    } focus:outline-none shadow-md`}
+                        ? 'bg-gradient-to-r from-slate-700 to-slate-800 text-white border-2 border-cyan-700' 
+                        : 'bg-gradient-to-r from-blue-100 to-slate-100 text-slate-800 border-2 border-blue-300'
+                    } focus:outline-none shadow-lg`}
                     onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
                     whileTap={{ scale: 0.95 }}
                     whileHover={{ scale: 1.05 }}
@@ -1257,25 +1263,56 @@ function App() {
                 </div>
                 
                 {/* Desktop navigation */}
-                <div className="hidden md:flex space-x-1 lg:space-x-4 xl:space-x-8 justify-center mx-auto">
+                <div className={`hidden md:flex justify-center mx-auto py-2 rounded-xl max-w-fit lg:max-w-fit ${
+                  theme === 'dark' 
+                    ? roboticMode
+                      ? 'bg-gradient-to-r from-slate-800 to-slate-900 border-2 border-cyan-600/70 shadow-lg shadow-cyan-900/30' 
+                      : 'bg-slate-800/90 border border-slate-700/80 shadow-lg shadow-slate-900/30' 
+                    : roboticMode
+                      ? 'bg-gradient-to-r from-white to-blue-50 border-2 border-blue-300/70 shadow-lg shadow-blue-900/20'
+                      : 'bg-white/90 border border-slate-200/80 shadow-lg shadow-slate-300/30'
+                }`}>
+                    <div className="flex items-center justify-center flex-nowrap space-x-3 md:space-x-4 lg:space-x-5 xl:space-x-6 px-0">
                   {['Home', 'About', 'Projects', 'Publications', 'Certificates', 'Awards', 'Contact'].map((item) => (
                     <motion.button
                       key={item}
                       onClick={() => scrollToSection(item.toLowerCase())}
-                      className={`px-2 lg:px-3 py-1.5 rounded-lg text-sm lg:text-base hover:text-cyan-400 ${theme === 'dark' ? 'hover:bg-slate-800/60' : 'hover:bg-slate-100/60'} transition-colors font-medium whitespace-nowrap`}
+                      className={`px-3 md:px-4 lg:px-5 py-2.5 rounded-lg text-base ${
+                        theme === 'dark' 
+                          ? roboticMode
+                            ? 'text-cyan-300 hover:text-cyan-100 hover:bg-cyan-800/50' 
+                            : 'text-slate-300 hover:text-cyan-400 hover:bg-slate-700/80' 
+                          : roboticMode
+                            ? 'text-blue-700 hover:text-blue-800 hover:bg-blue-100/80'
+                            : 'text-slate-700 hover:text-blue-600 hover:bg-slate-100/80'
+                      } transition-all duration-200 font-medium whitespace-nowrap nav-button-hover`}
                       whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
                     >
                       {item}
                     </motion.button>
                   ))}
+                  </div>
+                </div>
+                
+                {/* Divider between navigation and theme buttons */}
+                <div className="hidden md:block mx-3 lg:mx-4">
+                  <div className={`h-8 w-0.5 ${theme === 'dark' ? 'bg-gradient-to-b from-transparent via-cyan-500/50 to-transparent' : 'bg-gradient-to-b from-transparent via-blue-400/50 to-transparent'}`}></div>
                 </div>
                 
                 {/* Desktop theme buttons - hidden on mobile */}
-                <div className="hidden md:flex items-center space-x-2 md:space-x-3 md:ml-2">
+                <div className={`hidden md:flex items-center space-x-5 md:space-x-6 lg:space-x-7 px-3 py-1.5 rounded-xl ${
+                  theme === 'dark'
+                    ? roboticMode 
+                      ? 'bg-slate-800/80 border border-cyan-800/40' 
+                      : 'bg-slate-800/60'
+                    : roboticMode
+                      ? 'bg-white/80 border border-blue-300/40' 
+                      : 'bg-slate-100/60'
+                }`}>
                   <motion.button
                     onClick={toggleRoboticMode}
-                    className={`p-1.5 md:p-2 rounded-full ${
+                    className={`p-3 md:p-3.5 lg:p-4 rounded-full flex items-center justify-center ${
                       theme === 'dark' 
                         ? roboticMode ? 'bg-gradient-to-r from-cyan-700 to-blue-800 text-cyan-300 shadow-lg shadow-cyan-500/30' : 'bg-slate-800 text-gray-400' 
                         : roboticMode ? 'bg-gradient-to-r from-cyan-400 to-blue-500 text-white shadow-lg shadow-blue-500/20' : 'bg-slate-200 text-gray-600'
@@ -1292,10 +1329,15 @@ function App() {
                     {roboticMode && (
                       <span className="absolute inset-0 robot-glow opacity-70 rounded-full -z-10"></span>
                     )}
-                    <Cpu 
-                      size={20} 
-                      className={roboticMode ? 'animate-pulse' : ''}
-                    />
+                    <div className="relative">
+                      <Cpu 
+                        size={32} 
+                        className={roboticMode ? 'animate-pulse' : ''}
+                      />
+                      {roboticMode && (
+                        <div className="absolute -top-1 -right-1 w-3 h-3 bg-cyan-400 rounded-full animate-ping"></div>
+                      )}
+                    </div>
                     {roboticMode && (
                       <motion.span 
                         className="absolute inset-0 border border-cyan-400/50 rounded-full"
@@ -1313,7 +1355,7 @@ function App() {
                   
                   <motion.button
                     onClick={toggleTheme}
-                    className={`p-1.5 md:p-2 rounded-full ${
+                    className={`p-3 md:p-3.5 lg:p-4 rounded-full flex items-center justify-center ${
                       theme === 'dark' 
                         ? 'bg-gradient-to-r from-cyan-700 to-blue-800 text-cyan-300 shadow-lg shadow-cyan-500/30' 
                         : 'bg-gradient-to-r from-cyan-400 to-blue-500 text-white shadow-lg shadow-blue-500/20'
@@ -1328,7 +1370,15 @@ function App() {
                     {theme === 'dark' && (
                       <span className="absolute inset-0 theme-glow opacity-70 rounded-full -z-10"></span>
                     )}
-                    {theme === 'dark' ? <Sun size={20} className="text-cyan-300 animate-pulse" /> : <Moon size={20} />}
+                    <div className="relative">
+                      {theme === 'dark' ? 
+                        <Sun size={32} className="text-cyan-300 animate-pulse" /> : 
+                        <Moon size={32} />
+                      }
+                      <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full h-full rounded-full">
+                        <div className={`absolute -inset-1 ${theme === 'dark' ? 'bg-yellow-400/10' : 'bg-blue-400/10'} rounded-full blur-sm`}></div>
+                      </div>
+                    </div>
                     <motion.span 
                       className={`absolute inset-0 border rounded-full ${theme === 'dark' ? 'border-cyan-400/50' : 'border-blue-400/50'}`}
                       animate={{ 
@@ -1347,19 +1397,32 @@ function App() {
               {/* Mobile menu */}
               <AnimatePresence>
                 {mobileMenuOpen && (
-                  <motion.div 
-                    className={`mobile-menu md:hidden fixed inset-x-0 top-20 z-40 ${
-                      theme === 'dark' 
-                        ? 'bg-slate-900/95 backdrop-blur-lg text-white border-b border-slate-700/50' 
-                        : 'bg-white/95 backdrop-blur-lg text-slate-900 border-b border-slate-200/50'
-                    } shadow-xl overflow-hidden`}
-                    initial={{ opacity: 0, maxHeight: 0 }}
-                    animate={{ opacity: 1, maxHeight: '500px' }}
-                    exit={{ opacity: 0, maxHeight: 0 }}
-                    transition={{ duration: 0.3, ease: 'easeInOut' }}
-                  >
+                  <>
+                    {/* Backdrop */}
+                    <motion.div 
+                      className="fixed inset-0 bg-black/30 backdrop-blur-sm z-[2147483646] md:hidden mobile-menu-backdrop"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                      transition={{ duration: 0.3 }}
+                      onClick={() => setMobileMenuOpen(false)}
+                      style={{ isolation: 'isolate' }}
+                    />
+                    
+                    {/* Menu */}
+                    <motion.div 
+                      className={`mobile-menu md:hidden fixed inset-x-0 top-20 z-[2147483647] ${
+                        theme === 'dark' 
+                          ? 'bg-slate-900/95 backdrop-blur-lg text-white border-2 border-cyan-500' 
+                          : 'bg-white/95 backdrop-blur-lg text-slate-900 border-2 border-blue-500'
+                      } shadow-2xl overflow-hidden menu-shadow-glow`}
+                      initial={{ opacity: 0, maxHeight: 0 }}
+                      animate={{ opacity: 1, maxHeight: '500px' }}
+                      exit={{ opacity: 0, maxHeight: 0 }}
+                      transition={{ duration: 0.3, ease: 'easeInOut' }}
+                    >
                     <div className="container mx-auto py-5 px-6">
-                      <div className="flex flex-col space-y-1">
+                      <div className="flex flex-col space-y-2">
                         {['Home', 'About', 'Projects', 'Publications', 'Certificates', 'Awards', 'Contact'].map((item) => (
                           <motion.button
                             key={item}
@@ -1367,11 +1430,11 @@ function App() {
                               scrollToSection(item.toLowerCase());
                               setMobileMenuOpen(false);
                             }}
-                            className={`py-3 px-4 rounded-lg text-lg font-medium ${
+                            className={`py-3 px-4 rounded-lg text-lg font-bold mb-1 ${
                               theme === 'dark' 
-                                ? 'hover:bg-slate-800 hover:text-cyan-400' 
-                                : 'hover:bg-slate-100 hover:text-blue-600'
-                            } transition-colors w-full text-left`}
+                                ? 'bg-slate-800 hover:bg-cyan-900 hover:text-cyan-300 text-white border-l-4 border-cyan-500' 
+                                : 'bg-slate-100 hover:bg-blue-100 hover:text-blue-700 text-slate-800 border-l-4 border-blue-500'
+                            } transition-colors w-full text-left shadow-md`}
                             whileHover={{ x: 10 }}
                             whileTap={{ scale: 0.98 }}
                             initial={{ opacity: 0, x: -20 }}
@@ -1380,37 +1443,51 @@ function App() {
                               delay: 0.05 * ['Home', 'About', 'Projects', 'Publications', 'Certificates', 'Awards', 'Contact'].indexOf(item)
                             }}
                           >
-                            {item}
+                            <div className="flex items-center">
+                              <span className={`mr-3 ${theme === 'dark' ? 'text-cyan-400' : 'text-blue-600'}`}>
+                                {item === 'Home' && <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>}
+                                {item === 'About' && <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="8" r="5"></circle><path d="M20 21a8 8 0 1 0-16 0"></path></svg>}
+                                {item === 'Projects' && <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="12 2 19 9 12 16 5 9 12 2"></polygon><polyline points="19 15 19 22 5 22 5 15"></polyline></svg>}
+                                {item === 'Publications' && <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>}
+                                {item === 'Certificates' && <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"></rect><line x1="3" y1="10" x2="21" y2="10"></line></svg>}
+                                {item === 'Awards' && <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="8" r="6"></circle><path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"></path></svg>}
+                                {item === 'Contact' && <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.908.339 1.85.574 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>}
+                              </span>
+                              {item}
+                            </div>
                           </motion.button>
                         ))}
                         
-                        <div className={`h-px w-full my-2 ${theme === 'dark' ? 'bg-slate-700/50' : 'bg-slate-200/50'}`}></div>
+                        <div className={`h-px w-full my-2 ${theme === 'dark' ? 'bg-cyan-500/50' : 'bg-blue-300/50'}`}></div>
                         
                         <div className="flex items-center justify-between py-3 px-4">
-                          <span className="font-medium">Theme Settings</span>
+                          <span className={`font-medium ${theme === 'dark' ? 'text-cyan-300' : 'text-blue-700'}`}>Theme Settings</span>
                           <div className="flex items-center space-x-4">
                             <motion.button
                               onClick={toggleRoboticMode}
-                              className={`p-2 rounded-full ${
+                              className={`p-3 rounded-full ${
                                 theme === 'dark' 
                                   ? roboticMode ? 'bg-gradient-to-r from-cyan-700 to-blue-800 text-cyan-300' : 'bg-slate-800 text-gray-400' 
                                   : roboticMode ? 'bg-gradient-to-r from-cyan-400 to-blue-500 text-white' : 'bg-slate-200 text-gray-600'
                               } relative ${roboticMode ? 'robot-border shadow-lg shadow-cyan-500/30' : ''}`}
                               whileTap={{ scale: 0.9 }}
                             >
-                              <Cpu size={20} className={roboticMode ? 'animate-pulse' : ''} />
+                              <Cpu size={26} className={roboticMode ? 'animate-pulse' : ''} />
                               {roboticMode && (
-                                <motion.span 
-                                  className="absolute inset-0 border border-cyan-400/50 rounded-full"
-                                  animate={{ 
-                                    scale: [1, 1.2, 1], 
-                                    opacity: [0.7, 0.2, 0.7] 
-                                  }}
-                                  transition={{ 
-                                    duration: 2,
-                                    repeat: Infinity
-                                  }}
-                                />
+                                <>
+                                  <div className="absolute -top-1 -right-1 w-2 h-2 bg-cyan-400 rounded-full animate-ping"></div>
+                                  <motion.span 
+                                    className="absolute inset-0 border border-cyan-400/50 rounded-full"
+                                    animate={{ 
+                                      scale: [1, 1.2, 1], 
+                                      opacity: [0.7, 0.2, 0.7] 
+                                    }}
+                                    transition={{ 
+                                      duration: 2,
+                                      repeat: Infinity
+                                    }}
+                                  />
+                                </>
                               )}
                             </motion.button>
                             
@@ -1426,7 +1503,12 @@ function App() {
                               {theme === 'dark' && (
                                 <span className="absolute inset-0 theme-glow opacity-70 rounded-full -z-10"></span>
                               )}
-                              {theme === 'dark' ? <Sun size={20} className="text-cyan-300 animate-pulse" /> : <Moon size={20} />}
+                              <div className="relative">
+                                {theme === 'dark' ? <Sun size={20} className="text-cyan-300 animate-pulse" /> : <Moon size={20} />}
+                                <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full h-full rounded-full">
+                                  <div className={`absolute -inset-1 ${theme === 'dark' ? 'bg-yellow-400/10' : 'bg-blue-400/10'} rounded-full blur-sm`}></div>
+                                </div>
+                              </div>
                               <motion.span 
                                 className={`absolute inset-0 border rounded-full ${theme === 'dark' ? 'border-cyan-400/50' : 'border-blue-400/50'}`}
                                 animate={{ 
@@ -1446,11 +1528,20 @@ function App() {
                     
                     {roboticMode && (
                       <>
-                        <div className="absolute left-0 top-1/3 h-[1px] w-full bg-gradient-to-r from-transparent via-cyan-500/30 to-transparent"></div>
-                        <div className="absolute left-0 bottom-0 h-[1px] w-full bg-gradient-to-r from-transparent via-cyan-500/30 to-transparent"></div>
+                        <div className="absolute left-0 top-1/3 h-[2px] w-full bg-gradient-to-r from-transparent via-cyan-400 to-transparent"></div>
+                        <div className="absolute left-0 bottom-0 h-[2px] w-full bg-gradient-to-r from-transparent via-cyan-400 to-transparent"></div>
+                        <div className="absolute right-2 top-2 flex items-center">
+                          <span className="text-xs font-mono text-cyan-400 animate-pulse">MENU.SYS</span>
+                        </div>
                       </>
                     )}
-                  </motion.div>
+                    
+                    {/* Menu glowing border in both themes */}
+                    <div className={`absolute inset-0 pointer-events-none ${
+                      theme === 'dark' ? 'shadow-[0_0_20px_rgba(6,182,212,0.3)]' : 'shadow-[0_0_20px_rgba(59,130,246,0.3)]'
+                    }`}></div>
+                    </motion.div>
+                  </>
                 )}
               </AnimatePresence>
             </motion.nav>

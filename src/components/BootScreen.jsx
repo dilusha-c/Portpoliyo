@@ -2,6 +2,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Player } from '@lottiefiles/react-lottie-player';
 import HumanoidRobot from './HumanoidRobot';
 import { useEffect } from 'react';
+import PropTypes from 'prop-types';
 
 const BootScreen = ({ onComplete }) => {
   
@@ -196,6 +197,10 @@ const BootScreen = ({ onComplete }) => {
           </div>
         </motion.div>
   );
+};
+
+BootScreen.propTypes = {
+  onComplete: PropTypes.func.isRequired,
 };
 
 export default BootScreen;

@@ -5,7 +5,7 @@ import './HumanoidRobot.css';
 
 const HumanoidRobot = () => {
   return (
-    <div className="relative w-72 h-robot mt-5">
+    <div className="relative w-72 h-robot mt-5 z-10">
       {/* Background grid pattern - enhanced */}
       <div className="absolute inset-0 w-full h-full overflow-hidden opacity-30">
         <motion.div

@@ -5,7 +5,7 @@ const HumanRobotDecoration = ({ theme }) => {
   // Static SVG for better performance
   return (
     <div 
-      className="absolute left-0 bottom-0 h-full w-60 md:w-80 overflow-hidden pointer-events-none"
+      className="absolute left-0 bottom-0 h-full w-60 md:w-80 overflow-hidden pointer-events-none z-10"
     >
       {/* Fully Robotic Silhouette */}
       <svg 
