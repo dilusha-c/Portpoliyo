@@ -2,7 +2,6 @@ import { motion } from 'framer-motion'
 import { TypeAnimation } from 'react-type-animation'
 import { Sun, Moon, Cpu } from 'lucide-react'
 import PropTypes from 'prop-types'
-import BinaryMatrix from '../components/BinaryMatrix'
 import CircuitPaths from '../components/CircuitPaths'
 import LeftRobotDecoration from '../components/LeftRobotDecoration'
 
@@ -117,8 +116,7 @@ const HeroSection = ({ theme, roboticMode, scrollToSection, smoothScrollToSectio
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-blue-500/20 to-transparent rounded-full blur-3xl top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"></div>
       </div>
 
-      {/* Binary Matrix Background */}
-      {roboticMode && <BinaryMatrix />}
+      {/* Binary Matrix Background - REMOVED: Now applied globally in App.jsx */}
 
       {/* Circuit Paths */}
       {roboticMode && <CircuitPaths theme={theme} />}

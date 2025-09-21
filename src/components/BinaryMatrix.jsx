@@ -68,7 +68,7 @@ const BinaryMatrix = () => {
   }, []);
 
   return (
-    <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden opacity-30">
+    <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden opacity-30">
       {matrix.map((row, i) => (
         <div key={`row-${i}`} className="flex justify-center">
           {row.map((cell) => (

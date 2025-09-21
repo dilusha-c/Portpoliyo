@@ -10,6 +10,7 @@ import RobotDecorator from './components/RobotDecorator'
 import RoboticSectionTitle from './components/RoboticSectionTitle'
 import RobotBackgroundDecoration from './components/RobotBackgroundDecoration'
 import HumanRobotDecoration from './components/HumanRobotDecoration'
+import BinaryMatrix from './components/BinaryMatrix'
 import useIsMobile from './hooks/useIsMobile'
 import SafeMobileDetect from './components/SafeMobileDetect'
 
@@ -1166,6 +1167,8 @@ function App() {
             animate={{ opacity: 1 }}
             transition={{ duration: 0.8 }}
           >
+            {/* Binary Matrix Background - Applied globally when robotic mode is active */}
+            {roboticMode && <BinaryMatrix />}
             {/* Progress bar - grows from middle to edges */}
             <div className="fixed top-0 z-50 h-1.5 overflow-hidden left-0 right-0">
               {/* Subtle gradient overlay for the whole progress bar area */}
