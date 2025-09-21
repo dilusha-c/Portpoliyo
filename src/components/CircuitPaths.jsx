@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion';
+import PropTypes from 'prop-types';
 
 const CircuitPaths = ({ theme }) => {
   return (
@@ -112,6 +113,10 @@ const CircuitPaths = ({ theme }) => {
       </svg>
     </div>
   );
+};
+
+CircuitPaths.propTypes = {
+  theme: PropTypes.oneOf(['light', 'dark']).isRequired,
 };
 
 export default CircuitPaths;

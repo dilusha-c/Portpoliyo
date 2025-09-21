@@ -1,6 +1,7 @@
 import React, { useContext } from 'react';
 import { motion } from 'framer-motion';
-import { ThemeContext } from '../main';
+import { ThemeContext } from '../contexts/ThemeContext';
+import PropTypes from 'prop-types';
 
 const RoboticSectionTitle = ({ children }) => {
   const { roboticMode } = useContext(ThemeContext);
@@ -91,6 +92,10 @@ const RoboticSectionTitle = ({ children }) => {
       </div>
     </motion.div>
   );
+};
+
+RoboticSectionTitle.propTypes = {
+  children: PropTypes.node.isRequired,
 };
 
 export default RoboticSectionTitle;

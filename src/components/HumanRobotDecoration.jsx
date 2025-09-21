@@ -1,5 +1,5 @@
 import React from 'react';
-import { motion } from 'framer-motion';
+import PropTypes from 'prop-types';
 
 const HumanRobotDecoration = ({ theme }) => {
   // Static SVG for better performance
@@ -346,6 +346,10 @@ const HumanRobotDecoration = ({ theme }) => {
       ))}
     </div>
   );
+};
+
+HumanRobotDecoration.propTypes = {
+  theme: PropTypes.oneOf(['light', 'dark']).isRequired,
 };
 
 export default HumanRobotDecoration;

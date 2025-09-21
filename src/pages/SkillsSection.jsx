@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion'
+import PropTypes from 'prop-types'
 import RoboticSectionTitle from '../components/RoboticSectionTitle'
 
 const SkillsSection = ({ theme, roboticMode, setShowSkillsModal }) => {
@@ -335,6 +336,12 @@ const SkillsSection = ({ theme, roboticMode, setShowSkillsModal }) => {
       </div>
     </section>
   )
+}
+
+SkillsSection.propTypes = {
+  theme: PropTypes.string.isRequired,
+  roboticMode: PropTypes.bool.isRequired,
+  setShowSkillsModal: PropTypes.func.isRequired
 }
 
 export default SkillsSection

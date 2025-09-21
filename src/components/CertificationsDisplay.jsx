@@ -1,10 +1,11 @@
 import { useState, useContext, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { Player } from '@lottiefiles/react-lottie-player';
-import { ThemeContext } from '../main';
+import { ThemeContext } from '../contexts/ThemeContext';
 import { X, Filter } from 'lucide-react';
 import { createPortal } from 'react-dom';
 import './CertificationsScanner.css';
+import PropTypes from 'prop-types';
 
 // Import certification images
 import machineLearningImg from '../assets/certifications/Machine Learning.png';
@@ -22,14 +23,160 @@ import supervisedMLImg from '../assets/certifications/Supervised Machine Learnin
 import unsupervisedMLImg from '../assets/certifications/Unsupervised Learning, Recommenders,.png';
 import networkSupportImg from '../assets/certifications/Network Support and Security.png';
 
+const certifications = [
+  {
+    title: "Machine Learning Specialization",
+    desc: "Comprehensive training in machine learning principles, algorithms, neural networks, and AI implementation for practical applications.",
+    org: "DeepLearning.AI, Stanford University",
+    year: "July 2025",
+    featured: true,
+    category: "Machine Learning & Artificial Intelligence",
+    imageUrl: machineLearningImg,
+    verifyUrl: "https://www.coursera.org/account/accomplishments/specialization/RXZHOBN9VT3G",
+    credentialId: "RXZHOBN9VT3G"
+  },
+  {
+    title: "Network Technician Career Path",
+    desc: "Expertise in installing, configuring, and managing computer networks with a focus on Cisco networking technologies.",
+    org: "Cisco",
+    year: "July 2025",
+    featured: true,
+    category: "Networking",
+    imageUrl: networkTechnicianImg,
+    verifyUrl: "https://www.credly.com/badges/178fca33-76b1-4a37-8c7e-54c58632ce85/linked_in_profile"
+  },
+  {
+    title: "Python Programming",
+    desc: "Comprehensive training in Python programming language fundamentals, data structures, and application development.",
+    org: "University of Moratuwa",
+    year: "2025",
+    featured: true,
+    category: "Programming & Development",
+    imageUrl: pythonProgrammingImg,
+    verifyUrl: "https://open.uom.lk/lms/mod/customcert/verify_certificate.php",
+    credentialId: "oMH9LB43vl"
+  },
+  {
+    title: "Network Addressing and Basic Troubleshooting",
+    desc: "Proficiency in configuring, managing, and troubleshooting computer networks and network addressing systems.",
+    org: "Cisco",
+    year: "July 2025",
+    featured: true,
+    category: "Networking",
+    imageUrl: networkAddressingImg,
+    verifyUrl: "https://www.credly.com/badges/1f86229e-67e7-47ca-8e6b-35bd4ba4bcbd/linked_in_profile"
+  },
+  // Additional certificates (not featured - will only show in popup)
+  {
+    title: "Python for Beginners",
+    desc: "Introduction to Python programming fundamentals and basic application development concepts.",
+    org: "University of Moratuwa",
+    year: "2025",
+    featured: false,
+    category: "Programming & Development",
+    imageUrl: pythonForBeginnersImg, // Using actual image
+    verifyUrl: "https://open.uom.lk/lms/mod/customcert/verify_certificate.php",
+    credentialId: "XZ5PzjiA8h"
+  },
+  {
+    title: "Networking Basics",
+    desc: "Introduction to fundamental networking concepts, protocols, and architectures.",
+    org: "Cisco",
+    year: "December 2024",
+    featured: false,
+    category: "Networking",
+    imageUrl: networkingBasicsImg, // Using actual image
+    verifyUrl: "https://www.credly.com/badges/34838485-265b-4bd2-89a9-ad801ebbfd54/linked_in_profile"
+  },
+  {
+    title: "Introduction to Cybersecurity",
+    desc: "Foundational knowledge of cybersecurity principles, threats, and protection mechanisms.",
+    org: "Cisco",
+    year: "December 2024",
+    featured: false,
+    category: "Cybersecurity",
+    imageUrl: introCybersecurityImg, // Using actual image
+    verifyUrl: "https://www.credly.com/badges/560680a1-6111-4d9d-981e-0e03393652b9/linked_in_profile"
+  },
+  {
+    title: "Computer Hardware Basics",
+    desc: "Understanding of computer hardware components, architecture, and basic troubleshooting.",
+    org: "Cisco",
+    year: "December 2024",
+    featured: false,
+    category: "Hardware & Systems",
+    imageUrl: computerHardwareImg, // Using actual image
+    verifyUrl: "https://www.credly.com/badges/4eccea92-3f13-4a37-b3c8-d92bfcfeba0a/linked_in_profile"
+  },
+  {
+    title: "Supervised Machine Learning: Regression and Classification",
+    desc: "Deep dive into regression and classification algorithms for supervised machine learning applications.",
+    org: "DeepLearning.AI",
+    year: "April 2025",
+    featured: false,
+    category: "Machine Learning & Artificial Intelligence",
+    imageUrl: supervisedMLImg, // Using actual image
+    verifyUrl: "https://www.coursera.org/account/accomplishments/verify/I45GXQQBSC5Z",
+    credentialId: "I45GXQQBSC5Z"
+  },
+  {
+    title: "Advanced Learning Algorithms",
+    desc: "Exploration of sophisticated learning algorithms and their implementation in complex AI systems.",
+    org: "DeepLearning.AI, Stanford University",
+    year: "June 2025",
+    featured: false,
+    category: "Machine Learning & Artificial Intelligence",
+    imageUrl: advancedLearningImg, // Using actual image
+    verifyUrl: "https://www.coursera.org/account/accomplishments/records/EF66Q4ALMHWF",
+    credentialId: "EF66Q4ALMHWF"
+  },
+  {
+    title: "Unsupervised Learning, Recommenders, Reinforcement Learning",
+    desc: "Advanced techniques in unsupervised learning, recommendation systems, and reinforcement learning strategies.",
+    org: "DeepLearning.AI, Stanford University",
+    year: "July 2025",
+    featured: false,
+    category: "Machine Learning & Artificial Intelligence",
+    imageUrl: unsupervisedMLImg, // Using actual image
+    verifyUrl: "https://www.coursera.org/account/accomplishments/records/6P89GUDLPVIZ",
+    credentialId: "6P89GUDLPVIZ"
+  },
+  {
+    title: "Networking Devices and Initial Configuration",
+    desc: "Configuring and managing network devices with focus on initial setup and basic connectivity.",
+    org: "Cisco",
+    year: "July 2025",
+    featured: false,
+    category: "Networking",
+    imageUrl: networkingDevicesImg, // Using actual image
+    verifyUrl: "https://www.credly.com/badges/9f0a16a1-e2c5-4b12-b90e-1947ad035077/public_url"
+  },
+  {
+    title: "Network Support and Security",
+    desc: "Advanced techniques for network support, troubleshooting, and implementing security measures.",
+    org: "Cisco",
+    year: "July 2025",
+    featured: false,
+    category: "Networking",
+    imageUrl: networkSupportImg, // Using actual image
+    verifyUrl: "https://www.credly.com/badges/42c4c480-d55e-46df-ae89-7cd02c02a811/linked_in_profile"
+  },
+  {
+    title: "Endpoint Security",
+    desc: "Specialized training in securing endpoint devices and protecting against modern security threats.",
+    org: "Cisco",
+    year: "August 2025",
+    featured: false,
+    category: "Cybersecurity",
+    imageUrl: endpointSecurityImg, // Using actual image
+    verifyUrl: "https://www.credly.com/badges/3d6c192f-ed41-43f1-9418-4611a2005b04/linked_in_profile"
+  }
+];
+
 const CertificationsDisplay = ({ theme }) => {
   const { roboticMode } = useContext(ThemeContext);
-  const [showMore, setShowMore] = useState(false);
-  const [selectedCert, setSelectedCert] = useState(null);
-  const [robotAnimating, setRobotAnimating] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState('All');
-  const [filteredCerts, setFilteredCerts] = useState([]);
   const modalContentRef = useRef(null);
   
   // For certificate image popup
@@ -37,195 +184,34 @@ const CertificationsDisplay = ({ theme }) => {
   const [selectedCertImage, setSelectedCertImage] = useState(null);
   const certImageModalRef = useRef(null);
   
-  // Certificate data array with categories
-  const certifications = [
-    {
-      title: "Machine Learning Specialization",
-      desc: "Comprehensive training in machine learning principles, algorithms, neural networks, and AI implementation for practical applications.",
-      org: "DeepLearning.AI, Stanford University",
-      year: "July 2025",
-      featured: true,
-      category: "Machine Learning & Artificial Intelligence",
-      imageUrl: machineLearningImg,
-      verifyUrl: "https://www.coursera.org/account/accomplishments/specialization/RXZHOBN9VT3G",
-      credentialId: "RXZHOBN9VT3G"
-    },
-    {
-      title: "Network Technician Career Path",
-      desc: "Expertise in installing, configuring, and managing computer networks with a focus on Cisco networking technologies.",
-      org: "Cisco",
-      year: "July 2025",
-      featured: true,
-      category: "Networking",
-      imageUrl: networkTechnicianImg,
-      verifyUrl: "https://www.credly.com/badges/178fca33-76b1-4a37-8c7e-54c58632ce85/linked_in_profile"
-    },
-    {
-      title: "Python Programming",
-      desc: "Comprehensive training in Python programming language fundamentals, data structures, and application development.",
-      org: "University of Moratuwa",
-      year: "2025",
-      featured: true,
-      category: "Programming & Development",
-      imageUrl: pythonProgrammingImg,
-      verifyUrl: "https://open.uom.lk/lms/mod/customcert/verify_certificate.php",
-      credentialId: "oMH9LB43vl"
-    },
-    {
-      title: "Network Addressing and Basic Troubleshooting",
-      desc: "Proficiency in configuring, managing, and troubleshooting computer networks and network addressing systems.",
-      org: "Cisco",
-      year: "July 2025",
-      featured: true,
-      category: "Networking",
-      imageUrl: networkAddressingImg,
-      verifyUrl: "https://www.credly.com/badges/1f86229e-67e7-47ca-8e6b-35bd4ba4bcbd/linked_in_profile"
-    },
-    // Additional certificates (not featured - will only show in popup)
-    {
-      title: "Python for Beginners",
-      desc: "Introduction to Python programming fundamentals and basic application development concepts.",
-      org: "University of Moratuwa",
-      year: "2025",
-      featured: false,
-      category: "Programming & Development",
-      imageUrl: pythonForBeginnersImg, // Using actual image
-      verifyUrl: "https://open.uom.lk/lms/mod/customcert/verify_certificate.php",
-      credentialId: "XZ5PzjiA8h"
-    },
-    {
-      title: "Networking Basics",
-      desc: "Introduction to fundamental networking concepts, protocols, and architectures.",
-      org: "Cisco",
-      year: "December 2024",
-      featured: false,
-      category: "Networking",
-      imageUrl: networkingBasicsImg, // Using actual image
-      verifyUrl: "https://www.credly.com/badges/34838485-265b-4bd2-89a9-ad801ebbfd54/linked_in_profile"
-    },
-    {
-      title: "Introduction to Cybersecurity",
-      desc: "Foundational knowledge of cybersecurity principles, threats, and protection mechanisms.",
-      org: "Cisco",
-      year: "December 2024",
-      featured: false,
-      category: "Cybersecurity",
-      imageUrl: introCybersecurityImg, // Using actual image
-      verifyUrl: "https://www.credly.com/badges/560680a1-6111-4d9d-981e-0e03393652b9/linked_in_profile"
-    },
-    {
-      title: "Computer Hardware Basics",
-      desc: "Understanding of computer hardware components, architecture, and basic troubleshooting.",
-      org: "Cisco",
-      year: "December 2024",
-      featured: false,
-      category: "Hardware & Systems",
-      imageUrl: computerHardwareImg, // Using actual image
-      verifyUrl: "https://www.credly.com/badges/4eccea92-3f13-4a37-b3c8-d92bfcfeba0a/linked_in_profile"
-    },
-    {
-      title: "Supervised Machine Learning: Regression and Classification",
-      desc: "Deep dive into regression and classification algorithms for supervised machine learning applications.",
-      org: "DeepLearning.AI",
-      year: "April 2025",
-      featured: false,
-      category: "Machine Learning & Artificial Intelligence",
-      imageUrl: supervisedMLImg, // Using actual image
-      verifyUrl: "https://www.coursera.org/account/accomplishments/verify/I45GXQQBSC5Z",
-      credentialId: "I45GXQQBSC5Z"
-    },
-    {
-      title: "Advanced Learning Algorithms",
-      desc: "Exploration of sophisticated learning algorithms and their implementation in complex AI systems.",
-      org: "DeepLearning.AI, Stanford University",
-      year: "June 2025",
-      featured: false,
-      category: "Machine Learning & Artificial Intelligence",
-      imageUrl: advancedLearningImg, // Using actual image
-      verifyUrl: "https://www.coursera.org/account/accomplishments/records/EF66Q4ALMHWF",
-      credentialId: "EF66Q4ALMHWF"
-    },
-    {
-      title: "Unsupervised Learning, Recommenders, Reinforcement Learning",
-      desc: "Advanced techniques in unsupervised learning, recommendation systems, and reinforcement learning strategies.",
-      org: "DeepLearning.AI, Stanford University",
-      year: "July 2025",
-      featured: false,
-      category: "Machine Learning & Artificial Intelligence",
-      imageUrl: unsupervisedMLImg, // Using actual image
-      verifyUrl: "https://www.coursera.org/account/accomplishments/records/6P89GUDLPVIZ",
-      credentialId: "6P89GUDLPVIZ"
-    },
-    {
-      title: "Networking Devices and Initial Configuration",
-      desc: "Configuring and managing network devices with focus on initial setup and basic connectivity.",
-      org: "Cisco",
-      year: "July 2025",
-      featured: false,
-      category: "Networking",
-      imageUrl: networkingDevicesImg, // Using actual image
-      verifyUrl: "https://www.credly.com/badges/9f0a16a1-e2c5-4b12-b90e-1947ad035077/public_url"
-    },
-    {
-      title: "Network Support and Security",
-      desc: "Advanced techniques for network support, troubleshooting, and implementing security measures.",
-      org: "Cisco",
-      year: "July 2025",
-      featured: false,
-      category: "Networking",
-      imageUrl: networkSupportImg, // Using actual image
-      verifyUrl: "https://www.credly.com/badges/42c4c480-d55e-46df-ae89-7cd02c02a811/linked_in_profile"
-    },
-    {
-      title: "Endpoint Security",
-      desc: "Specialized training in securing endpoint devices and protecting against modern security threats.",
-      org: "Cisco",
-      year: "August 2025",
-      featured: false,
-      category: "Cybersecurity",
-      imageUrl: endpointSecurityImg, // Using actual image
-      verifyUrl: "https://www.credly.com/badges/3d6c192f-ed41-43f1-9418-4611a2005b04/linked_in_profile"
-    }
-  ];
+  // Filter certifications based on selected category
+  const filteredCerts = selectedCategory === 'All' 
+    ? certifications 
+    : certifications.filter(cert => cert.category === selectedCategory);
   
-  // Get unique categories
-  const categories = ['All', ...new Set(certifications.map(cert => cert.category))].sort();
-  
-  // Filter certificates for the main display - only show featured certificates
+  // Display only featured certificates (first 4)
   const displayedCerts = certifications.filter(cert => cert.featured);
   
-  // Function to handle opening the modal
+  // Categories for filtering
+  const categories = ['All', 'Machine Learning & Artificial Intelligence', 'Programming & Development', 'Networking', 'Cybersecurity', 'Hardware & Systems'];
+  
+  // Handle opening the full certificates modal
   const handleOpenModal = () => {
-    setSelectedCategory('All');
-    setFilteredCerts(certifications);
     setShowModal(true);
-    console.log("Modal opened");
   };
   
-  // Function to handle viewing certificate image
+  // Handle viewing certificate image
   const handleViewCertificate = (cert, e) => {
-    e.stopPropagation();
+    e?.stopPropagation();
     setSelectedCertImage(cert);
     setShowCertImageModal(true);
-    console.log("Opening certificate image:", cert.title);
   };
   
-  // Function to handle certificate verification
+  // Handle verifying certificate
   const handleVerifyCertificate = (cert, e) => {
-    e.stopPropagation();
-    // Open verification URL in a new tab
+    e?.stopPropagation();
     window.open(cert.verifyUrl, '_blank', 'noopener,noreferrer');
-    console.log("Verifying certificate:", cert.title);
   };
-
-  // Update filtered certificates when category changes
-  useEffect(() => {
-    if (selectedCategory === 'All') {
-      setFilteredCerts(certifications);
-    } else {
-      setFilteredCerts(certifications.filter(cert => cert.category === selectedCategory));
-    }
-  }, [selectedCategory]);
   
   // Close modal on scroll outside or escape key
   useEffect(() => {
@@ -330,53 +316,6 @@ const CertificationsDisplay = ({ theme }) => {
     visible: { opacity: 1, y: 0 }
   };
   
-  // For certificate selection popup
-  const [popupPosition, setPopupPosition] = useState({ x: 0, y: 0 });
-  const [showCertPopup, setShowCertPopup] = useState(false);
-
-  // Handle certificate selection
-  const handleCertClick = (cert, index, e) => {
-    // Get mouse position for popup
-    const rect = e.currentTarget.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-    
-    setPopupPosition({ x, y });
-    setSelectedCert(cert);
-    setShowCertPopup(true);
-    setRobotAnimating(true);
-    
-    // Reset robot animation after a delay
-    setTimeout(() => {
-      setRobotAnimating(false);
-    }, 2000);
-  };
-
-  // Close popup on click outside or scroll
-  useEffect(() => {
-    const handleClickOutside = (e) => {
-      if (showCertPopup) {
-        setShowCertPopup(false);
-      }
-    };
-
-    const handleScroll = () => {
-      if (showCertPopup) {
-        setShowCertPopup(false);
-      }
-    };
-
-    if (showCertPopup) {
-      document.addEventListener('click', handleClickOutside);
-      document.addEventListener('scroll', handleScroll, true);
-    }
-    
-    return () => {
-      document.removeEventListener('click', handleClickOutside);
-      document.removeEventListener('scroll', handleScroll, true);
-    };
-  }, [showCertPopup]);
-  
   return (
     <div className="relative">
       {/* Robot animation */}
@@ -392,58 +331,6 @@ const CertificationsDisplay = ({ theme }) => {
           src="/animations/robot-assistant.json"
           className="w-full h-full"
         />
-        
-        {/* Speech bubble */}
-        {selectedCert && (
-          <motion.div 
-            className={`absolute -left-56 md:-left-40 top-10 w-52 md:w-64 p-4 rounded-lg ${
-              theme === 'dark' ? 'bg-slate-700' : 'bg-white'
-            } shadow-lg ${roboticMode ? 'tech-panel border-blue-500 border' : ''}`}
-            initial={{ opacity: 0, scale: 0.7, x: 50 }}
-            animate={{ opacity: 1, scale: 1, x: 0 }}
-            transition={{ type: "spring", stiffness: 500 }}
-          >
-            <div className={`absolute top-5 right-[-10px] transform rotate-45 w-5 h-5 ${
-              theme === 'dark' ? 'bg-slate-700' : 'bg-white'
-            } ${roboticMode ? 'border-r border-t border-cyan-500' : ''}`}></div>
-            
-            {roboticMode ? (
-              <>
-                <p className="text-sm text-blue-500 font-mono font-bold mb-2">
-                  <span className="inline-block w-2 h-2 bg-blue-500 mr-1 animate-pulse rounded-full"></span>
-                  CERT_ANALYSIS_COMPLETE
-                </p>
-                <p className="text-xs font-mono text-blue-300 leading-tight">
-                  ID: {selectedCert.credentialId || `${selectedCert.title.substring(0, 3)}${selectedCert.org.substring(0, 3)}${selectedCert.year}`}<br/>
-                  AUTHORITY: {selectedCert.org}<br/>
-                  VALIDATION: PASSED<br/>
-                  STATUS: <span className="text-green-400">VERIFIED</span>
-                </p>
-              </>
-            ) : (
-              <>
-                <p className={`text-sm ${theme === 'dark' ? 'text-cyan-300' : 'text-blue-500'} font-bold`}>
-                  Great choice!
-                </p>
-                <p className={`text-xs mt-1 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`}>
-                  {selectedCert.title} from {selectedCert.org} is an impressive credential!
-                </p>
-              </>
-            )}
-          </motion.div>
-        )}
-        
-        {/* Robot reaction */}
-        {robotAnimating && (
-          <motion.div 
-            className={`absolute -top-8 -right-8 text-2xl`}
-            initial={{ scale: 0 }}
-            animate={{ scale: [0, 1.5, 1] }}
-            transition={{ duration: 0.5 }}
-          >
-            <span role="img" aria-label="thumbs up">👍</span>
-          </motion.div>
-        )}
       </motion.div>
 
       {/* Certification cards */}
@@ -461,7 +348,6 @@ const CertificationsDisplay = ({ theme }) => {
                 ? 'bg-slate-800 border border-slate-700' 
                 : 'bg-white border border-slate-200'
             } ${roboticMode ? 'scanner-animation robotic-glow border-2 border-blue-500' : ''} cursor-pointer`}
-            onClick={() => handleCertClick(cert, index)}
           >
             {roboticMode && (
               <>
@@ -616,7 +502,7 @@ const CertificationsDisplay = ({ theme }) => {
           <div 
             className="fixed inset-0 bg-black bg-opacity-70 z-[9999] flex items-center justify-center p-4 cert-modal-overlay" 
             style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0 }}
-            onClick={(e) => {
+            onClick={() => {
               console.log("Modal backdrop clicked");
               setShowModal(false);
             }}
@@ -720,7 +606,6 @@ const CertificationsDisplay = ({ theme }) => {
                             ? 'bg-slate-800 border border-slate-700' 
                             : 'bg-white border border-slate-200'
                         } ${roboticMode ? 'scanner-animation robotic-glow border-2 border-blue-500' : ''}`}
-                        onClick={() => handleCertClick(cert, index)}
                       >
                         {roboticMode && (
                           <>
@@ -797,7 +682,7 @@ const CertificationsDisplay = ({ theme }) => {
                         {/* View and Verify buttons */}
                         <div className="flex justify-between gap-2 mt-auto">
                           <button
-                            onClick={(e) => handleViewCertificate(cert, e)}
+                            onClick={() => handleViewCertificate(cert)}
                             className={`flex items-center justify-center px-3 py-2 rounded text-sm font-semibold ${
                               theme === 'dark'
                                 ? 'bg-cyan-600 hover:bg-cyan-700 text-white shadow-md shadow-cyan-900/30'
@@ -807,7 +692,7 @@ const CertificationsDisplay = ({ theme }) => {
                             {roboticMode ? 'VIEW_CERT' : 'View Certificate'}
                           </button>
                           <button
-                            onClick={(e) => handleVerifyCertificate(cert, e)}
+                            onClick={() => handleVerifyCertificate(cert)}
                             className={`flex items-center justify-center px-3 py-2 rounded text-sm font-semibold ${
                               theme === 'dark'
                                 ? 'bg-slate-700 hover:bg-slate-600 text-cyan-300 border border-cyan-600 shadow-md shadow-cyan-900/20'
@@ -840,7 +725,7 @@ const CertificationsDisplay = ({ theme }) => {
           <div 
             className="fixed inset-0 bg-black bg-opacity-80 z-[9999] flex items-center justify-center p-4" 
             style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0 }}
-            onClick={(e) => {
+            onClick={() => {
               console.log("Certificate image modal backdrop clicked");
               setShowCertImageModal(false);
             }}
@@ -983,6 +868,10 @@ const CertificationsDisplay = ({ theme }) => {
         )}
     </div>
   );
+};
+
+CertificationsDisplay.propTypes = {
+  theme: PropTypes.oneOf(['light', 'dark']).isRequired,
 };
 
 export default CertificationsDisplay;

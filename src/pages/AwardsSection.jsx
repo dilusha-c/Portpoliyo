@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion'
 import { useState, useEffect } from 'react'
+import PropTypes from 'prop-types'
 import RoboticSectionTitle from '../components/RoboticSectionTitle'
 import { Award, Trophy, Star, X, Eye } from 'lucide-react'
 import codefestImg from '../assets/award/CODEFEST.jpg'
@@ -11,16 +12,50 @@ import sliitXtremeImg1 from '../assets/award/SliitXtreme 1.jpg'
 import sliitXtremeImg2 from '../assets/award/SliitXtreme 2.jpg'
 import sliitXtremeImg3 from '../assets/award/SliitXtreme  3.jpg'
 
-const AwardsSection = ({ theme, roboticMode, openImageModal }) => {
-  const [currentImageIndices, setCurrentImageIndices] = useState({})
-  const [currentAwardIndex, setCurrentAwardIndex] = useState(0)
-  const [isAnimating, setIsAnimating] = useState(true)
-
-  const fadeInUp = {
-    hidden: { opacity: 0, y: 20 },
-    visible: { opacity: 1, y: 0 }
+const awards = [
+  {
+    title: "Merit Award – Algothon Contest (Tertiary Category)",
+    organization: "SLIIT CODEFEST 2025 – Faculty of Computing, Sri Lanka Institute of Information Technology",
+    year: "Sep 2025",
+    description: "As part of Team Engiam (members: Dilusha Chamika, Hesara Perera, Sandil Perera), received a Merit Award at the Algothon Contest under the Tertiary Category of SLIIT CODEFEST 2025, organized by the Faculty of Computing, SLIIT. Recognized for algorithmic problem-solving and teamwork.",
+    icon: Trophy,
+    color: "text-yellow-500",
+    images: [codefest2025Img1, codefest2025Img2]
+  },
+  {
+    title: "Finalist at CODEFEST 2024 – Algothon!",
+    organization: "Sri Lanka Institute of Information Technology",
+    year: "Jan 2025",
+    description: "Excited to share that Team ENIGMA—comprising Sandil Perera, Hesara Perera, and myself—emerged as Finalists in the Algothon under the Tertiary Category at CODEFEST 2024, organized by SLIIT, Faculty of Computing. It was an incredible experience tackling complex algorithmic challenges, collaborating as a team, and pushing our problem-solving skills to the next level.",
+    icon: Trophy,
+    color: "text-yellow-500",
+    images: [codefestImg]
+  },
+  {
+    title: "Dean's List - Year 01 Semester 01 (3.7)",
+    organization: "SLIIT",
+    year: "Oct 2024",
+    description: "I am pleased to announce that I have been named to the Dean's List for Semester 1, achieving a GPA of 3.7 in my Computer Science program at SLIIT. This recognition reflects my commitment to academic rigor and pursuit of excellence.",
+    icon: Star,
+    color: "text-yellow-500",
+    images: [deansListImg1, deansListImg2]
+  },
+  {
+    title: "5th Place - SliitXtreme 3.0",
+    organization: "IEEE Computer Society of SLIIT",
+    year: "2024",
+    description: "As part of Team ENIGMA, I contributed to securing the 5th position at SLIITXtreme 3.0. This collaborative effort highlighted our team's ability to work together and solve complex coding challenges.",
+    icon: Award,
+    color: "text-orange-500",
+    images: [sliitXtremeImg1, sliitXtremeImg2, sliitXtremeImg3]
   }
+]
 
+const AwardsSection = ({ theme, roboticMode, openImageModal }) => {
+  const [currentImageIndices, setCurrentImageIndices] = useState({});
+  const [currentAwardIndex, setCurrentAwardIndex] = useState(awards.length * 2); // Start in the middle for infinite scroll
+  
+  // Animation variants
   const stagger = {
     hidden: { opacity: 0 },
     visible: {
@@ -29,49 +64,15 @@ const AwardsSection = ({ theme, roboticMode, openImageModal }) => {
         staggerChildren: 0.2
       }
     }
-  }
-
-  const awards = [
-    {
-      title: "Merit Award – Algothon Contest (Tertiary Category)",
-      organization: "SLIIT CODEFEST 2025 – Faculty of Computing, Sri Lanka Institute of Information Technology",
-      year: "Sep 2025",
-      description: "As part of Team Engiam (members: Dilusha Chamika, Hesara Perera, Sandil Perera), received a Merit Award at the Algothon Contest under the Tertiary Category of SLIIT CODEFEST 2025, organized by the Faculty of Computing, SLIIT. Recognized for algorithmic problem-solving and teamwork.",
-      icon: Trophy,
-      color: "text-yellow-500",
-      images: [codefest2025Img1, codefest2025Img2]
-    },
-    {
-      title: "Finalist at CODEFEST 2024 – Algothon!",
-      organization: "Sri Lanka Institute of Information Technology",
-      year: "Jan 2025",
-      description: "Excited to share that Team ENIGMA—comprising Sandil Perera, Hesara Perera, and myself—emerged as Finalists in the Algothon under the Tertiary Category at CODEFEST 2024, organized by SLIIT, Faculty of Computing. It was an incredible experience tackling complex algorithmic challenges, collaborating as a team, and pushing our problem-solving skills to the next level.",
-      icon: Trophy,
-      color: "text-yellow-500",
-      images: [codefestImg]
-    },
-    {
-      title: "Dean's List - Year 01 Semester 01 (3.7)",
-      organization: "SLIIT",
-      year: "Oct 2024",
-      description: "I am pleased to announce that I have been named to the Dean's List for Semester 1, achieving a GPA of 3.7 in my Computer Science program at SLIIT. This recognition reflects my commitment to academic rigor and pursuit of excellence.",
-      icon: Star,
-      color: "text-yellow-500",
-      images: [deansListImg1, deansListImg2]
-    },
-    {
-      title: "5th Place - SliitXtreme 3.0",
-      organization: "IEEE Computer Society of SLIIT",
-      year: "2024",
-      description: "As part of Team ENIGMA, I contributed to securing the 5th position at SLIITXtreme 3.0. This collaborative effort highlighted our team's ability to work together and solve complex coding challenges.",
-      icon: Award,
-      color: "text-orange-500",
-      images: [sliitXtremeImg1, sliitXtremeImg2, sliitXtremeImg3]
-    }
-  ]
+  };
+  
+  const fadeInUp = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0 }
+  };
 
   // Create duplicated awards for infinite scroll effect (more duplicates for smoother infinite scrolling)
-  const duplicatedAwards = [...awards, ...awards, ...awards, ...awards, ...awards]
+  const duplicatedAwards = [...awards, ...awards, ...awards, ...awards, ...awards];
 
   // Initialize current image indices
   useEffect(() => {
@@ -100,7 +101,7 @@ const AwardsSection = ({ theme, roboticMode, openImageModal }) => {
     return () => {
       Object.values(intervals).forEach(clearInterval)
     }
-  }, [awards])
+  }, [])
 
   // Auto-scroll awards in infinite circular motion (forward only)
   useEffect(() => {
@@ -116,7 +117,7 @@ const AwardsSection = ({ theme, roboticMode, openImageModal }) => {
     }, 4000) // Change awards every 4 seconds
 
     return () => clearInterval(scrollInterval)
-  }, [awards.length])
+  }, [])
 
   const handleOpenImageModal = (images, awardTitle, awardIndex) => {
     openImageModal(images, awardTitle, currentImageIndices[awardIndex] || 0)
@@ -352,6 +353,12 @@ const AwardsSection = ({ theme, roboticMode, openImageModal }) => {
       </div>
     </section>
   )
+}
+
+AwardsSection.propTypes = {
+  theme: PropTypes.string.isRequired,
+  roboticMode: PropTypes.bool.isRequired,
+  openImageModal: PropTypes.func.isRequired
 }
 
 export default AwardsSection

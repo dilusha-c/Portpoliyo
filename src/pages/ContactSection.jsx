@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion'
 import RoboticSectionTitle from '../components/RoboticSectionTitle'
 import { Mail, Github, Linkedin } from 'lucide-react'
+import PropTypes from 'prop-types'
 import RobotDecorator from '../components/RobotDecorator'
 
 const ContactSection = ({ theme, roboticMode, contactFormData, setContactFormData, handleContactSubmit, formStatus }) => {
@@ -192,7 +193,7 @@ const ContactSection = ({ theme, roboticMode, contactFormData, setContactFormDat
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5 mr-2">
                       <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clipRule="evenodd" />
                     </svg>
-                    Your message has been sent successfully! I'll get back to you soon.
+                    Your message has been sent successfully! I&apos;ll get back to you soon.
                   </div>
                 </motion.div>
               )}
@@ -416,6 +417,24 @@ const ContactSection = ({ theme, roboticMode, contactFormData, setContactFormDat
       </div>
     </section>
   )
+}
+
+ContactSection.propTypes = {
+  theme: PropTypes.string.isRequired,
+  roboticMode: PropTypes.bool.isRequired,
+  contactFormData: PropTypes.shape({
+    name: PropTypes.string.isRequired,
+    email: PropTypes.string.isRequired,
+    subject: PropTypes.string,
+    message: PropTypes.string.isRequired
+  }).isRequired,
+  setContactFormData: PropTypes.func.isRequired,
+  handleContactSubmit: PropTypes.func.isRequired,
+  formStatus: PropTypes.shape({
+    submitting: PropTypes.bool.isRequired,
+    submitted: PropTypes.bool.isRequired,
+    error: PropTypes.string
+  }).isRequired
 }
 
 export default ContactSection

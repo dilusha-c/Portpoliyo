@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext } from 'react'
+import { useState, useEffect, useContext, useCallback } from 'react'
 import { motion, useScroll, useAnimation, AnimatePresence } from 'framer-motion'
 import { TypeAnimation } from 'react-type-animation'
 import { Sun, Moon, ArrowUp, Github, Linkedin, Mail, ExternalLink, Cpu } from 'lucide-react'
@@ -25,7 +25,7 @@ import './components/Education.css'
 import './components/overflow-fix.css'
 import './components/mobile-fixes.css'
 import './components/mobile-critical-fix.css'
-import { ThemeContext } from './main.jsx'
+import { ThemeContext } from './contexts/ThemeContext'
 
 import HeroSection from './pages/HeroSection'
 import AboutSection from './pages/AboutSection'
@@ -38,12 +38,7 @@ import ContactSection from './pages/ContactSection'
 import EducationSection from './pages/EducationSection'
 
 // Import project images
-import profileImg from './assets/Profile.jpg'
 import logoImg from './assets/logo.png'
-import sliitImg from './assets/sliit.png'
-
-// Import CV/Resume
-import cvPdf from './assets/cv.pdf'
 
 // EmailJS configuration
 // Replace these with your actual EmailJS values
@@ -67,12 +62,102 @@ function App() {
     currentIndex: 0
   })
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
-  const [activeSection, setActiveSection] = useState('home')
   const isMobile = useIsMobile()
   const controls = useAnimation()
   const { scrollYProgress } = useScroll({
     offset: ["start start", "end end"]
   })
+  
+  // Function to handle escape key press to close modal
+  const handleEscapeKey = useCallback((e) => {
+    if (e.key === 'Escape') {
+      closeImageModal();
+    }
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  
+  // Function to open image modal with enhanced scroll prevention
+  const openImageModal = useCallback((images, title, currentIndex = 0) => {
+    // Store the scroll position in a data attribute
+    const scrollY = window.scrollY;
+    document.body.setAttribute('data-scroll-position', scrollY);
+    
+    setImageModal({
+      isOpen: true,
+      images: images,
+      title: title,
+      currentIndex: currentIndex
+    });
+    
+    // Better approach to disable scrolling without jumping
+    document.body.style.overflow = 'hidden';
+    document.body.style.top = `-${scrollY}px`;
+    document.body.style.position = 'fixed';
+    document.body.style.width = '100%';
+    document.body.style.paddingRight = '15px'; // Compensate for scrollbar disappearance
+    
+    // Add event listeners for escape key and clicks to close modal
+    document.addEventListener('keydown', handleEscapeKey);
+    
+    // Small delay to avoid immediate trigger of the click event
+    setTimeout(() => {
+      document.addEventListener('mousedown', handleModalOutsideClick);
+      document.addEventListener('touchstart', handleModalOutsideClick);
+    }, 10);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  
+  // Function to navigate images in modal
+  const navigateImage = (direction) => {
+    if (!imageModal.isOpen || !imageModal.images.length) return
+
+    const newIndex = direction === 'next'
+      ? (imageModal.currentIndex + 1) % imageModal.images.length
+      : (imageModal.currentIndex - 1 + imageModal.images.length) % imageModal.images.length
+
+    setImageModal(prev => ({
+      ...prev,
+      currentIndex: newIndex
+    }))
+  }
+  
+  // Function to handle clicks outside the modal content
+  const handleModalOutsideClick = useCallback((e) => {
+    // Get the modal content element
+    const modalContent = document.querySelector('.modal-content');
+    const closeButton = document.querySelector('.close-button');
+    
+    // Check if the click was outside the modal content or on the overlay
+    // We specifically check if it's not on the content and not on the close button
+    if (modalContent && !modalContent.contains(e.target) || 
+        (e.target.classList && e.target.classList.contains('modal-overlay'))) {
+      closeImageModal();
+    }
+    
+    // Also close if clicked directly on the close button
+    if (closeButton && (closeButton === e.target || closeButton.contains(e.target))) {
+      closeImageModal();
+    }
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  
+  // Function to close image modal and restore scrolling while preserving position
+  const closeImageModal = useCallback(() => {
+    setImageModal(prev => ({
+      ...prev,
+      isOpen: false
+    }));
+    
+    // Get the scroll position from the data attribute
+    const scrollY = parseInt(document.body.getAttribute('data-scroll-position') || '0', 10);
+    
+    // Restore scrolling and layout
+    document.body.style.overflow = '';
+    document.body.style.position = '';
+    document.body.style.top = '';
+    document.body.style.width = '';
+    document.body.style.paddingRight = '';
+    
+    // Important: restore the scroll position
+    window.scrollTo(0, scrollY);
+  }, []);
   
   // Always show boot screen on every page refresh
   useEffect(() => {
@@ -115,7 +200,6 @@ function App() {
       // Manual progress calculation as a fallback for scrollYProgress
       const windowHeight = document.documentElement.scrollHeight - window.innerHeight
       if (windowHeight > 0) {
-        const progress = window.scrollY / windowHeight
         // We don't need to set this manually if scrollYProgress from Framer Motion is working
         // This is just a fallback approach if needed
         
@@ -131,7 +215,6 @@ function App() {
             // Consider a section in view if it's top is in the top half of the screen
             if (rect.top <= window.innerHeight/2 && rect.bottom >= window.innerHeight/2) {
               sessionStorage.setItem('currentSection', section);
-              setActiveSection(section);
               break;
             }
           }
@@ -363,7 +446,7 @@ function App() {
         document.removeEventListener('keydown', handleEscapeKey);
       }
     }
-  }, [imageModal.isOpen])
+  }, [imageModal.isOpen, handleEscapeKey]); // Removed closeImageModal from dependencies
   
   // Cross-browser scroll function that works reliably
   const smoothScrollToSection = (sectionId) => {
@@ -519,15 +602,6 @@ function App() {
     };
   }, [isMobile]);
 
-  // Handle contact form input changes
-  const handleContactInputChange = (e) => {
-    const { id, value } = e.target;
-    setContactFormData(prevData => ({
-      ...prevData,
-      [id]: value
-    }));
-  };
-
   // Handle contact form submission
   const handleContactSubmit = async (e) => {
     e.preventDefault();
@@ -636,137 +710,9 @@ function App() {
     }
   };
 
-  // Utility function to get current section from sessionStorage
-  const getCurrentSection = () => {
-    return sessionStorage.getItem('currentSection') || 'home';
-  }
-  
-  const fadeInUp = {
-    hidden: { opacity: 0, y: 20 },
-    visible: { opacity: 1, y: 0 }
-  }
-
-  const stagger = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.2
-      }
-    }
-  }
-
-  const skills = [
-    
-    { name: "Java", level: 85 },
-    { name: "C", level: 83 },
-    { name: "Python", level: 88 },
-    { name: "React.js", level: 60 },
-    { name: "TensorFlow", level: 82 },
-    { name: "Spring Boot", level: 78 },
-    { name: "MySQL", level: 85 },
-    { name: "Machine Learning", level: 80 }
-  ]
-
   const handleBootComplete = () => {
     setShowBootScreen(false);
     setPortfolioVisible(true);
-  };
-  
-  // Function to handle escape key press to close modal
-  const handleEscapeKey = (e) => {
-    if (e.key === 'Escape') {
-      closeImageModal();
-    }
-  };
-  
-  // Function to open image modal with enhanced scroll prevention
-  const openImageModal = (images, title, currentIndex = 0) => {
-    // Store the scroll position in a data attribute
-    const scrollY = window.scrollY;
-    document.body.setAttribute('data-scroll-position', scrollY);
-    
-    setImageModal({
-      isOpen: true,
-      images: images,
-      title: title,
-      currentIndex: currentIndex
-    });
-    
-    // Better approach to disable scrolling without jumping
-    document.body.style.overflow = 'hidden';
-    document.body.style.top = `-${scrollY}px`;
-    document.body.style.position = 'fixed';
-    document.body.style.width = '100%';
-    document.body.style.paddingRight = '15px'; // Compensate for scrollbar disappearance
-    
-    // Add event listeners for escape key and clicks to close modal
-    document.addEventListener('keydown', handleEscapeKey);
-    
-    // Small delay to avoid immediate trigger of the click event
-    setTimeout(() => {
-      document.addEventListener('mousedown', handleModalOutsideClick);
-      document.addEventListener('touchstart', handleModalOutsideClick);
-    }, 10);
-  };
-
-  // Function to navigate images in modal
-  const navigateImage = (direction) => {
-    if (!imageModal.isOpen || !imageModal.images.length) return
-
-    const newIndex = direction === 'next'
-      ? (imageModal.currentIndex + 1) % imageModal.images.length
-      : (imageModal.currentIndex - 1 + imageModal.images.length) % imageModal.images.length
-
-    setImageModal(prev => ({
-      ...prev,
-      currentIndex: newIndex
-    }))
-  }
-  
-  // Function to handle clicks outside the modal content
-  const handleModalOutsideClick = (e) => {
-    // Get the modal content element
-    const modalContent = document.querySelector('.modal-content');
-    const closeButton = document.querySelector('.close-button');
-    
-    // Check if the click was outside the modal content or on the overlay
-    // We specifically check if it's not on the content and not on the close button
-    if (modalContent && !modalContent.contains(e.target) || 
-        (e.target.classList && e.target.classList.contains('modal-overlay'))) {
-      closeImageModal();
-    }
-    
-    // Also close if clicked directly on the close button
-    if (closeButton && (closeButton === e.target || closeButton.contains(e.target))) {
-      closeImageModal();
-    }
-  };
-
-  // Function to close image modal and restore scrolling while preserving position
-  const closeImageModal = () => {
-    setImageModal({
-      ...imageModal,
-      isOpen: false
-    });
-    
-    // Get the scroll position from the data attribute
-    const scrollY = parseInt(document.body.getAttribute('data-scroll-position') || '0', 10);
-    
-    // Restore scrolling and layout
-    document.body.style.overflow = '';
-    document.body.style.position = '';
-    document.body.style.top = '';
-    document.body.style.width = '';
-    document.body.style.paddingRight = '';
-    
-    // Important: restore the scroll position
-    window.scrollTo(0, scrollY);
-    
-    // Remove all event listeners
-    document.removeEventListener('keydown', handleEscapeKey);
-    document.removeEventListener('mousedown', handleModalOutsideClick);
-    document.removeEventListener('touchstart', handleModalOutsideClick);
   };
   
   return (

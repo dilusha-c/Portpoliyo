@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion';
+import PropTypes from 'prop-types';
 
 const LeftRobotDecoration = ({ theme }) => {
   return (
@@ -130,6 +131,10 @@ const LeftRobotDecoration = ({ theme }) => {
       </svg>
     </motion.div>
   );
+};
+
+LeftRobotDecoration.propTypes = {
+  theme: PropTypes.oneOf(['light', 'dark']).isRequired,
 };
 
 export default LeftRobotDecoration;

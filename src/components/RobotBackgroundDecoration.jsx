@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 // Performance-optimized static decoration
 const RobotBackgroundDecoration = ({ theme }) => {
@@ -131,6 +132,10 @@ const RobotBackgroundDecoration = ({ theme }) => {
       ))}
     </div>
   );
+};
+
+RobotBackgroundDecoration.propTypes = {
+  theme: PropTypes.oneOf(['light', 'dark']).isRequired,
 };
 
 export default RobotBackgroundDecoration;

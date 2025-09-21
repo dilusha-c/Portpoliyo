@@ -1,10 +1,10 @@
 import { motion } from 'framer-motion'
 import { TypeAnimation } from 'react-type-animation'
 import { Sun, Moon, Cpu } from 'lucide-react'
+import PropTypes from 'prop-types'
 import BinaryMatrix from '../components/BinaryMatrix'
 import CircuitPaths from '../components/CircuitPaths'
 import LeftRobotDecoration from '../components/LeftRobotDecoration'
-import profileImg from '../assets/Profile.jpg'
 
 const HeroSection = ({ theme, roboticMode, scrollToSection, smoothScrollToSection, toggleTheme, toggleRoboticMode }) => {
   return (
@@ -181,7 +181,7 @@ const HeroSection = ({ theme, roboticMode, scrollToSection, smoothScrollToSectio
                 transition: { duration: 0.5, delay: 0.2 }
               }}
             >
-              I'm
+              I&apos;m
             </motion.span>
           </motion.div>
 
@@ -335,6 +335,15 @@ const HeroSection = ({ theme, roboticMode, scrollToSection, smoothScrollToSectio
       </motion.div>
     </section>
   )
+}
+
+HeroSection.propTypes = {
+  theme: PropTypes.string.isRequired,
+  roboticMode: PropTypes.bool.isRequired,
+  scrollToSection: PropTypes.func.isRequired,
+  smoothScrollToSection: PropTypes.func.isRequired,
+  toggleTheme: PropTypes.func.isRequired,
+  toggleRoboticMode: PropTypes.func.isRequired
 }
 
 export default HeroSection

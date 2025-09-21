@@ -1,21 +1,19 @@
-import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Player } from '@lottiefiles/react-lottie-player';
 import HumanoidRobot from './HumanoidRobot';
+import { useEffect } from 'react';
 
 const BootScreen = ({ onComplete }) => {
-  const [isLoading, setIsLoading] = useState(true);
   
-  // Boot sequence animation timing
+  // Call onComplete after boot sequence finishes (3.8s progress bar + small delay)
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsLoading(false);
-      if (onComplete) onComplete();
+    if (onComplete) {
+      const timer = setTimeout(() => {
+        onComplete();
+      }, 4200); // 3.8s + 400ms delay for smooth transition
       
-      // No longer saving to localStorage since we want to show on every refresh
-    }, 4000); // 4 seconds boot sequence
-    
-    return () => clearTimeout(timer);
+      return () => clearTimeout(timer);
+    }
   }, [onComplete]);
   
   return (

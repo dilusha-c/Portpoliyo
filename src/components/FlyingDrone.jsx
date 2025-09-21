@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import PropTypes from 'prop-types';
 
 const FlyingDrone = ({ theme }) => {
   // Add state for detection
@@ -371,6 +372,10 @@ const FlyingDrone = ({ theme }) => {
       </svg>
     </motion.div>
   );
+};
+
+FlyingDrone.propTypes = {
+  theme: PropTypes.oneOf(['light', 'dark']).isRequired,
 };
 
 export default FlyingDrone;

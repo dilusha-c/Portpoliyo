@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion'
 import RoboticSectionTitle from '../components/RoboticSectionTitle'
 import CertificationsDisplay from '../components/CertificationsDisplay'
+import PropTypes from 'prop-types'
 
 const CertificatesSection = ({ theme, roboticMode }) => {
   const fadeInUp = {
@@ -28,6 +29,11 @@ const CertificatesSection = ({ theme, roboticMode }) => {
       </div>
     </section>
   )
+}
+
+CertificatesSection.propTypes = {
+  theme: PropTypes.oneOf(['light', 'dark']).isRequired,
+  roboticMode: PropTypes.bool.isRequired,
 }
 
 export default CertificatesSection

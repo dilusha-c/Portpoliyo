@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion'
 import RoboticSectionTitle from '../components/RoboticSectionTitle'
 import RobotDecorator from '../components/RobotDecorator'
+import PropTypes from 'prop-types'
 
 const PublicationsSection = ({ theme, roboticMode }) => {
   const fadeInUp = {
@@ -111,6 +112,11 @@ const PublicationsSection = ({ theme, roboticMode }) => {
       </div>
     </section>
   )
+}
+
+PublicationsSection.propTypes = {
+  theme: PropTypes.oneOf(['light', 'dark']).isRequired,
+  roboticMode: PropTypes.bool.isRequired,
 }
 
 export default PublicationsSection

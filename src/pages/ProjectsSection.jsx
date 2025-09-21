@@ -5,8 +5,9 @@ import animalRecognizerImg from '../assets/animal.jpg'
 import gymSyncImg from '../assets/GymSync.jpg'
 import zaveImg from '../assets/Zave UI Design.jpg'
 import landmineRobotImg from '../assets/robo.jpg'
+import PropTypes from 'prop-types'
 
-const ProjectsSection = ({ theme, roboticMode }) => {
+const ProjectsSection = ({ theme }) => {
   const fadeInUp = {
     hidden: { opacity: 0, y: 20 },
     visible: { opacity: 1, y: 0 }
@@ -174,7 +175,7 @@ const ProjectsSection = ({ theme, roboticMode }) => {
                 <span className="text-sm text-gray-400">Feb - May 2025</span>
               </div>
               <p className={`${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'} mb-4`}>
-                Advanced Gym Management System developed for SLIIT's Object-Oriented Analysis & Design module.
+                Advanced Gym Management System developed for SLIIT&apos;s Object-Oriented Analysis & Design module.
               </p>
               <div className="mb-4">
                 <h4 className="font-semibold mb-2 text-sm uppercase tracking-wider text-cyan-400">Key Features</h4>
@@ -346,6 +347,10 @@ const ProjectsSection = ({ theme, roboticMode }) => {
       </div>
     </section>
   )
+}
+
+ProjectsSection.propTypes = {
+  theme: PropTypes.oneOf(['light', 'dark']).isRequired,
 }
 
 export default ProjectsSection

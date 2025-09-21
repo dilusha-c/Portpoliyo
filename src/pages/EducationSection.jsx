@@ -2,6 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import FlyingDrone from '../components/FlyingDrone';
 import sliitImg from '../assets/sliit.png';
+import PropTypes from 'prop-types';
 
 const EducationSection = ({ theme, roboticMode }) => {
   return (
@@ -117,6 +118,11 @@ const EducationSection = ({ theme, roboticMode }) => {
       </div>
     </section>
   );
+};
+
+EducationSection.propTypes = {
+  theme: PropTypes.oneOf(['light', 'dark']).isRequired,
+  roboticMode: PropTypes.bool.isRequired,
 };
 
 export default EducationSection;

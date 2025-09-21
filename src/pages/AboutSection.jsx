@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion'
+import PropTypes from 'prop-types'
 import RobotDecorator from '../components/RobotDecorator'
 import RobotBackgroundDecoration from '../components/RobotBackgroundDecoration'
 import HumanRobotDecoration from '../components/HumanRobotDecoration'
@@ -124,11 +125,11 @@ const AboutSection = ({ theme, roboticMode, scrollToSection }) => {
             <motion.p
               className={`${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'} mb-4 text-lg`}
             >
-              I'm Dilusha Chamika, a Computer Systems Engineering undergraduate at SLIIT with a passion for AI, robotics, and full-stack development.
+              I&apos;m Dilusha Chamika, a Computer Systems Engineering undergraduate at SLIIT with a passion for AI, robotics, and full-stack development.
             </motion.p>
 
             <motion.p className={`${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'} mb-4`}>
-              I've built several innovative projects connecting theory with practice, including:
+              I&apos;ve built several innovative projects connecting theory with practice, including:
             </motion.p>
 
             <ul className={`${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'} mb-4 list-disc pl-6`}>
@@ -141,7 +142,7 @@ const AboutSection = ({ theme, roboticMode, scrollToSection }) => {
             </ul>
 
             <motion.p className={`${theme === 'dark' ? 'text-gray-300' : 'text-gray-700'} mb-6`}>
-              With certifications from Stanford/DeepLearning.AI in Machine Learning and Cisco in Endpoint Security, plus published research on UAV technologies and AI accelerators, I'm committed to creating impactful solutions that make a real difference.
+              With certifications from Stanford/DeepLearning.AI in Machine Learning and Cisco in Endpoint Security, plus published research on UAV technologies and AI accelerators, I&apos;m committed to creating impactful solutions that make a real difference.
             </motion.p>
 
             <div className="flex flex-wrap gap-4">
@@ -170,6 +171,12 @@ const AboutSection = ({ theme, roboticMode, scrollToSection }) => {
       </div>
     </section>
   )
+}
+
+AboutSection.propTypes = {
+  theme: PropTypes.string.isRequired,
+  roboticMode: PropTypes.bool.isRequired,
+  scrollToSection: PropTypes.func.isRequired
 }
 
 export default AboutSection

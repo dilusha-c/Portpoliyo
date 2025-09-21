@@ -1,16 +1,16 @@
 import React, { useState, useEffect } from 'react';
 
+const bootPhrases = [
+  "SYSTEMS ONLINE",
+  "LOADING PORTFOLIO",
+  "INITIALIZING UI",
+  "CALIBRATING DISPLAY",
+  "READY"
+];
+
 const RobotTextDisplay = () => {
   const [displayText, setDisplayText] = useState('');
   const [currentPhase, setCurrentPhase] = useState(0);
-  
-  const bootPhrases = [
-    "SYSTEMS ONLINE",
-    "LOADING PORTFOLIO",
-    "INITIALIZING UI",
-    "CALIBRATING DISPLAY",
-    "READY"
-  ];
   
   useEffect(() => {
     // Text typing effect
