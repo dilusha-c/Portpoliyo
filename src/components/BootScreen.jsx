@@ -19,23 +19,45 @@ const BootScreen = ({ onComplete }) => {
   }, [onComplete]);
   
   return (
-    <AnimatePresence>
-      {isLoading && (
-        <motion.div 
-          className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-cyberpunk-background"
-          initial={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 1 }}
-          style={{ paddingBottom: "5vh" }} /* Add some padding to shift everything up a bit */
-        >
-          {/* Grid background */}
-          <div className="absolute inset-0 opacity-5 bg-[linear-gradient(to_right,#06b6d4_1px,transparent_1px),linear-gradient(to_bottom,#06b6d4_1px,transparent_1px)]" style={{ backgroundSize: '40px 40px' }}></div>
+    <motion.div 
+      className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-cyberpunk-background min-h-screen overflow-hidden"
+      style={{ isolation: 'isolate' }}
+      initial={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 1 }}
+      key="bootscreen-container"
+    >
+          {/* Grid background - contained within boot screen */}
+          <motion.div 
+            className="absolute inset-0 bg-[linear-gradient(to_right,#06b6d4_1px,transparent_1px),linear-gradient(to_bottom,#06b6d4_1px,transparent_1px)]" 
+            style={{ 
+              backgroundSize: '40px 40px',
+              opacity: 0.05,
+              isolation: 'isolate'
+            }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 0.05 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 1 }}
+          ></motion.div>
           
           {/* Enhanced glow effect */}
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-[radial-gradient(circle,rgba(6,182,212,0.2)_0%,transparent_70%)]"></div>
+          <motion.div 
+            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-[radial-gradient(circle,rgba(6,182,212,0.2)_0%,transparent_70%)]"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 1 }}
+          ></motion.div>
           
           {/* Digital particles */}
-          <div className="absolute inset-0 overflow-hidden">
+          <motion.div 
+            className="absolute inset-0 overflow-hidden"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 1 }}
+          >
             {[...Array(15)].map((_, i) => (
               <motion.div
                 key={i}
@@ -57,10 +79,16 @@ const BootScreen = ({ onComplete }) => {
                 }}
               />
             ))}
-          </div>
+          </motion.div>
           
           {/* Circuit board pattern */}
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] opacity-20 pointer-events-none">
+          <motion.div 
+            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] opacity-20 pointer-events-none"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 0.2 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 1 }}
+          >
             <svg width="100%" height="100%" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
               <pattern id="circuitPattern" patternUnits="userSpaceOnUse" width="20" height="20" patternTransform="rotate(45)">
                 <rect width="100%" height="100%" fill="none" />
@@ -73,13 +101,13 @@ const BootScreen = ({ onComplete }) => {
               </pattern>
               <rect width="100%" height="100%" fill="url(#circuitPattern)" />
             </svg>
-          </div>
+          </motion.div>
           
           {/* Robot animation section */}
-          <div className="relative mb-8">
+          <div className="relative mb-4 md:mb-8 flex-1 flex items-center justify-center">
             {/* Humanoid Robot Animation */}
             <motion.div
-              className="relative z-10" /* Removed mb-16 to center properly */
+              className="relative z-10"
               animate={{ y: [0, -5, 0] }}
               transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
             >
@@ -102,7 +130,7 @@ const BootScreen = ({ onComplete }) => {
           </div>
           
           {/* Loading text with typing animation - moved higher */}
-          <div className="text-center relative mt-1"> {/* Removed margin completely */}
+          <div className="text-center relative mt-2 md:mt-1 flex-shrink-0">
             <motion.h2 
               className="text-2xl md:text-3xl font-orbitron mb-6 text-cyan-400 typewriter" /* Increased margin-bottom from mb-4 to mb-6 */
               initial={{ width: 0 }}
@@ -169,8 +197,6 @@ const BootScreen = ({ onComplete }) => {
             <div className="w-full h-full scanline"></div>
           </div>
         </motion.div>
-      )}
-    </AnimatePresence>
   );
 };
 

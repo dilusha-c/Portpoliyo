@@ -75,7 +75,7 @@ const FlyingDrone = ({ theme }) => {
         <motion.circle
           cx="30"
           cy="17"
-          r="3"
+          r={3}
           fill={colors.camera}
           stroke={colors.bodyStroke}
           strokeWidth="0.75"
@@ -83,7 +83,7 @@ const FlyingDrone = ({ theme }) => {
         <motion.circle
           cx="30"
           cy="17"
-          r="1"
+          r={1}
           fill={colors.light}
           animate={{ 
             opacity: [0.7, 1, 0.7],
@@ -103,10 +103,10 @@ const FlyingDrone = ({ theme }) => {
         <line x1="38" y1="18" x2="48" y2="22" stroke={colors.bodyStroke} strokeWidth="1.5" />
         
         {/* Propeller Mounts */}
-        <circle cx="12" cy="10" r="2" fill={colors.bodyFill} stroke={colors.bodyStroke} strokeWidth="1" />
-        <circle cx="12" cy="22" r="2" fill={colors.bodyFill} stroke={colors.bodyStroke} strokeWidth="1" />
-        <circle cx="48" cy="10" r="2" fill={colors.bodyFill} stroke={colors.bodyStroke} strokeWidth="1" />
-        <circle cx="48" cy="22" r="2" fill={colors.bodyFill} stroke={colors.bodyStroke} strokeWidth="1" />
+        <circle cx="12" cy="10" r={2} fill={colors.bodyFill} stroke={colors.bodyStroke} strokeWidth="1" />
+        <circle cx="12" cy="22" r={2} fill={colors.bodyFill} stroke={colors.bodyStroke} strokeWidth="1" />
+        <circle cx="48" cy="10" r={2} fill={colors.bodyFill} stroke={colors.bodyStroke} strokeWidth="1" />
+        <circle cx="48" cy="22" r={2} fill={colors.bodyFill} stroke={colors.bodyStroke} strokeWidth="1" />
         
         {/* Propellers - with animation */}
         <motion.g
@@ -177,7 +177,7 @@ const FlyingDrone = ({ theme }) => {
         <motion.circle
           cx="24"
           cy="17"
-          r="1"
+          r={1}
           fill="red"
           animate={{ opacity: [0.5, 1, 0.5] }}
           transition={{ 
@@ -190,7 +190,7 @@ const FlyingDrone = ({ theme }) => {
         <motion.circle
           cx="36"
           cy="17"
-          r="1"
+          r={1}
           fill="green"
           animate={{ opacity: [0.5, 1, 0.5] }}
           transition={{ 
@@ -258,13 +258,15 @@ const FlyingDrone = ({ theme }) => {
           <motion.ellipse
             cx="30"
             cy="28"
-            rx="10"
-            ry="2"
+            rx={10}
+            ry={2}
             fill="transparent"
             stroke={colors.light}
             strokeWidth="0.5"
             strokeOpacity="0.3"
-            animate={{ rx: [10, 15, 10, 5, 10] }}
+            animate={{ 
+              scaleX: [1, 1.5, 1, 0.5, 1],
+            }}
             transition={{ 
               duration: 3, 
               repeat: Infinity, 
@@ -322,13 +324,13 @@ const FlyingDrone = ({ theme }) => {
                 key={i}
                 cx="30"
                 cy={y}
-                r="10"
+                r={5}
                 fill="transparent"
                 stroke={colors.light}
                 strokeWidth="0.5"
                 strokeOpacity="0.3"
                 animate={{ 
-                  r: [5, 15, 5],
+                  scale: [1, 3, 1],
                   opacity: [0.1, 0.3, 0.1]
                 }}
                 transition={{ 

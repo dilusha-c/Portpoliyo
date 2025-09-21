@@ -70,7 +70,7 @@ const CircuitPaths = ({ theme }) => {
               key={`${x}-${y}`}
               cx={`${x}%`}
               cy={`${y}%`}
-              r="3"
+              r={3}
               fill="none"
               stroke={theme === 'dark' ? 'rgba(6, 182, 212, 0.8)' : 'rgba(59, 130, 246, 0.8)'}
               strokeWidth="0.5"

@@ -51,7 +51,7 @@ const LeftRobotDecoration = ({ theme }) => {
         
         {/* Robot eyes */}
         <motion.circle
-          cx="43" cy="55" r="3"
+          cx="43" cy="55" r={3}
           fill={theme === 'dark' ? 'rgba(6, 182, 212, 0.8)' : 'rgba(59, 130, 246, 0.8)'}
           initial={{ opacity: 0 }}
           animate={{ opacity: [0, 1, 0, 1] }}
@@ -59,7 +59,7 @@ const LeftRobotDecoration = ({ theme }) => {
         />
         
         <motion.circle
-          cx="57" cy="55" r="3"
+          cx="57" cy="55" r={3}
           fill={theme === 'dark' ? 'rgba(6, 182, 212, 0.8)' : 'rgba(59, 130, 246, 0.8)'}
           initial={{ opacity: 0 }}
           animate={{ opacity: [0, 1, 0, 1] }}

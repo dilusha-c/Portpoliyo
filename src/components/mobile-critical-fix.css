@@ -54,9 +54,14 @@
     max-height: 100%;
   }
   
-  /* Prevent fixed position elements from breaking layout */
-  .fixed:not(nav) {
-    position: absolute !important;
+  /* Ensure modal overlay is always on top */
+  .modal-overlay {
+    position: fixed !important;
+    z-index: 999999 !important;
+  }
+  
+  .skills-modal-content {
+    z-index: 1000000 !important;
   }
   
   /* Fix for iOS Safari full height issues */
