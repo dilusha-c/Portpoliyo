@@ -70,59 +70,7 @@ const ContactSection = ({ theme, roboticMode, contactFormData, setContactFormDat
           Contact Me
         </RoboticSectionTitle>
 
-        {/* Robot decoration - only in robotic mode */}
-        {roboticMode && (
-          <div className="absolute right-0 -top-16 md:right-10 lg:right-20 z-10 w-40 h-40 opacity-70 pointer-events-none">
-            {/* Robot head */}
-            <div className="relative">
-              <div className="w-20 h-20 rounded-lg border-2 border-cyan-400 flex items-center justify-center"
-                style={{
-                  background: 'linear-gradient(135deg, rgba(8, 47, 73, 0.8) 0%, rgba(6, 182, 212, 0.2) 100%)',
-                  boxShadow: '0 0 15px rgba(6, 182, 212, 0.5)'
-                }}
-              >
-                {/* Robot eyes */}
-                <div className="flex gap-3">
-                  <div className="w-3 h-3 rounded-full bg-cyan-400 animate-pulse"></div>
-                  <div className="w-3 h-3 rounded-full bg-cyan-400 animate-pulse"
-                    style={{ animationDelay: '0.5s' }}></div>
-                </div>
-
-                {/* Robot antenna */}
-                <div className="absolute -top-5 left-1/2 transform -translate-x-1/2 w-1 h-5 bg-cyan-400">
-                  <div className="absolute -top-2 left-1/2 transform -translate-x-1/2 w-3 h-3 rounded-full bg-cyan-500 animate-pulse"></div>
-                </div>
-              </div>
-
-              {/* Robot body */}
-              <div className="w-16 h-8 mt-1 mx-auto border-2 border-cyan-400 rounded"
-                style={{
-                  background: 'linear-gradient(135deg, rgba(8, 47, 73, 0.8) 0%, rgba(6, 182, 212, 0.2) 100%)',
-                }}
-              >
-                {/* Body lights */}
-                <div className="flex justify-center gap-2 mt-1">
-                  <div className="w-1.5 h-1.5 rounded-full bg-cyan-400"></div>
-                  <div className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-blink"></div>
-                  <div className="w-1.5 h-1.5 rounded-full bg-cyan-400"></div>
-                </div>
-              </div>
-
-              {/* Speech bubble with binary */}
-              <div className="absolute -left-24 top-2 w-24 h-16 bg-slate-800 border border-cyan-500 rounded p-2 flex items-center justify-center">
-                <div className="text-xs text-cyan-400 font-mono overflow-hidden">
-                  <div className="animate-typing whitespace-nowrap">
-                    01001000 01101001
-                  </div>
-                  <div className="animate-typing whitespace-nowrap" style={{ animationDelay: '1s' }}>
-                    01001101 01110011 01100111
-                  </div>
-                </div>
-                <div className="absolute right-0 top-1/2 transform translate-x-1/2 rotate-45 w-3 h-3 bg-slate-800 border-r border-t border-cyan-500"></div>
-              </div>
-            </div>
-          </div>
-        )}
+        {/* Robot decoration removed as requested */}
 
         <div className="max-w-3xl mx-auto">
           <motion.div
