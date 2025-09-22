@@ -224,36 +224,6 @@ const AwardsSection = ({ theme, roboticMode, openImageModal }) => {
                         </div>
                       )}
 
-                      {/* Robotic scanning effect */}
-                      {roboticMode && (
-                        <>
-                          {/* Scanning line */}
-                          <motion.div
-                            className="absolute left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-cyan-400 to-transparent shadow-lg shadow-cyan-400/50 z-10"
-                            initial={{ top: "0%" }}
-                            animate={{ top: ["0%", "100%"] }}
-                            transition={{
-                              duration: 3,
-                              repeat: Infinity,
-                              ease: "linear",
-                              delay: originalIndex * 0.5
-                            }}
-                            style={{
-                              background: "linear-gradient(90deg, transparent, #00ffff, transparent)"
-                            }}
-                          />
-
-                          {/* Corner brackets */}
-                          <div className="absolute top-2 left-2 w-3 h-3 border-l-2 border-t-2 border-cyan-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10"></div>
-                          <div className="absolute top-2 right-2 w-3 h-3 border-r-2 border-t-2 border-cyan-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10"></div>
-                          <div className="absolute bottom-2 left-2 w-3 h-3 border-l-2 border-b-2 border-cyan-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10"></div>
-                          <div className="absolute bottom-2 right-2 w-3 h-3 border-r-2 border-b-2 border-cyan-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10"></div>
-
-                          {/* Status indicator */}
-                          <div className="absolute top-2 right-2 w-2 h-2 bg-cyan-400 rounded-full animate-pulse opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10"></div>
-                        </>
-                      )}
-
                       {/* Hover overlay with award title */}
                       <motion.div
                         className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/80 to-transparent z-10"

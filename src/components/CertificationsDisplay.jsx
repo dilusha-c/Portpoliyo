@@ -4,7 +4,6 @@ import { Player } from '@lottiefiles/react-lottie-player';
 import { ThemeContext } from '../contexts/ThemeContext';
 import { X, Filter } from 'lucide-react';
 import { createPortal } from 'react-dom';
-import './CertificationsScanner.css';
 import PropTypes from 'prop-types';
 
 const certifications = [
@@ -331,19 +330,8 @@ const CertificationsDisplay = ({ theme }) => {
               theme === 'dark' 
                 ? 'bg-slate-800 border border-slate-700' 
                 : 'bg-white border border-slate-200'
-            } ${roboticMode ? 'scanner-animation robotic-glow border-2 border-blue-500' : ''}`}
+            } ${roboticMode ? 'border-2 border-blue-500' : ''}`}
           >
-            {roboticMode && (
-              <>
-                <div className="scan-data-top-left"></div>
-                <div className="scan-data-top-right"></div>
-                <div className="scan-data-bottom-left"></div>
-                <div className="scan-data-bottom-right"></div>
-                <div className="scan-effect"></div>
-                <div className="scan-line"></div>
-                <div className="data-points"></div>
-              </>
-            )}
             <div className="flex items-center justify-between mb-4 flex-wrap">
               <h3 className={`text-xl font-bold w-full mb-2 min-h-[3rem] flex items-start ${theme === 'dark' ? 'text-white' : 'text-slate-800'}`}>{cert.title}</h3>
               <motion.div 
@@ -410,14 +398,6 @@ const CertificationsDisplay = ({ theme }) => {
                 {roboticMode ? 'VERIFY' : 'Verify'}
               </button>
             </div>
-            
-            {/* Scanning indicator in robotic mode */}
-            {roboticMode && (
-              <div className="absolute bottom-2 right-2 text-xs text-blue-500 font-mono flex items-center opacity-80">
-                <span className="w-2 h-2 bg-blue-500 rounded-full mr-1 animate-pulse"></span>
-                SCANNING
-              </div>
-            )}
           </motion.div>
         ))}
 
@@ -591,16 +571,8 @@ const CertificationsDisplay = ({ theme }) => {
                           theme === 'dark' 
                             ? 'bg-slate-800 border border-slate-700' 
                             : 'bg-white border border-slate-200'
-                        } ${roboticMode ? 'scanner-animation robotic-glow border-2 border-blue-500' : ''}`}
+                        } ${roboticMode ? 'border-2 border-blue-500' : ''}`}
                       >
-                        {roboticMode && (
-                          <>
-                            <div className="scan-data-top-left"></div>
-                            <div className="scan-data-top-right"></div>
-                            <div className="scan-data-bottom-left"></div>
-                            <div className="scan-data-bottom-right"></div>
-                          </>
-                        )}
                         
                         <div className="flex items-center justify-between mb-3 flex-wrap">
                           <h3 className={`text-lg font-bold w-full mb-2 min-h-[3rem] flex items-start ${
@@ -688,14 +660,6 @@ const CertificationsDisplay = ({ theme }) => {
                             {roboticMode ? 'VERIFY' : 'Verify'}
                           </button>
                         </div>
-                        
-                        {/* Scanning indicator in robotic mode */}
-                        {roboticMode && (
-                          <div className="absolute bottom-2 right-2 text-xs text-blue-500 font-mono flex items-center opacity-80">
-                            <span className="w-2 h-2 bg-blue-500 rounded-full mr-1 animate-pulse"></span>
-                            SCANNING
-                          </div>
-                        )}
                       </motion.div>
                     ))}
 

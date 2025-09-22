@@ -10,11 +10,8 @@ const HeroSection = ({ theme, roboticMode, scrollToSection, smoothScrollToSectio
   return (
     <section id="home" className="relative pt-32 pb-20 px-4 overflow-hidden">
       {/* Toggle buttons for robotic theme and dark mode - moved down to avoid menu overlap */}
-      <motion.button
+      <button
         onClick={toggleRoboticMode}
-        initial={{ opacity: 0, x: -20 }}
-        animate={{ opacity: 1, x: 0 }}
-        transition={{ delay: 0.5, duration: 0.5 }}
         className={`absolute top-20 left-4 md:top-20 md:left-8 z-30 flex items-center gap-2 py-2.5 px-5 rounded-lg ${
           theme === 'dark'
             ? roboticMode
@@ -24,18 +21,13 @@ const HeroSection = ({ theme, roboticMode, scrollToSection, smoothScrollToSectio
               ? 'bg-gradient-to-r from-cyan-400 to-blue-500 text-white border border-blue-500'
               : 'bg-slate-200 text-gray-600 border border-slate-300'
         } transition-all shadow-lg shadow-cyan-500/30 hover:shadow-cyan-500/50`}
-        whileHover={{
-          scale: 1.05,
-          boxShadow: roboticMode ? '0 0 20px rgba(8, 145, 178, 0.5)' : '0 0 10px rgba(100, 116, 139, 0.3)'
-        }}
-        whileTap={{ scale: 0.95 }}
         title="Toggle Robotic Theme"
       >
         <div className="relative">
           <Cpu
             size={20}
             className={roboticMode
-              ? `${theme === 'dark' ? 'text-cyan-300' : 'text-white'} animate-pulse`
+              ? `${theme === 'dark' ? 'text-cyan-300' : 'text-white'}`
               : `${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`
             }
           />
@@ -51,37 +43,22 @@ const HeroSection = ({ theme, roboticMode, scrollToSection, smoothScrollToSectio
           {roboticMode ? 'Robotic: ON' : 'Robotic: OFF'}
         </span>
         {roboticMode && (
-          <motion.div
-            className="absolute inset-0 border border-cyan-400/50 rounded-lg"
-            animate={{
-              scale: [1, 1.05, 1],
-              opacity: [0.7, 0.2, 0.7]
-            }}
-            transition={{
-              duration: 2,
-              repeat: Infinity
-            }}
-          />
+          <div className="absolute inset-0 border border-cyan-400/50 rounded-lg"></div>
         )}
-      </motion.button>
+      </button>
 
-      <motion.button
+      <button
         onClick={toggleTheme}
-        initial={{ opacity: 0, x: 20 }}
-        animate={{ opacity: 1, x: 0 }}
-        transition={{ delay: 0.5, duration: 0.5 }}
         className={`absolute top-20 right-4 md:top-20 md:right-8 z-30 flex items-center gap-2 py-2.5 px-5 rounded-lg ${
           theme === 'dark'
             ? 'bg-slate-800 text-gray-400 border border-slate-700'
             : 'bg-gradient-to-r from-cyan-400 to-blue-500 text-white border border-blue-500'
         } transition-all shadow-lg shadow-blue-500/30 hover:shadow-blue-500/50`}
-        whileHover={{ scale: 1.05, boxShadow: '0 0 20px rgba(59, 130, 246, 0.5)' }}
-        whileTap={{ scale: 0.95 }}
         title={theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
       >
         <div className="relative">
           {theme === 'dark' ? (
-            <Sun size={20} className="text-white animate-pulse" />
+            <Sun size={20} className="text-white" />
           ) : (
             <Moon size={20} className="text-white" />
           )}
@@ -90,7 +67,7 @@ const HeroSection = ({ theme, roboticMode, scrollToSection, smoothScrollToSectio
         <span className="text-sm font-bold text-white">
           {theme === 'dark' ? 'Light Mode' : 'Dark Mode'}
         </span>
-      </motion.button>
+      </button>
 
       <div className={`absolute inset-0 ${
         theme === 'dark'

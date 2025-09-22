@@ -38,7 +38,6 @@ export default {
         'float': 'float 3s ease-in-out infinite',
         'pulse-glow': 'pulse-glow 2s ease-in-out infinite',
         'glitch': 'glitch 1s linear infinite',
-        'scanline': 'scanline 6s linear infinite',
         'blink': 'blink 2s infinite',
         'flicker': 'flicker 3s linear infinite',
         'rotate-gear': '', /* Removed rotation animation for better performance */
@@ -92,12 +91,6 @@ export default {
             'clip-path': 'inset(70% 0 10% 0)',
             transform: 'skew(-0.5deg)',
           },
-        },
-        'scanline': {
-          '0%': { transform: 'translateY(-100%)' },
-          '50%': { transform: 'translateY(100%)' },
-          '50.1%': { transform: 'translateY(-100%)' },
-          '100%': { transform: 'translateY(100%)' },
         },
         'blink': {
           '0%, 100%': { opacity: '1' },

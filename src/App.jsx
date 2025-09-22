@@ -12,10 +12,8 @@ import RobotBackgroundDecoration from './components/RobotBackgroundDecoration'
 import HumanRobotDecoration from './components/HumanRobotDecoration'
 import BinaryMatrix from './components/BinaryMatrix'
 import useIsMobile from './hooks/useIsMobile'
-import SafeMobileDetect from './components/SafeMobileDetect'
 
 import './App.css'
-import './components/PublicationsScanner.css'
 import './components/FuturisticText.css'
 import './components/keyframe-animations.css'
 import './components/SectionDivider.css'
@@ -24,8 +22,7 @@ import './components/HardwareAnimations.css'
 import './components/HonorsAwards.css'
 import './components/Education.css'
 import './components/overflow-fix.css'
-import './components/mobile-fixes.css'
-import './components/mobile-critical-fix.css'
+import './components/z-index-fix.css'
 import './components/mobile-menu-styles.css'
 import { ThemeContext } from './contexts/ThemeContext'
 
@@ -715,9 +712,7 @@ function App() {
   
   return (
     <>
-      {/* SafeMobileDetect ensures mobile display works correctly */}
-      <SafeMobileDetect />
-      
+
       {/* Static gear icon instead of animated cursor */}
       {/* Removed static gear icon at bottom left corner */}
       
@@ -976,7 +971,6 @@ function App() {
                     <div className="robot-corner robot-corner-tr"></div>
                     <div className="robot-corner robot-corner-bl"></div>
                     <div className="robot-corner robot-corner-br"></div>
-                    <div className="scan-line"></div>
                     <div className="binary-dots"></div>
                     <div className="absolute top-1 right-4 text-[10px] text-cyan-400 font-mono opacity-70">SYS.MODAL.V1.4</div>
                     <div className="absolute bottom-1 left-4 text-[10px] text-cyan-400 font-mono opacity-70">[SKILLS.DAT]</div>
@@ -1144,7 +1138,6 @@ function App() {
                   <div className="robot-corner robot-corner-tr"></div>
                   <div className="robot-corner robot-corner-bl"></div>
                   <div className="robot-corner robot-corner-br"></div>
-                  <div className="scan-line"></div>
                   <div className="binary-dots"></div>
                   <div className="absolute top-1 right-4 text-[10px] text-cyan-400 font-mono opacity-70">IMG.MODAL.V1.2</div>
                   <div className="absolute bottom-1 left-4 text-[10px] text-cyan-400 font-mono opacity-70">[AWARD.GALLERY]</div>
@@ -1395,32 +1388,24 @@ function App() {
                 {mobileMenuOpen && (
                   <>
                     {/* Backdrop */}
-                    <motion.div 
+                    <div 
                       className="fixed inset-0 bg-black/30 backdrop-blur-sm z-[2147483646] md:hidden mobile-menu-backdrop"
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      exit={{ opacity: 0 }}
-                      transition={{ duration: 0.3 }}
                       onClick={() => setMobileMenuOpen(false)}
                       style={{ isolation: 'isolate' }}
                     />
                     
                     {/* Menu */}
-                    <motion.div 
+                    <div 
                       className={`mobile-menu md:hidden fixed inset-x-0 top-20 z-[2147483647] ${
                         theme === 'dark' 
                           ? 'bg-slate-900/95 backdrop-blur-lg text-white border-2 border-cyan-500' 
                           : 'bg-white/95 backdrop-blur-lg text-slate-900 border-2 border-blue-500'
                       } shadow-2xl overflow-hidden menu-shadow-glow`}
-                      initial={{ opacity: 0, maxHeight: 0 }}
-                      animate={{ opacity: 1, maxHeight: '500px' }}
-                      exit={{ opacity: 0, maxHeight: 0 }}
-                      transition={{ duration: 0.3, ease: 'easeInOut' }}
                     >
                     <div className="container mx-auto py-5 px-6">
                       <div className="flex flex-col space-y-2">
                         {['Home', 'About', 'Projects', 'Publications', 'Certificates', 'Awards', 'Contact'].map((item) => (
-                          <motion.button
+                          <button
                             key={item}
                             onClick={() => {
                               scrollToSection(item.toLowerCase());
@@ -1431,13 +1416,6 @@ function App() {
                                 ? 'bg-slate-800 hover:bg-cyan-900 hover:text-cyan-300 text-white border-l-4 border-cyan-500' 
                                 : 'bg-slate-100 hover:bg-blue-100 hover:text-blue-700 text-slate-800 border-l-4 border-blue-500'
                             } transition-colors w-full text-left shadow-md`}
-                            whileHover={{ x: 10 }}
-                            whileTap={{ scale: 0.98 }}
-                            initial={{ opacity: 0, x: -20 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            transition={{
-                              delay: 0.05 * ['Home', 'About', 'Projects', 'Publications', 'Certificates', 'Awards', 'Contact'].indexOf(item)
-                            }}
                           >
                             <div className="flex items-center">
                               <span className={`mr-3 ${theme === 'dark' ? 'text-cyan-400' : 'text-blue-600'}`}>
@@ -1451,7 +1429,7 @@ function App() {
                               </span>
                               {item}
                             </div>
-                          </motion.button>
+                          </button>
                         ))}
                         
                         <div className={`h-px w-full my-2 ${theme === 'dark' ? 'bg-cyan-500/50' : 'bg-blue-300/50'}`}></div>
@@ -1459,64 +1437,46 @@ function App() {
                         <div className="flex items-center justify-between py-3 px-4">
                           <span className={`font-medium ${theme === 'dark' ? 'text-cyan-300' : 'text-blue-700'}`}>Theme Settings</span>
                           <div className="flex items-center space-x-4">
-                            <motion.button
+                            <button
                               onClick={toggleRoboticMode}
                               className={`p-3 rounded-full ${
                                 theme === 'dark' 
                                   ? roboticMode ? 'bg-gradient-to-r from-cyan-700 to-blue-800 text-cyan-300' : 'bg-slate-800 text-gray-400' 
                                   : roboticMode ? 'bg-gradient-to-r from-cyan-400 to-blue-500 text-white' : 'bg-slate-200 text-gray-600'
                               } relative ${roboticMode ? 'robot-border shadow-lg shadow-cyan-500/30' : ''}`}
-                              whileTap={{ scale: 0.9 }}
                             >
-                              <Cpu size={26} className={roboticMode ? 'animate-pulse' : ''} />
+                              <Cpu size={26} className={roboticMode ? '' : ''} />
                               {roboticMode && (
                                 <>
-                                  <div className="absolute -top-1 -right-1 w-2 h-2 bg-cyan-400 rounded-full animate-ping"></div>
-                                  <motion.span 
+                                  <div className="absolute -top-1 -right-1 w-2 h-2 bg-cyan-400 rounded-full"></div>
+                                  <span 
                                     className="absolute inset-0 border border-cyan-400/50 rounded-full"
-                                    animate={{ 
-                                      scale: [1, 1.2, 1], 
-                                      opacity: [0.7, 0.2, 0.7] 
-                                    }}
-                                    transition={{ 
-                                      duration: 2,
-                                      repeat: Infinity
-                                    }}
                                   />
                                 </>
                               )}
-                            </motion.button>
+                            </button>
                             
-                            <motion.button
+                            <button
                               onClick={toggleTheme}
                               className={`p-2 rounded-full ${
                                 theme === 'dark' 
                                   ? 'bg-gradient-to-r from-cyan-700 to-blue-800 text-cyan-300 shadow-lg shadow-cyan-500/30' 
                                   : 'bg-gradient-to-r from-cyan-400 to-blue-500 text-white shadow-lg shadow-blue-500/20'
                               } relative ${theme === 'dark' ? 'theme-border-dark' : 'theme-border-light'}`}
-                              whileTap={{ scale: 0.9 }}
                             >
                               {theme === 'dark' && (
                                 <span className="absolute inset-0 theme-glow opacity-70 rounded-full -z-10"></span>
                               )}
                               <div className="relative">
-                                {theme === 'dark' ? <Sun size={20} className="text-cyan-300 animate-pulse" /> : <Moon size={20} />}
+                                {theme === 'dark' ? <Sun size={20} className="text-cyan-300" /> : <Moon size={20} />}
                                 <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full h-full rounded-full">
                                   <div className={`absolute -inset-1 ${theme === 'dark' ? 'bg-yellow-400/10' : 'bg-blue-400/10'} rounded-full blur-sm`}></div>
                                 </div>
                               </div>
-                              <motion.span 
+                              <span 
                                 className={`absolute inset-0 border rounded-full ${theme === 'dark' ? 'border-cyan-400/50' : 'border-blue-400/50'}`}
-                                animate={{ 
-                                  scale: [1, 1.2, 1], 
-                                  opacity: [0.7, 0.2, 0.7] 
-                                }}
-                                transition={{ 
-                                  duration: 2,
-                                  repeat: Infinity
-                                }}
                               />
-                            </motion.button>
+                            </button>
                           </div>
                         </div>
                       </div>
@@ -1527,7 +1487,7 @@ function App() {
                         <div className="absolute left-0 top-1/3 h-[2px] w-full bg-gradient-to-r from-transparent via-cyan-400 to-transparent"></div>
                         <div className="absolute left-0 bottom-0 h-[2px] w-full bg-gradient-to-r from-transparent via-cyan-400 to-transparent"></div>
                         <div className="absolute right-2 top-2 flex items-center">
-                          <span className="text-xs font-mono text-cyan-400 animate-pulse">MENU.SYS</span>
+                          <span className="text-xs font-mono text-cyan-400">MENU.SYS</span>
                         </div>
                       </>
                     )}
@@ -1536,7 +1496,7 @@ function App() {
                     <div className={`absolute inset-0 pointer-events-none ${
                       theme === 'dark' ? 'shadow-[0_0_20px_rgba(6,182,212,0.3)]' : 'shadow-[0_0_20px_rgba(59,130,246,0.3)]'
                     }`}></div>
-                    </motion.div>
+                    </div>
                   </>
                 )}
               </AnimatePresence>
@@ -1581,7 +1541,6 @@ function App() {
               </div>
               {roboticMode && (
                 <div className="absolute inset-0 opacity-10">
-                  <div className="binary-scan-line"></div>
                 </div>
               )}
             </div>

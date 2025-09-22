@@ -35,33 +35,6 @@
   animation: blink-border 2s infinite;
 }
 
-/* Adding scan line effect to modal in robotic mode */
-@keyframes scan-line {
-  0% {
-    transform: translateY(-100%);
-  }
-  100% {
-    transform: translateY(100%);
-  }
-}
-
-.robot-border .scan-line {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 10px;
-  background: linear-gradient(
-    to bottom,
-    transparent,
-    rgba(34, 211, 238, 0.2) 50%,
-    transparent
-  );
-  pointer-events: none;
-  z-index: 2;
-  animation: scan-line 3s linear infinite;
-}
-
 /* Binary dot pattern for robotic mode */
 .robot-border .binary-dots {
   position: absolute;

@@ -98,32 +98,6 @@
   opacity: 1;
 }
 
-/* Scan line effect for text */
-.scan-line {
-  position: relative;
-  overflow: hidden;
-}
-
-.scan-line::after {
-  content: '';
-  position: absolute;
-  top: -100%;
-  left: 0;
-  right: 0;
-  height: 10px;
-  background: linear-gradient(to bottom, 
-    rgba(6, 182, 212, 0), 
-    rgba(6, 182, 212, 0.5), 
-    rgba(6, 182, 212, 0)
-  );
-  animation: scanDown 2s linear infinite;
-}
-
-@keyframes scanDown {
-  0% { top: -100%; }
-  100% { top: 200%; }
-}
-
 /* Add special animation for the name on hover */
 .hero-text-word:hover .scan-line::after {
   content: '';
@@ -138,12 +112,6 @@
     rgba(255, 255, 255, 0.2), 
     transparent
   );
-  animation: scanAcross 1s linear;
-}
-
-@keyframes scanAcross {
-  0% { left: -100%; }
-  100% { left: 100%; }
 }
 
 /* Add coordinated animation for the name group */
@@ -216,19 +184,6 @@
   100% { letter-spacing: 2px; }
 }
 
-@keyframes subtleScan {
-  0% { 
-    background: linear-gradient(90deg, transparent, rgba(6, 182, 212, 0.1), transparent); 
-    background-size: 200% 100%;
-    background-position: -200% 0;
-  }
-  100% { 
-    background: linear-gradient(90deg, transparent, rgba(6, 182, 212, 0.1), transparent);
-    background-size: 200% 100%;
-    background-position: 200% 0;
-  }
-}
-
 .animate-float-text {
   animation: floatText 3s ease-in-out infinite;
 }
@@ -251,10 +206,6 @@
 
 .animate-robotic-text-glow {
   animation: roboticTextGlow 6s linear infinite;
-}
-
-.animate-subtle-scan {
-  animation: subtleScan 8s linear infinite;
 }
 
 .animate-letter-spacing {

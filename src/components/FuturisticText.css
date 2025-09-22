@@ -38,15 +38,6 @@
   }
 }
 
-@keyframes scanLine {
-  0% {
-    transform: translateY(-100%);
-  }
-  50%, 100% {
-    transform: translateY(100%);
-  }
-}
-
 @keyframes dataFlow {
   0% {
     background-position: 0% 0%;
@@ -242,7 +233,6 @@
   width: 120%;
   height: 100%;
   background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-  animation: scanAcross 1s linear;
 }
 
 /* Individual styling */
@@ -315,7 +305,6 @@
 
 .hero-text-word:hover::after {
   opacity: 1;
-  animation: dataScan 1s linear infinite;
 }
 
 .hero-text-word::before {
@@ -333,7 +322,6 @@
 
 .hero-text-word:hover::before {
   opacity: 1;
-  animation: scanLine 2s linear infinite;
 }
 
 .hero-text-word::after {
@@ -351,7 +339,6 @@
 
 .hero-text-word:hover::after {
   opacity: 1;
-  animation: scanLine 2s linear infinite reverse;
 }
 
 /* Special styles for name words */
@@ -416,21 +403,6 @@
   opacity: 1;
 }
 
-/* Data scan effect */
-@keyframes dataScan {
-  0% {
-    transform: translateY(-100%);
-    opacity: 0.7;
-  }
-  50% {
-    opacity: 0.3;
-  }
-  100% {
-    transform: translateY(100%);
-    opacity: 0.7;
-  }
-}
-
 .name-text-word::after {
   content: '';
   position: absolute;
@@ -449,5 +421,4 @@
 
 .name-text-word:hover::after {
   opacity: 1;
-  animation: dataScan 1.5s ease infinite;
 }
