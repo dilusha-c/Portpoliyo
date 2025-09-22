@@ -5,7 +5,7 @@ import RobotBackgroundDecoration from '../components/RobotBackgroundDecoration'
 import HumanRobotDecoration from '../components/HumanRobotDecoration'
 import RoboticSectionTitle from '../components/RoboticSectionTitle'
 const profileImg = 'https://res.cloudinary.com/dgthdmczs/image/upload/v1758527968/rm0e2lmyeunlq9citgkp.jpg'
-const cvPdf = '/Dilusha_Chamika_CV.pdf'
+const cvPdf = 'https://res.cloudinary.com/dgthdmczs/image/upload/v1758528127/w0rhudwzbbucl51qpxur.pdf'
 
 const AboutSection = ({ theme, roboticMode, scrollToSection }) => {
   return (

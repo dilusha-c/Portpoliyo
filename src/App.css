@@ -89,28 +89,9 @@ body {
   padding: 0 1rem;
 }
 
-/* Interactive cursor states */
-.gear-cursor-active a,
-.gear-cursor-active button,
-.gear-cursor-active [role="button"],
-.gear-cursor-active input[type="submit"],
-.gear-cursor-active input[type="button"],
-.gear-cursor-active input[type="checkbox"],
-.gear-cursor-active input[type="radio"],
-.gear-cursor-active select,
-.gear-cursor-active .clickable {
-  cursor: pointer !important;
-}
+/* Interactive cursor states - REMOVED */
 
-/* Hover state for interactive elements with gear cursor */
-.gear-cursor-active a:hover,
-.gear-cursor-active button:hover,
-.gear-cursor-active [role="button"]:hover,
-.gear-cursor-active input[type="submit"]:hover,
-.gear-cursor-active input[type="button"]:hover,
-.gear-cursor-active .clickable:hover {
-  cursor: pointer !important;
-}
+/* Hover state for interactive elements with gear cursor - REMOVED */
 
 /* Robot animations for contact section */
 @keyframes typing {

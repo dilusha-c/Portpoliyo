@@ -192,7 +192,7 @@ const AwardsSection = ({ theme, roboticMode, openImageModal }) => {
                         key={currentImageIndices[originalIndex] || 0}
                         src={award.images[currentImageIndices[originalIndex] || 0]}
                         alt={award.title}
-                        className="max-w-full max-h-full object-contain cursor-pointer"
+                        className="max-w-full max-h-full object-contain"
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         transition={{ duration: 0.5 }}

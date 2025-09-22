@@ -27,8 +27,6 @@ const detectMobile = () => {
 if (detectMobile()) {
   document.body.classList.add('is-mobile-device');
   document.documentElement.setAttribute('data-mobile', 'true');
-  // Ensure no cursor effects are applied
-  document.body.classList.remove('gear-cursor-active');
 }
 
 createRoot(document.getElementById('root')).render(

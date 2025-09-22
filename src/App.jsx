@@ -587,10 +587,6 @@ function App() {
     if (isActuallyMobile) {
       document.body.classList.add('is-mobile-device');
       
-      // Force remove any cursor styling that might be applied
-      document.body.classList.remove('gear-cursor-active');
-      document.body.style.cursor = '';
-      
       // Also add a data attribute for CSS targeting
       document.documentElement.setAttribute('data-mobile', 'true');
     } else {
