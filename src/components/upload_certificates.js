@@ -33,33 +33,17 @@ function getAllFiles(dirPath, arrayOfFiles = []) {
   return arrayOfFiles;
 }
 
-const assetsDir = path.join(__dirname, "../assets");
 const publicDir = path.join(__dirname, "../../public");
 const images = [
-  ...getAllFiles(assetsDir),
-  ...getAllFiles(publicDir).filter(file => path.basename(file) === 'og-image.png' || path.basename(file) === 'logo.png')
+  ...getAllFiles(publicDir)
 ];
 
 console.log(`Found ${images.length} assets to upload:`);
-images.forEach(img => console.log(`- ${path.relative(assetsDir, img)}`));
+images.forEach(img => console.log(`- ${path.basename(img)}`));
 
 for (const imgPath of images) {
   try {
-    const relativePath = path.relative(assetsDir, imgPath);
-    let folderName = '';
-    
-    if (relativePath.startsWith('..')) {
-      // Handle public folder files
-      const publicRelativePath = path.relative(publicDir, imgPath);
-      folderName = publicRelativePath.includes('/') ? path.dirname(publicRelativePath).replace(/\\/g, '/') : '';
-    } else {
-      // Handle assets folder files
-      folderName = path.dirname(relativePath).replace(/\\/g, '/');
-    }
-    
-    const uploadOptions = folderName && folderName !== '.' ? { folder: folderName } : {};
-
-    const result = await cloudinary.uploader.upload(imgPath, uploadOptions);
+    const result = await cloudinary.uploader.upload(imgPath);
     console.log(`${path.basename(imgPath)}: ${result.secure_url}`);
   } catch (error) {
     console.error(`Error uploading ${imgPath}:`, error);
