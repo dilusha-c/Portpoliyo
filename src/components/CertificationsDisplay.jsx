@@ -7,22 +7,6 @@ import { createPortal } from 'react-dom';
 import './CertificationsScanner.css';
 import PropTypes from 'prop-types';
 
-// Import certification images
-import machineLearningImg from '../assets/certifications/Machine Learning.png';
-import networkTechnicianImg from '../assets/certifications/Network Technician Career.png';
-import pythonProgrammingImg from '../assets/certifications/Python Programming.png';
-import networkAddressingImg from '../assets/certifications/Network Addressing and Basic Troubleshooting.png';
-import advancedLearningImg from '../assets/certifications/Advanced Learning Algorithms.png';
-import computerHardwareImg from '../assets/certifications/Computer Hardware Basics.png';
-import endpointSecurityImg from '../assets/certifications/Endpoint Security.png';
-import introCybersecurityImg from '../assets/certifications/Introduction to Cybersecurity.png';
-import networkingBasicsImg from '../assets/certifications/Networking Basics.png';
-import networkingDevicesImg from '../assets/certifications/Networking Devices and Initial Configuration.png';
-import pythonForBeginnersImg from '../assets/certifications/Python for Beginners.jpg';
-import supervisedMLImg from '../assets/certifications/Supervised Machine Learning.png';
-import unsupervisedMLImg from '../assets/certifications/Unsupervised Learning, Recommenders,.png';
-import networkSupportImg from '../assets/certifications/Network Support and Security.png';
-
 const certifications = [
   {
     title: "Machine Learning Specialization",
@@ -31,7 +15,7 @@ const certifications = [
     year: "July 2025",
     featured: true,
     category: "Machine Learning & Artificial Intelligence",
-    imageUrl: machineLearningImg,
+    imageUrl: "https://res.cloudinary.com/dgthdmczs/image/upload/v1758516399/certificates/el7whw9rlpjhlopay2fc.png",
     verifyUrl: "https://www.coursera.org/account/accomplishments/specialization/RXZHOBN9VT3G",
     credentialId: "RXZHOBN9VT3G"
   },
@@ -42,7 +26,7 @@ const certifications = [
     year: "July 2025",
     featured: true,
     category: "Networking",
-    imageUrl: networkTechnicianImg,
+    imageUrl: "https://res.cloudinary.com/dgthdmczs/image/upload/v1758517009/certificates/ul5jntgfx0a9t8wvdfwz.png",
     verifyUrl: "https://www.credly.com/badges/178fca33-76b1-4a37-8c7e-54c58632ce85/linked_in_profile"
   },
   {
@@ -52,7 +36,7 @@ const certifications = [
     year: "2025",
     featured: true,
     category: "Programming & Development",
-    imageUrl: pythonProgrammingImg,
+    imageUrl: "https://res.cloudinary.com/dgthdmczs/image/upload/v1758516393/certificates/f8fmuqzwnhr5fx1nf9s1.png",
     verifyUrl: "https://open.uom.lk/lms/mod/customcert/verify_certificate.php",
     credentialId: "oMH9LB43vl"
   },
@@ -63,7 +47,7 @@ const certifications = [
     year: "July 2025",
     featured: true,
     category: "Networking",
-    imageUrl: networkAddressingImg,
+    imageUrl: "https://res.cloudinary.com/dgthdmczs/image/upload/v1758516394/certificates/z0xjodeh8fwoxusexkqv.png",
     verifyUrl: "https://www.credly.com/badges/1f86229e-67e7-47ca-8e6b-35bd4ba4bcbd/linked_in_profile"
   },
   // Additional certificates (not featured - will only show in popup)
@@ -74,7 +58,7 @@ const certifications = [
     year: "2025",
     featured: false,
     category: "Programming & Development",
-    imageUrl: pythonForBeginnersImg, // Using actual image
+    imageUrl: "https://res.cloudinary.com/dgthdmczs/image/upload/v1758527396/certificates/jtmj9amxtsckz4cbfpou.jpg",
     verifyUrl: "https://open.uom.lk/lms/mod/customcert/verify_certificate.php",
     credentialId: "XZ5PzjiA8h"
   },
@@ -85,7 +69,7 @@ const certifications = [
     year: "December 2024",
     featured: false,
     category: "Networking",
-    imageUrl: networkingBasicsImg, // Using actual image
+    imageUrl: "https://res.cloudinary.com/dgthdmczs/image/upload/v1758517008/certificates/zaxcrwyldz9lmofnb4t7.png", // Using actual image
     verifyUrl: "https://www.credly.com/badges/34838485-265b-4bd2-89a9-ad801ebbfd54/linked_in_profile"
   },
   {
@@ -95,7 +79,7 @@ const certifications = [
     year: "December 2024",
     featured: false,
     category: "Cybersecurity",
-    imageUrl: introCybersecurityImg, // Using actual image
+    imageUrl: "https://res.cloudinary.com/dgthdmczs/image/upload/v1758516397/certificates/jlmpfbdpfqg9tw4zygzl.png", // Cloudinary image
     verifyUrl: "https://www.credly.com/badges/560680a1-6111-4d9d-981e-0e03393652b9/linked_in_profile"
   },
   {
@@ -105,7 +89,7 @@ const certifications = [
     year: "December 2024",
     featured: false,
     category: "Hardware & Systems",
-    imageUrl: computerHardwareImg, // Using actual image
+    imageUrl: "https://res.cloudinary.com/dgthdmczs/image/upload/v1758516395/certificates/xumpodcvj3hqn4wviqwr.png", // Cloudinary image
     verifyUrl: "https://www.credly.com/badges/4eccea92-3f13-4a37-b3c8-d92bfcfeba0a/linked_in_profile"
   },
   {
@@ -115,7 +99,7 @@ const certifications = [
     year: "April 2025",
     featured: false,
     category: "Machine Learning & Artificial Intelligence",
-    imageUrl: supervisedMLImg, // Using actual image
+    imageUrl: "https://res.cloudinary.com/dgthdmczs/image/upload/v1758527152/certificates/z0qqppcaexoa72jvdbpv.png",
     verifyUrl: "https://www.coursera.org/account/accomplishments/verify/I45GXQQBSC5Z",
     credentialId: "I45GXQQBSC5Z"
   },
@@ -126,7 +110,7 @@ const certifications = [
     year: "June 2025",
     featured: false,
     category: "Machine Learning & Artificial Intelligence",
-    imageUrl: advancedLearningImg, // Using actual image
+    imageUrl: "https://res.cloudinary.com/dgthdmczs/image/upload/v1758516022/certificates/q1lfwztttapesjgqixdo.png", // Cloudinary image
     verifyUrl: "https://www.coursera.org/account/accomplishments/records/EF66Q4ALMHWF",
     credentialId: "EF66Q4ALMHWF"
   },
@@ -137,7 +121,7 @@ const certifications = [
     year: "July 2025",
     featured: false,
     category: "Machine Learning & Artificial Intelligence",
-    imageUrl: unsupervisedMLImg, // Using actual image
+    imageUrl: "https://res.cloudinary.com/dgthdmczs/image/upload/v1758527295/certificates/ntj0dkomgzdc3unmcriu.png",
     verifyUrl: "https://www.coursera.org/account/accomplishments/records/6P89GUDLPVIZ",
     credentialId: "6P89GUDLPVIZ"
   },
@@ -148,7 +132,7 @@ const certifications = [
     year: "July 2025",
     featured: false,
     category: "Networking",
-    imageUrl: networkingDevicesImg, // Using actual image
+    imageUrl: "https://res.cloudinary.com/dgthdmczs/image/upload/v1758517010/certificates/cnsfawyod1rl0lnmz181.png", // Using actual image
     verifyUrl: "https://www.credly.com/badges/9f0a16a1-e2c5-4b12-b90e-1947ad035077/public_url"
   },
   {
@@ -158,7 +142,7 @@ const certifications = [
     year: "July 2025",
     featured: false,
     category: "Networking",
-    imageUrl: networkSupportImg, // Using actual image
+    imageUrl: "https://res.cloudinary.com/dgthdmczs/image/upload/v1758516398/certificates/rtppm0cfbesv7blrb3lw.png", // Cloudinary image
     verifyUrl: "https://www.credly.com/badges/42c4c480-d55e-46df-ae89-7cd02c02a811/linked_in_profile"
   },
   {
@@ -168,7 +152,7 @@ const certifications = [
     year: "August 2025",
     featured: false,
     category: "Cybersecurity",
-    imageUrl: endpointSecurityImg, // Using actual image
+    imageUrl: "https://res.cloudinary.com/dgthdmczs/image/upload/v1758516396/certificates/np1oxw9m1bnhvlwushwq.png", // Cloudinary image
     verifyUrl: "https://www.credly.com/badges/3d6c192f-ed41-43f1-9418-4611a2005b04/linked_in_profile"
   }
 ];
@@ -222,7 +206,7 @@ const CertificationsDisplay = ({ theme }) => {
       // Check if the event target is not inside the modal content
       const isOutsideModal = modalContentRef.current && !modalContentRef.current.contains(e.target);
       
-      // If scrolling happens outside the modal, close it
+      // If scrolling outside the modal, close it
       if (isOutsideModal) {
         console.log('Scroll detected outside modal - closing');
         setShowModal(false);
@@ -436,6 +420,7 @@ const CertificationsDisplay = ({ theme }) => {
             )}
           </motion.div>
         ))}
+
       </div>
       
       {/* View All button - only show if there are more certificates than displayed */}
@@ -581,6 +566,7 @@ const CertificationsDisplay = ({ theme }) => {
                 ))}
               </div>
               
+
               {/* Certificates grid */}
               <div className="p-6">
                 {filteredCerts.length === 0 ? (
@@ -652,7 +638,7 @@ const CertificationsDisplay = ({ theme }) => {
                   ) : (
                     <svg xmlns="http://www.w3.org/2000/svg" className={`h-5 w-5 ${theme === 'dark' ? 'text-cyan-400' : 'text-blue-500'}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
-                    </svg>
+                  </svg>
                   )}
                           </motion.div>
                         </div>
@@ -712,6 +698,7 @@ const CertificationsDisplay = ({ theme }) => {
                         )}
                       </motion.div>
                     ))}
+
                   </motion.div>
                 )}
               </div>
@@ -831,7 +818,7 @@ const CertificationsDisplay = ({ theme }) => {
                       ) : (
                         <>
                           <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
-                            <path fillRule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                            <path fillRule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-4.438 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                           </svg>
                           Verify Certificate
                         </>

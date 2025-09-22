@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import FlyingDrone from '../components/FlyingDrone';
-import sliitImg from '../assets/sliit.png';
+const sliitImg = 'https://res.cloudinary.com/dgthdmczs/image/upload/v1758527970/qr0n3bftmuubfmixhxjw.png';
 import PropTypes from 'prop-types';
 
 const EducationSection = ({ theme, roboticMode }) => {

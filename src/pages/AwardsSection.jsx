@@ -3,14 +3,6 @@ import { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import RoboticSectionTitle from '../components/RoboticSectionTitle'
 import { Award, Trophy, Star, X, Eye } from 'lucide-react'
-import codefestImg from '../assets/award/CODEFEST.jpg'
-import codefest2025Img1 from '../assets/award/CODEFEST2025 1.jpg'
-import codefest2025Img2 from '../assets/award/CODEFEST2025 2.jpg'
-import deansListImg1 from '../assets/award/Deans-List-1.jpg'
-import deansListImg2 from '../assets/award/Deans-List-2.jpg'
-import sliitXtremeImg1 from '../assets/award/SliitXtreme 1.jpg'
-import sliitXtremeImg2 from '../assets/award/SliitXtreme 2.jpg'
-import sliitXtremeImg3 from '../assets/award/SliitXtreme  3.jpg'
 
 const awards = [
   {
@@ -20,7 +12,7 @@ const awards = [
     description: "As part of Team Engiam (members: Dilusha Chamika, Hesara Perera, Sandil Perera), received a Merit Award at the Algothon Contest under the Tertiary Category of SLIIT CODEFEST 2025, organized by the Faculty of Computing, SLIIT. Recognized for algorithmic problem-solving and teamwork.",
     icon: Trophy,
     color: "text-yellow-500",
-    images: [codefest2025Img1, codefest2025Img2]
+    images: ["https://res.cloudinary.com/dgthdmczs/image/upload/v1758527652/certificates/rjpqrt1q84h8igynptbv.jpg", "https://res.cloudinary.com/dgthdmczs/image/upload/v1758527657/certificates/tkvpccbczkpti9y3aj3x.jpg"]
   },
   {
     title: "Finalist at CODEFEST 2024 – Algothon!",
@@ -29,7 +21,7 @@ const awards = [
     description: "Excited to share that Team ENIGMA—comprising Sandil Perera, Hesara Perera, and myself—emerged as Finalists in the Algothon under the Tertiary Category at CODEFEST 2024, organized by SLIIT, Faculty of Computing. It was an incredible experience tackling complex algorithmic challenges, collaborating as a team, and pushing our problem-solving skills to the next level.",
     icon: Trophy,
     color: "text-yellow-500",
-    images: [codefestImg]
+    images: ["https://res.cloudinary.com/dgthdmczs/image/upload/v1758527651/certificates/brwjacazfypkkdgmyvyj.jpg"]
   },
   {
     title: "Dean's List - Year 01 Semester 01 (3.7)",
@@ -38,7 +30,7 @@ const awards = [
     description: "I am pleased to announce that I have been named to the Dean's List for Semester 1, achieving a GPA of 3.7 in my Computer Science program at SLIIT. This recognition reflects my commitment to academic rigor and pursuit of excellence.",
     icon: Star,
     color: "text-yellow-500",
-    images: [deansListImg1, deansListImg2]
+    images: ["https://res.cloudinary.com/dgthdmczs/image/upload/v1758527659/certificates/ecjfesadba2k8njjlfl9.jpg", "https://res.cloudinary.com/dgthdmczs/image/upload/v1758527660/certificates/wcdwwjbd7gowfn8eeris.jpg"]
   },
   {
     title: "5th Place - SliitXtreme 3.0",
@@ -47,7 +39,7 @@ const awards = [
     description: "As part of Team ENIGMA, I contributed to securing the 5th position at SLIITXtreme 3.0. This collaborative effort highlighted our team's ability to work together and solve complex coding challenges.",
     icon: Award,
     color: "text-orange-500",
-    images: [sliitXtremeImg1, sliitXtremeImg2, sliitXtremeImg3]
+    images: ["https://res.cloudinary.com/dgthdmczs/image/upload/v1758527662/certificates/pj6h4z0eyy0f09stj6bb.jpg", "https://res.cloudinary.com/dgthdmczs/image/upload/v1758527663/certificates/vpezhjyx2xt1kkphysb0.jpg", "https://res.cloudinary.com/dgthdmczs/image/upload/v1758527661/certificates/tazhyj6lmxbuql0eqsb7.jpg"]
   }
 ]
 

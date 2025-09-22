@@ -4,8 +4,8 @@ import RobotDecorator from '../components/RobotDecorator'
 import RobotBackgroundDecoration from '../components/RobotBackgroundDecoration'
 import HumanRobotDecoration from '../components/HumanRobotDecoration'
 import RoboticSectionTitle from '../components/RoboticSectionTitle'
-import profileImg from '../assets/Profile.jpg'
-import cvPdf from '../assets/cv.pdf'
+const profileImg = 'https://res.cloudinary.com/dgthdmczs/image/upload/v1758527968/rm0e2lmyeunlq9citgkp.jpg'
+const cvPdf = 'https://res.cloudinary.com/dgthdmczs/image/upload/v1758527965/wcgm17ocidxdybr5uh97.pdf'
 
 const AboutSection = ({ theme, roboticMode, scrollToSection }) => {
   return (

@@ -40,7 +40,7 @@ import ContactSection from './pages/ContactSection'
 import EducationSection from './pages/EducationSection'
 
 // Import project images
-import logoImg from './assets/logo.png'
+const logoImg = 'https://res.cloudinary.com/dgthdmczs/image/upload/v1758527967/csqcbfb9uvdhfo0ruq1v.png'
 
 // EmailJS configuration
 // Replace these with your actual EmailJS values

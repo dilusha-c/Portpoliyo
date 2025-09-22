@@ -1,10 +1,10 @@
 import { motion } from 'framer-motion'
 import RoboticSectionTitle from '../components/RoboticSectionTitle'
 import { Github, ExternalLink } from 'lucide-react'
-import animalRecognizerImg from '../assets/animal.jpg'
-import gymSyncImg from '../assets/GymSync.jpg'
-import zaveImg from '../assets/Zave UI Design.jpg'
-import landmineRobotImg from '../assets/robo.jpg'
+const animalRecognizerImg = 'https://res.cloudinary.com/dgthdmczs/image/upload/v1758527960/kdvukqbd7wuwjrgfs9ir.jpg'
+const gymSyncImg = 'https://res.cloudinary.com/dgthdmczs/image/upload/v1758527966/somuuyhlbef1gaqlwmn5.jpg'
+const zaveImg = 'https://res.cloudinary.com/dgthdmczs/image/upload/v1758527972/wcjr4d6lvz6jj1lv4kol.jpg'
+const landmineRobotImg = 'https://res.cloudinary.com/dgthdmczs/image/upload/v1758527969/xtenkluxsdvbt3k1uupy.jpg'
 import PropTypes from 'prop-types'
 
 const ProjectsSection = ({ theme }) => {
