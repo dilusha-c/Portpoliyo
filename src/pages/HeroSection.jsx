@@ -220,7 +220,7 @@ const HeroSection = ({ theme, roboticMode, scrollToSection, smoothScrollToSectio
             transition={{ type: "spring", stiffness: 300 }}
           >
             <motion.span
-              className={`hero-text-word inline-block cursor-default relative font-bold name-glow-effect`}
+              className={`hero-text-word inline-block relative font-bold name-glow-effect`}
               data-text="Dilusha"
               style={{
                 letterSpacing: '2px'
@@ -241,7 +241,7 @@ const HeroSection = ({ theme, roboticMode, scrollToSection, smoothScrollToSectio
             </motion.span>
 
             <motion.span
-              className={`hero-text-word inline-block cursor-default relative font-bold name-glow-effect animate-letter-spacing`}
+              className={`hero-text-word inline-block relative font-bold name-glow-effect animate-letter-spacing`}
               data-text="Chamika"
               style={{
                 letterSpacing: '2px'
@@ -355,7 +355,7 @@ const HeroSection = ({ theme, roboticMode, scrollToSection, smoothScrollToSectio
         >
           <button
             onClick={() => scrollToSection('about')}
-            className={`${theme === 'dark' ? 'text-white/50 hover:text-white' : 'text-slate-700 hover:text-slate-900'} cursor-pointer`}
+            className={`${theme === 'dark' ? 'text-white/50 hover:text-white' : 'text-slate-700 hover:text-slate-900'}`}
           >
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="animate-bounce"><path d="m6 9 6 6 6-6"></path></svg>
           </button>

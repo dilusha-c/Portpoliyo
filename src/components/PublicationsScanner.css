@@ -179,16 +179,6 @@
   z-index: 1; /* Keep them above the content but below interactive elements */
 }
 
-/* Special cursor states for interactive elements when gear cursor is active */
-.gear-cursor-active a,
-.gear-cursor-active button,
-.gear-cursor-active [role="button"],
-.gear-cursor-active input,
-.gear-cursor-active select,
-.gear-cursor-active textarea {
-  cursor: pointer !important;
-}
-
 /* Blue highlights for the citation markers */
 .pulse-animation .highlight-line::after {
   content: '';

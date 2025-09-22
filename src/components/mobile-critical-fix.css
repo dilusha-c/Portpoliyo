@@ -21,9 +21,6 @@
   }
   
   /* Completely disable cursor styling on mobile */
-  * {
-    cursor: auto !important;
-  }
   
   /* Fix z-index stacking issues */
   .fixed {
@@ -70,32 +67,5 @@
     /* Fallback for browsers that don't support dynamic viewport units */
     height: -webkit-fill-available !important;
     height: -moz-available !important;
-  }
-}
-
-/* Extra safety for cursor issues */
-body.is-mobile-device .gear-cursor-active,
-body.is-mobile-device .cursor-none {
-  display: none !important;
-}
-
-/* Important emergency reset for cursor */
-@media (pointer: coarse), (max-width: 767px) {
-  body {
-    cursor: auto !important;
-  }
-  
-  * {
-    cursor: auto !important;
-  }
-  
-  /* Hide any custom cursor elements */
-  .gear-cursor,
-  .cursor-element,
-  .custom-cursor {
-    display: none !important;
-    opacity: 0 !important;
-    visibility: hidden !important;
-    pointer-events: none !important;
   }
 }

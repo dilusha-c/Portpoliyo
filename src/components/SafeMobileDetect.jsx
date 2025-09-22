@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 
 /**
  * Component that ensures mobile detection works correctly and fixes any issues
- * with cursors or other mobile-specific problems
+ * with mobile-specific problems
  */
 const SafeMobileDetect = () => {
   useEffect(() => {
@@ -29,15 +29,10 @@ const SafeMobileDetect = () => {
       document.body.classList.add('is-mobile-device');
       document.documentElement.setAttribute('data-mobile', 'true');
       
-      // Force remove any cursor styling
-      document.body.classList.remove('gear-cursor-active');
-      document.body.style.cursor = '';
-      
       // Apply inline style for safety
       document.head.insertAdjacentHTML('beforeend', `
         <style id="mobile-emergency-styles">
           @media (max-width: 767px), (pointer: coarse) {
-            * { cursor: auto !important; }
             .gear-cursor, .cursor-element, .custom-cursor {
               display: none !important;
               opacity: 0 !important;
@@ -57,9 +52,7 @@ const SafeMobileDetect = () => {
       // Reset any cursor elements that might be in the DOM
       const allElements = document.querySelectorAll('*');
       allElements.forEach(el => {
-        if (el.style && el.style.cursor === 'none') {
-          el.style.cursor = '';
-        }
+        // Reset any problematic elements
       });
     }
     

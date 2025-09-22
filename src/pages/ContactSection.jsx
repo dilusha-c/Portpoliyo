@@ -295,7 +295,7 @@ const ContactSection = ({ theme, roboticMode, contactFormData, setContactFormDat
                 disabled={formStatus.submitting}
                 className={`w-full bg-gradient-to-r from-cyan-500 to-blue-500 text-white font-bold py-3 px-6 rounded-lg shadow-lg transition-all ${
                   roboticMode ? 'border border-cyan-400 relative overflow-hidden' : ''
-                } ${formStatus.submitting ? 'opacity-70 cursor-not-allowed' : ''}`}
+                } ${formStatus.submitting ? 'opacity-70' : ''}`}
                 whileHover={!formStatus.submitting ? { scale: 1.02, boxShadow: "0 0 15px rgba(34, 211, 238, 0.5)" } : {}}
                 whileTap={!formStatus.submitting ? { scale: 0.98 } : {}}
               >
