@@ -43,7 +43,15 @@
   animation: menuGlow 3s infinite;
 }
 
-/* Menu item hover effects */
+/* Menu item hover effects - improved for touch devices */
+.mobile-menu button {
+  position: relative;
+  overflow: hidden;
+  min-height: 48px; /* Ensure minimum touch target size */
+  display: flex;
+  align-items: center;
+}
+
 .mobile-menu button:hover {
   transform: translateX(10px);
   transition: all 0.3s ease;
@@ -61,7 +69,7 @@
 }
 
 /* Enhanced hover styles for desktop menu */
-@media (min-width: 768px) {
+@media (min-width: 1024px) { /* Changed from 768px to 1024px */
   .nav-button-hover:hover {
     box-shadow: 0 4px 12px rgba(6, 182, 212, 0.2);
   }
@@ -82,4 +90,63 @@
   box-shadow: 
     0 10px 25px -5px rgba(0, 0, 0, 0.15),
     0 0 20px rgba(59, 130, 246, 0.2);
+}
+
+/* Responsive improvements for mobile menu */
+@media (max-width: 640px) {
+  .mobile-menu {
+    top: 12px; /* Even higher on very small screens */
+    border-radius: 12px;
+    max-height: 50vh; /* More conservative for mobile */
+  }
+}
+
+/* Tablet improvements */
+@media (min-width: 641px) and (max-width: 1023px) {
+  .mobile-menu {
+    max-width: 400px;
+    margin: 20px auto;
+    max-height: 45vh; /* Consistent with main menu */
+  }
+}
+
+/* Custom scrollbar for mobile menu */
+.mobile-menu .container::-webkit-scrollbar {
+  width: 6px;
+}
+
+.mobile-menu .container::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.mobile-menu .container::-webkit-scrollbar-thumb {
+  background: rgba(6, 182, 212, 0.3);
+  border-radius: 3px;
+}
+
+.mobile-menu .container::-webkit-scrollbar-thumb:hover {
+  background: rgba(6, 182, 212, 0.5);
+}
+
+.light .mobile-menu .container::-webkit-scrollbar-thumb {
+  background: rgba(59, 130, 246, 0.3);
+}
+
+.light .mobile-menu .container::-webkit-scrollbar-thumb:hover {
+  background: rgba(59, 130, 246, 0.5);
+}
+
+/* Additional zoom level adjustments */
+/* These help with higher zoom levels by reducing menu size further */
+@media (max-width: 1024px) {
+  .mobile-menu {
+    max-height: var(--mobile-menu-height, min(45vh, calc(100vh - 140px))); /* Use CSS custom property with fallback */
+  }
+}
+
+/* Extra conservative approach for very high zoom levels */
+@media (max-width: 768px) {
+  .mobile-menu {
+    max-height: var(--mobile-menu-height, min(40vh, calc(100vh - 120px))); /* Even more conservative on smaller screens */
+  }
 }

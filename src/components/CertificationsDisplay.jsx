@@ -484,10 +484,11 @@ const CertificationsDisplay = ({ theme }) => {
             >
               {/* Close button */}
               <button 
-                className={`absolute top-4 right-4 p-2 rounded-full ${
+                className={`absolute top-4 right-4 p-3 rounded-full ${
                   theme === 'dark' ? 'bg-slate-800 text-gray-300' : 'bg-gray-100 text-gray-600'
                 } hover:bg-red-500 hover:text-white transition-colors z-10`}
                 onClick={() => setShowModal(false)}
+                aria-label="Close certificates modal"
               >
                 <X size={20} />
               </button>
@@ -693,10 +694,11 @@ const CertificationsDisplay = ({ theme }) => {
             >
               {/* Close button */}
               <button 
-                className={`absolute top-4 right-4 p-2 rounded-full ${
+                className={`absolute top-4 right-4 p-3 rounded-full ${
                   theme === 'dark' ? 'bg-slate-800 text-gray-300' : 'bg-gray-100 text-gray-600'
                 } hover:bg-red-500 hover:text-white transition-colors z-10`}
                 onClick={() => setShowCertImageModal(false)}
+                aria-label="Close certificate image modal"
               >
                 <X size={20} />
               </button>

@@ -309,6 +309,7 @@ const AwardsSection = ({ theme, roboticMode, openImageModal }) => {
                 whileHover={{ scale: 1.2 }}
                 whileTap={{ scale: 0.9 }}
                 animate={(currentAwardIndex % awards.length) === index ? { scale: 1.1 } : { scale: 1 }}
+                aria-label={`Go to award ${index + 1} of ${awards.length}`}
               />
             ))}
           </div>

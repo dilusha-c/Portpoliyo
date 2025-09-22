@@ -355,54 +355,45 @@ function App() {
     };
   }, []);
 
-  // Add a class to the body when image modal is open in robotic mode to keep cursor visible
+  // Dynamic mobile menu height adjustment for zoom levels
   useEffect(() => {
-    if (imageModal.isOpen && roboticMode) {
-      document.body.classList.add('modal-open-robotic');
-      
-      // Add CSS for the close button glow in robotic mode
-      const style = document.createElement('style');
-      style.id = 'modal-close-button-style';
-      style.innerHTML = `
-        .modal-content .close-button {
-          box-shadow: 0 0 15px 3px rgba(239, 68, 68, 0.8);
-          animation: pulse-red 2s infinite;
-        }
-        @keyframes pulse-red {
-          0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.8); }
-          50% { box-shadow: 0 0 15px 5px rgba(239, 68, 68, 0.4); }
-          100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+    const adjustMenuHeight = () => {
+      const mobileMenu = document.querySelector('.mobile-menu');
+      if (mobileMenu && window.innerWidth < 1024) { // Only on mobile/tablet
+        // Detect zoom level (rough estimation)
+        const zoomLevel = Math.round((window.outerWidth / window.innerWidth) * 100);
+        
+        // Adjust height based on zoom level
+        let heightPercentage = 45; // Base height
+        
+        if (zoomLevel >= 150) {
+          heightPercentage = 35; // Very conservative at high zoom
+        } else if (zoomLevel >= 125) {
+          heightPercentage = 38; // Conservative at medium-high zoom
+        } else if (zoomLevel >= 110) {
+          heightPercentage = 40; // Moderate adjustment
         }
         
-        /* Make close button more visible in robotic mode */
-        .modal-content {
-          position: relative;
-        }
+        // Apply the height using CSS custom property for better performance
+        document.documentElement.style.setProperty('--mobile-menu-height', `${heightPercentage}vh`);
+        mobileMenu.style.maxHeight = `var(--mobile-menu-height, 45vh)`;
         
-        /* Ensure the close button is always at the top-right */
-        .modal-content .close-button {
-          position: absolute !important;
-          top: 0 !important;
-          right: 0 !important;
-          z-index: 9999 !important;
-        }
-      `;
-      document.head.appendChild(style);
-    } else {
-      document.body.classList.remove('modal-open-robotic');
-      const style = document.getElementById('modal-close-button-style');
-      if (style) {
-        document.head.removeChild(style);
-      }
-    }
-    return () => {
-      document.body.classList.remove('modal-open-robotic');
-      const style = document.getElementById('modal-close-button-style');
-      if (style) {
-        document.head.removeChild(style);
+        // Also ensure minimum height for usability
+        const minHeight = Math.min(window.innerHeight * 0.25, 250); // At least 25% of screen or 250px
+        mobileMenu.style.minHeight = `${minHeight}px`;
       }
     };
-  }, [imageModal.isOpen, roboticMode])
+
+    // Initial adjustment
+    adjustMenuHeight();
+
+    // Adjust on resize (which includes zoom changes)
+    window.addEventListener('resize', adjustMenuHeight);
+    
+    return () => {
+      window.removeEventListener('resize', adjustMenuHeight);
+    };
+  }, []);
 
   // Animate skills when they come into view
   useEffect(() => {
@@ -1232,8 +1223,8 @@ useEffect(() => {
                 </div>
                 
                 
-                {/* Mobile menu button - Right side on mobile */}
-                <div className="block md:hidden">
+                {/* Mobile menu button - Right side on mobile/tablet */}
+                <div className="block lg:hidden">
                   <motion.button 
                     className={`mobile-menu-button p-3 rounded-lg ${
                       theme === 'dark' 
@@ -1257,7 +1248,7 @@ useEffect(() => {
                 </div>
                 
                 {/* Desktop navigation */}
-                <div className={`hidden md:flex justify-center mx-auto py-2 rounded-xl max-w-fit lg:max-w-fit ${
+                <div className={`hidden lg:flex justify-center mx-auto py-2 rounded-xl max-w-fit lg:max-w-fit ${
                   theme === 'dark' 
                     ? roboticMode
                       ? 'bg-gradient-to-r from-slate-800 to-slate-900 border-2 border-cyan-600/70 shadow-lg shadow-cyan-900/30' 
@@ -1290,12 +1281,12 @@ useEffect(() => {
                 </div>
                 
                 {/* Divider between navigation and theme buttons */}
-                <div className="hidden md:block mx-3 lg:mx-4">
+                <div className="hidden lg:block mx-3 lg:mx-4">
                   <div className={`h-8 w-0.5 ${theme === 'dark' ? 'bg-gradient-to-b from-transparent via-cyan-500/50 to-transparent' : 'bg-gradient-to-b from-transparent via-blue-400/50 to-transparent'}`}></div>
                 </div>
                 
                 {/* Desktop theme buttons - hidden on mobile */}
-                <div className={`hidden md:flex items-center space-x-5 md:space-x-6 lg:space-x-7 px-3 py-1.5 rounded-xl ${
+                <div className={`hidden lg:flex items-center space-x-5 md:space-x-6 lg:space-x-7 px-3 py-1.5 rounded-xl ${
                   theme === 'dark'
                     ? roboticMode 
                       ? 'bg-slate-800/80 border border-cyan-800/40' 
@@ -1394,33 +1385,35 @@ useEffect(() => {
                   <>
                     {/* Backdrop */}
                     <div 
-                      className="fixed inset-0 bg-black/30 backdrop-blur-sm z-[2147483646] md:hidden mobile-menu-backdrop"
+                      className="fixed inset-0 bg-black/30 backdrop-blur-sm z-[2147483646] lg:hidden mobile-menu-backdrop"
                       onClick={() => setMobileMenuOpen(false)}
                       style={{ isolation: 'isolate' }}
                     />
                     
                     {/* Menu */}
                     <div 
-                      className={`mobile-menu md:hidden fixed inset-x-0 top-20 z-[2147483647] ${
+                      className={`mobile-menu lg:hidden fixed left-1/2 top-16 z-[2147483647] transform -translate-x-1/2 ${
                         theme === 'dark' 
                           ? 'bg-slate-900/95 backdrop-blur-lg text-white border-2 border-cyan-500' 
                           : 'bg-white/95 backdrop-blur-lg text-slate-900 border-2 border-blue-500'
-                      } shadow-2xl overflow-hidden menu-shadow-glow`}
+                      } shadow-2xl menu-shadow-glow max-h-[45vh] w-[95%] sm:w-[92%] md:w-[95%] lg:w-[98%] xl:w-full max-w-6xl`}
                     >
-                    <div className="container mx-auto py-5 px-6">
+                    <div className="px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 py-5 h-full overflow-y-auto">
                       <div className="flex flex-col space-y-2">
                         {['Home', 'About', 'Projects', 'Publications', 'Certificates', 'Awards', 'Contact'].map((item) => (
-                          <button
+                          <motion.button
                             key={item}
                             onClick={() => {
                               scrollToSection(item.toLowerCase());
                               setMobileMenuOpen(false);
                             }}
-                            className={`py-3 px-4 rounded-lg text-lg font-bold mb-1 ${
+                            className={`py-4 px-4 rounded-lg text-lg font-bold mb-2 ${
                               theme === 'dark' 
-                                ? 'bg-slate-800 hover:bg-cyan-900 hover:text-cyan-300 text-white border-l-4 border-cyan-500' 
-                                : 'bg-slate-100 hover:bg-blue-100 hover:text-blue-700 text-slate-800 border-l-4 border-blue-500'
-                            } transition-colors w-full text-left shadow-md`}
+                                ? 'bg-slate-800 hover:bg-cyan-900 hover:text-cyan-300 text-white border-l-4 border-cyan-500 active:bg-cyan-800' 
+                                : 'bg-slate-100 hover:bg-blue-100 hover:text-blue-700 text-slate-800 border-l-4 border-blue-500 active:bg-blue-200'
+                            } transition-all duration-200 w-full text-left shadow-md min-h-[48px] flex items-center`}
+                            whileTap={{ scale: 0.98 }}
+                            aria-label={`Navigate to ${item} section`}
                           >
                             <div className="flex items-center">
                               <span className={`mr-3 ${theme === 'dark' ? 'text-cyan-400' : 'text-blue-600'}`}>
@@ -1434,7 +1427,7 @@ useEffect(() => {
                               </span>
                               {item}
                             </div>
-                          </button>
+                          </motion.button>
                         ))}
                         
                         <div className={`h-px w-full my-2 ${theme === 'dark' ? 'bg-cyan-500/50' : 'bg-blue-300/50'}`}></div>
@@ -1442,13 +1435,15 @@ useEffect(() => {
                         <div className="flex items-center justify-between py-3 px-4">
                           <span className={`font-medium ${theme === 'dark' ? 'text-cyan-300' : 'text-blue-700'}`}>Theme Settings</span>
                           <div className="flex items-center space-x-4">
-                            <button
+                            <motion.button
                               onClick={toggleRoboticMode}
                               className={`p-3 rounded-full ${
                                 theme === 'dark' 
                                   ? roboticMode ? 'bg-gradient-to-r from-cyan-700 to-blue-800 text-cyan-300' : 'bg-slate-800 text-gray-400' 
                                   : roboticMode ? 'bg-gradient-to-r from-cyan-400 to-blue-500 text-white' : 'bg-slate-200 text-gray-600'
-                              } relative ${roboticMode ? 'robot-border shadow-lg shadow-cyan-500/30' : ''}`}
+                              } relative ${roboticMode ? 'robot-border shadow-lg shadow-cyan-500/30' : ''} min-h-[48px] min-w-[48px] flex items-center justify-center`}
+                              whileTap={{ scale: 0.9 }}
+                              aria-label={roboticMode ? 'Disable robotic theme' : 'Enable robotic theme'}
                             >
                               <Cpu size={26} className={roboticMode ? '' : ''} />
                               {roboticMode && (
@@ -1459,15 +1454,17 @@ useEffect(() => {
                                   />
                                 </>
                               )}
-                            </button>
+                            </motion.button>
                             
-                            <button
+                            <motion.button
                               onClick={toggleTheme}
                               className={`p-2 rounded-full ${
                                 theme === 'dark' 
                                   ? 'bg-gradient-to-r from-cyan-700 to-blue-800 text-cyan-300 shadow-lg shadow-cyan-500/30' 
                                   : 'bg-gradient-to-r from-cyan-400 to-blue-500 text-white shadow-lg shadow-blue-500/20'
-                              } relative ${theme === 'dark' ? 'theme-border-dark' : 'theme-border-light'}`}
+                              } relative ${theme === 'dark' ? 'theme-border-dark' : 'theme-border-light'} min-h-[48px] min-w-[48px] flex items-center justify-center`}
+                              whileTap={{ scale: 0.9 }}
+                              aria-label={theme === 'dark' ? 'Switch to light theme' : 'Switch to dark theme'}
                             >
                               {theme === 'dark' && (
                                 <span className="absolute inset-0 theme-glow opacity-70 rounded-full -z-10"></span>
@@ -1481,7 +1478,7 @@ useEffect(() => {
                               <span 
                                 className={`absolute inset-0 border rounded-full ${theme === 'dark' ? 'border-cyan-400/50' : 'border-blue-400/50'}`}
                               />
-                            </button>
+                            </motion.button>
                           </div>
                         </div>
                       </div>
@@ -1564,7 +1561,7 @@ useEffect(() => {
 
             {/* Footer */}
             <footer className={`${theme === 'dark' ? 'bg-slate-900 text-gray-400' : 'bg-white text-gray-600'} py-8 px-4 border-t ${theme === 'dark' ? 'border-slate-800' : 'border-slate-200'} transition-colors duration-300`}>
-              <div className="container mx-auto flex flex-col md:flex-row justify-between items-center">
+              <div className="container mx-auto flex flex-col lg:flex-row justify-between items-center">
                 <motion.p 
                   className="mb-4 md:mb-0"
                   initial={{ opacity: 0 }}

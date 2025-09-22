@@ -21,6 +21,7 @@ const HeroSection = ({ theme, roboticMode, scrollToSection, smoothScrollToSectio
               ? 'bg-gradient-to-r from-cyan-400 to-blue-500 text-white border border-blue-500'
               : 'bg-slate-200 text-gray-600 border border-slate-300'
         } transition-all shadow-lg shadow-cyan-500/30 hover:shadow-cyan-500/50`}
+        aria-label="Toggle Robotic Theme"
         title="Toggle Robotic Theme"
       >
         <div className="relative">
@@ -54,6 +55,7 @@ const HeroSection = ({ theme, roboticMode, scrollToSection, smoothScrollToSectio
             ? 'bg-slate-800 text-gray-400 border border-slate-700'
             : 'bg-gradient-to-r from-cyan-400 to-blue-500 text-white border border-blue-500'
         } transition-all shadow-lg shadow-blue-500/30 hover:shadow-blue-500/50`}
+        aria-label={theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
         title={theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
       >
         <div className="relative">
@@ -333,6 +335,7 @@ const HeroSection = ({ theme, roboticMode, scrollToSection, smoothScrollToSectio
           <button
             onClick={() => scrollToSection('about')}
             className={`${theme === 'dark' ? 'text-white/50 hover:text-white' : 'text-slate-700 hover:text-slate-900'}`}
+            aria-label="Scroll to About section"
           >
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="animate-bounce"><path d="m6 9 6 6 6-6"></path></svg>
           </button>
