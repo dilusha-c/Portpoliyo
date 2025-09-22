@@ -1,6 +1,6 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import { Player } from '@lottiefiles/react-lottie-player';
-import HumanoidRobot from './HumanoidRobot';
+import HumanoidRobot from './HumanoidRobotSimplified';
 import { useEffect } from 'react';
 import PropTypes from 'prop-types';
 
@@ -57,7 +57,7 @@ const BootScreen = ({ onComplete }) => {
             exit={{ opacity: 0 }}
             transition={{ duration: 0 }}
           >
-            {[...Array(15)].map((_, i) => (
+            {[...Array(8)].map((_, i) => (
               <motion.div
                 key={i}
                 className="absolute w-1 h-1 bg-cyan-400 rounded-full"
@@ -89,14 +89,10 @@ const BootScreen = ({ onComplete }) => {
             transition={{ duration: 0 }}
           >
             <svg width="100%" height="100%" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-              <pattern id="circuitPattern" patternUnits="userSpaceOnUse" width="20" height="20" patternTransform="rotate(45)">
+              <pattern id="circuitPattern" patternUnits="userSpaceOnUse" width="30" height="30" patternTransform="rotate(45)">
                 <rect width="100%" height="100%" fill="none" />
-                <path d="M0,10 h20 M10,0 v20" stroke="rgba(6,182,212,0.5)" strokeWidth="0.5" />
-                <circle cx="10" cy="10" r="2" fill="rgba(6,182,212,0.7)" />
-                <circle cx="0" cy="0" r="1" fill="rgba(6,182,212,0.5)" />
-                <circle cx="0" cy="20" r="1" fill="rgba(6,182,212,0.5)" />
-                <circle cx="20" cy="0" r="1" fill="rgba(6,182,212,0.5)" />
-                <circle cx="20" cy="20" r="1" fill="rgba(6,182,212,0.5)" />
+                <path d="M0,15 h15 M15,0 v15" stroke="rgba(6,182,212,0.5)" strokeWidth="0.5" />
+                <circle cx="15" cy="15" r="2" fill="rgba(6,182,212,0.7)" />
               </pattern>
               <rect width="100%" height="100%" fill="url(#circuitPattern)" />
             </svg>

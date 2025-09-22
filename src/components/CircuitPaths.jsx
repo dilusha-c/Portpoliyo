@@ -64,9 +64,9 @@ const CircuitPaths = ({ theme }) => {
           transition={{ duration: 4, repeat: Infinity, repeatType: 'loop', repeatDelay: 7 }}
         />
         
-        {/* Circuit nodes */}
-        {[25, 50, 75].map((x) => 
-          [20, 50, 80].map((y) => (
+        {/* Circuit nodes - reduced from 9 to 4 */}
+        {[25, 75].map((x) => 
+          [30, 70].map((y) => (
             <motion.circle
               key={`${x}-${y}`}
               cx={`${x}%`}

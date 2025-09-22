@@ -1,16 +1,15 @@
-import { useState, useEffect, useContext, useCallback } from 'react'
+import { useState, useEffect, useContext, useCallback, lazy, Suspense } from 'react'
 import { motion, useScroll, useAnimation, AnimatePresence } from 'framer-motion'
 import { TypeAnimation } from 'react-type-animation'
 import { Sun, Moon, ArrowUp, Github, Linkedin, Mail, ExternalLink, Cpu } from 'lucide-react'
 import emailjs from '@emailjs/browser'
 import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from "@vercel/speed-insights/react";
-import BootScreen from './components/BootScreen'
-import RobotDecorator from './components/RobotDecorator'
 import RoboticSectionTitle from './components/RoboticSectionTitle'
-import RobotBackgroundDecoration from './components/RobotBackgroundDecoration'
-import HumanRobotDecoration from './components/HumanRobotDecoration'
 import BinaryMatrix from './components/BinaryMatrix'
+
+// Lazy load BootScreen since it's only shown once
+const BootScreen = lazy(() => import('./components/BootScreen'))
 import useIsMobile from './hooks/useIsMobile'
 
 import './App.css'
@@ -548,24 +547,27 @@ function App() {
     error: null
   });
   
-  // Initialize EmailJS
-  useEffect(() => {
+// Defer non-critical initialization
+useEffect(() => {
+  // Use requestIdleCallback if available, otherwise setTimeout
+  const deferInit = window.requestIdleCallback || 
+    ((callback) => setTimeout(callback, 1));
+  
+  deferInit(() => {
+    // Initialize EmailJS with lower priority
     try {
-      // Initialize EmailJS with the proper options
       emailjs.init({
         publicKey: EMAILJS_PUBLIC_KEY,
-        // Limited to a single email per session to avoid spam
         limitRate: {
-          throttle: 2000 // wait 2 sec before trying again
+          throttle: 2000
         }
       });
       console.log('EmailJS initialized successfully');
     } catch (error) {
       console.error('Error initializing EmailJS:', error);
     }
-  }, []);
-  
-  // Add mobile class to body for mobile-specific styling with enhanced detection
+  });
+}, []);  // Add mobile class to body for mobile-specific styling with enhanced detection
   useEffect(() => {
     // Multiple checks for mobile detection
     const hasTouchScreen = (
@@ -719,7 +721,9 @@ function App() {
       {/* Boot screen for first-time visitors */}
       <AnimatePresence mode="wait">
         {showBootScreen && (
-          <BootScreen onComplete={handleBootComplete} />
+          <Suspense fallback={<div className="fixed inset-0 bg-slate-900 flex items-center justify-center z-50"><div className="text-cyan-400">Loading...</div></div>}>
+            <BootScreen onComplete={handleBootComplete} />
+          </Suspense>
         )}
       </AnimatePresence>
       
@@ -1054,6 +1058,7 @@ function App() {
                       initial={{ opacity: 0, scale: 0.95 }}
                       animate={{ opacity: 1, scale: 1 }}
                       transition={{ duration: 0.3 }}
+                      loading="lazy"
                     />
 
                     {/* Image Counter */}

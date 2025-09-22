@@ -67,6 +67,8 @@ const AboutSection = ({ theme, roboticMode, scrollToSection }) => {
                 src={profileImg}
                 alt="Dilusha Chamika Profile Photo"
                 className="w-full h-full object-cover rounded-full"
+                width="256"
+                height="256"
               />
 
               {roboticMode && (

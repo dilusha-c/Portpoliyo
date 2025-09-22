@@ -4,11 +4,11 @@ import PropTypes from 'prop-types';
 const BinaryMatrix = ({ heroSection = false }) => {
   const [matrix, setMatrix] = useState([]);
   
-  // Create the initial binary matrix
+  // Create the initial binary matrix - optimized for performance
   useEffect(() => {
-    // Determine columns and rows based on window size
-    const columns = Math.floor(window.innerWidth / 20); // 20px spacing
-    const rows = Math.floor(window.innerHeight / 30); // 30px spacing
+    // Reduce density for better performance - larger spacing
+    const columns = Math.floor(window.innerWidth / 40); // 40px spacing instead of 20px
+    const rows = Math.floor(window.innerHeight / 50); // 50px spacing instead of 30px
     
     const newMatrix = [];
     for (let i = 0; i < rows; i++) {
@@ -25,10 +25,10 @@ const BinaryMatrix = ({ heroSection = false }) => {
     }
     setMatrix(newMatrix);
     
-    // Handle window resize
+    // Handle window resize - throttled for performance
     const handleResize = () => {
-      const columns = Math.floor(window.innerWidth / 20);
-      const rows = Math.floor(window.innerHeight / 30);
+      const columns = Math.floor(window.innerWidth / 40);
+      const rows = Math.floor(window.innerHeight / 50);
       
       const newMatrix = [];
       for (let i = 0; i < rows; i++) {

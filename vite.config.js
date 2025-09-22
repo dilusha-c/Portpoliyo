@@ -20,14 +20,11 @@ export default defineConfig({
           'ui-components': [
             './src/components/BinaryMatrix',
             './src/components/CircuitPaths',
-            './src/components/FlyingDrone',
-            './src/components/HumanoidRobot',
-            './src/components/HumanRobotDecoration',
+            './src/components/FlyingDroneSimplified',
+            './src/components/HumanoidRobotSimplified',
             './src/components/LeftRobotDecoration',
-            './src/components/RobotBackgroundDecoration',
-            './src/components/RobotDecorator',
-            './src/components/RoboticSectionTitle',
-            './src/components/RobotTextDisplay'
+            './src/components/RobotTextDisplay',
+            './src/components/RoboticSectionTitle'
           ],
 
           // Animation chunks

@@ -198,6 +198,7 @@ const AwardsSection = ({ theme, roboticMode, openImageModal }) => {
                         transition={{ duration: 0.5 }}
                         whileHover={{ scale: 1.02 }}
                         onClick={() => handleOpenImageModal(award.images, award.title, originalIndex)}
+                        loading="lazy"
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent pointer-events-none"></div>
 

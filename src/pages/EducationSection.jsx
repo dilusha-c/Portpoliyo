@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import FlyingDrone from '../components/FlyingDrone';
+import FlyingDrone from '../components/FlyingDroneSimplified';
 const sliitImg = 'https://res.cloudinary.com/dgthdmczs/image/upload/v1758527970/qr0n3bftmuubfmixhxjw.png';
 import PropTypes from 'prop-types';
 
@@ -85,6 +85,9 @@ const EducationSection = ({ theme, roboticMode }) => {
               src={sliitImg}
               alt="SLIIT Logo"
               className={`w-full h-full object-contain ${theme === 'dark' ? 'filter brightness-110' : ''}`}
+              loading="lazy"
+              width="96"
+              height="96"
             />
             {roboticMode && (
               <div className="absolute inset-0 pointer-events-none">

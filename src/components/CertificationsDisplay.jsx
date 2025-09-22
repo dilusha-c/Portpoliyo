@@ -718,6 +718,7 @@ const CertificationsDisplay = ({ theme }) => {
                     src={selectedCertImage.imageUrl} 
                     alt={`${selectedCertImage.title} Certificate`}
                     className="w-full h-auto object-contain"
+                    loading="lazy"
                     onError={(e) => {
                       e.target.onerror = null;
                       e.target.src = machineLearningImg;
