@@ -40,9 +40,9 @@ const logoImg = 'https://res.cloudinary.com/dgthdmczs/image/upload/v1758527967/c
 
 // EmailJS configuration
 // Replace these with your actual EmailJS values
-const EMAILJS_SERVICE_ID = "service_g2d5b5l";
-const EMAILJS_TEMPLATE_ID = "template_lta7m59";
-const EMAILJS_PUBLIC_KEY = "ZZAxpETQoSc-iQUf3";
+const EMAILJS_SERVICE_ID = import.meta.env.EMAILJS_SERVICE_ID;
+const EMAILJS_TEMPLATE_ID = import.meta.env.EMAILJS_TEMPLATE_ID;
+const EMAILJS_PUBLIC_KEY = import.meta.env.EMAILJS_PUBLIC_KEY;
 
 // Initialize EmailJS - using a safer approach inside an effect hook instead of at the global level
 // We'll do this in a useEffect hook inside the component
