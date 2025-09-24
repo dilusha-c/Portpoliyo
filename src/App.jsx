@@ -40,9 +40,9 @@ const logoImg = 'https://res.cloudinary.com/dgthdmczs/image/upload/v1758527967/c
 
 // EmailJS configuration
 // Replace these with your actual EmailJS values
-const EMAILJS_SERVICE_ID = import.meta.env.EMAILJS_SERVICE_ID;
-const EMAILJS_TEMPLATE_ID = import.meta.env.EMAILJS_TEMPLATE_ID;
-const EMAILJS_PUBLIC_KEY = import.meta.env.EMAILJS_PUBLIC_KEY;
+const EMAILJS_SERVICE_ID = import.meta.env.VITE_EMAILJS_SERVICE_ID;
+const EMAILJS_TEMPLATE_ID = import.meta.env.VITE_EMAILJS_TEMPLATE_ID;
+const EMAILJS_PUBLIC_KEY = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
 
 // Initialize EmailJS - using a safer approach inside an effect hook instead of at the global level
 // We'll do this in a useEffect hook inside the component
@@ -613,6 +613,9 @@ useEffect(() => {
     
     try {
       console.log('Starting email submission process...');
+      console.log('EMAILJS_SERVICE_ID:', EMAILJS_SERVICE_ID);
+      console.log('EMAILJS_TEMPLATE_ID:', EMAILJS_TEMPLATE_ID);
+      console.log('EMAILJS_PUBLIC_KEY:', EMAILJS_PUBLIC_KEY);
       
       // Using Email.js to send emails
       const templateParams = {
@@ -661,6 +664,11 @@ useEffect(() => {
       
     } catch (error) {
       console.error('Error sending email:', error);
+      console.error('Error details:', {
+        message: error.message,
+        status: error.status,
+        text: error.text
+      });
       
       // Provide more specific error message based on the error type
       let errorMessage = 'Failed to send your message. Please try again later or contact me directly via email.';
