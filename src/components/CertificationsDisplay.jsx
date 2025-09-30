@@ -196,89 +196,97 @@ const CertificationsDisplay = ({ theme }) => {
     window.open(cert.verifyUrl, '_blank', 'noopener,noreferrer');
   };
   
-  // Close modal on scroll outside or escape key
+  // Prevent background scrolling while the certificates modal is open
+  // and restore the previous scroll position when closed. Also listen
+  // for Escape to close the modal. Do NOT close the modal on scroll.
   useEffect(() => {
-    const handleScroll = (e) => {
-      // Only run this if modal is open
-      if (!showModal) return;
-      
-      // Check if the event target is not inside the modal content
-      const isOutsideModal = modalContentRef.current && !modalContentRef.current.contains(e.target);
-      
-      // If scrolling outside the modal, close it
-      if (isOutsideModal) {
-        console.log('Scroll detected outside modal - closing');
-        setShowModal(false);
-      }
-    };
-    
-    const handleKeyDown = (e) => {
-      if (e.key === 'Escape' && showModal) {
-        console.log('Escape key pressed - closing modal');
-        setShowModal(false);
-      }
-    };
-    
-    // Add scroll event listener to document when modal is open
     if (showModal) {
-      document.addEventListener('wheel', handleScroll, { passive: true });
-      document.addEventListener('touchmove', handleScroll, { passive: true });
-      document.addEventListener('keydown', handleKeyDown);
-      
-      // Also prevent body scrolling while modal is open
+      const scrollY = window.scrollY || window.pageYOffset || 0;
+      document.body.setAttribute('data-scroll-position', String(scrollY));
       document.body.style.overflow = 'hidden';
+      document.body.style.top = `-${scrollY}px`;
+      document.body.style.position = 'fixed';
+      document.body.style.width = '100%';
+      document.body.style.paddingRight = '15px'; // compensate for scrollbar disappearance
+
+      const handleKeyDown = (e) => {
+        if (e.key === 'Escape') setShowModal(false);
+      };
+
+      document.addEventListener('keydown', handleKeyDown);
+
+      return () => {
+        document.removeEventListener('keydown', handleKeyDown);
+        // Only restore body scrolling when no other modal (image modal) is open
+        if (!showCertImageModal) {
+          const saved = parseInt(document.body.getAttribute('data-scroll-position') || '0', 10);
+          document.body.style.overflow = '';
+          document.body.style.position = '';
+          document.body.style.top = '';
+          document.body.style.width = '';
+          document.body.style.paddingRight = '';
+          window.scrollTo(0, saved);
+        }
+      };
     } else {
-      document.body.style.overflow = '';
+      // If the certificates modal is closed and the image modal is not open,
+      // ensure body scroll is restored.
+      if (!showCertImageModal) {
+        const saved = parseInt(document.body.getAttribute('data-scroll-position') || '0', 10);
+        document.body.style.overflow = '';
+        document.body.style.position = '';
+        document.body.style.top = '';
+        document.body.style.width = '';
+        document.body.style.paddingRight = '';
+        window.scrollTo(0, saved);
+      }
     }
-    
-    // Clean up
-    return () => {
-      document.removeEventListener('wheel', handleScroll);
-      document.removeEventListener('touchmove', handleScroll);
-      document.removeEventListener('keydown', handleKeyDown);
-      document.body.style.overflow = '';
-    };
-  }, [showModal]);
+  }, [showModal, showCertImageModal]);
   
-  // Similar effect for certificate image modal
+  // Prevent background scrolling while certificate image modal is open.
   useEffect(() => {
-    const handleScroll = (e) => {
-      if (!showCertImageModal) return;
-      
-      const isOutsideModal = certImageModalRef.current && !certImageModalRef.current.contains(e.target);
-      
-      if (isOutsideModal) {
-        console.log('Scroll detected outside cert image modal - closing');
-        setShowCertImageModal(false);
-      }
-    };
-    
-    const handleKeyDown = (e) => {
-      if (e.key === 'Escape' && showCertImageModal) {
-        console.log('Escape key pressed - closing cert image modal');
-        setShowCertImageModal(false);
-      }
-    };
-    
     if (showCertImageModal) {
-      document.addEventListener('wheel', handleScroll, { passive: true });
-      document.addEventListener('touchmove', handleScroll, { passive: true });
-      document.addEventListener('keydown', handleKeyDown);
+      const scrollY = window.scrollY || window.pageYOffset || 0;
+      // If a scroll position wasn't already stored by the parent modal, store it now
+      if (!document.body.getAttribute('data-scroll-position')) {
+        document.body.setAttribute('data-scroll-position', String(scrollY));
+      }
       document.body.style.overflow = 'hidden';
+      document.body.style.top = `-${document.body.getAttribute('data-scroll-position') || 0}px`;
+      document.body.style.position = 'fixed';
+      document.body.style.width = '100%';
+      document.body.style.paddingRight = '15px';
+
+      const handleKeyDown = (e) => {
+        if (e.key === 'Escape') setShowCertImageModal(false);
+      };
+
+      document.addEventListener('keydown', handleKeyDown);
+
+      return () => {
+        document.removeEventListener('keydown', handleKeyDown);
+        // Only restore when the main certificates modal is also closed
+        if (!showModal) {
+          const saved = parseInt(document.body.getAttribute('data-scroll-position') || '0', 10);
+          document.body.style.overflow = '';
+          document.body.style.position = '';
+          document.body.style.top = '';
+          document.body.style.width = '';
+          document.body.style.paddingRight = '';
+          window.scrollTo(0, saved);
+        }
+      };
     } else {
       if (!showModal) {
+        const saved = parseInt(document.body.getAttribute('data-scroll-position') || '0', 10);
         document.body.style.overflow = '';
+        document.body.style.position = '';
+        document.body.style.top = '';
+        document.body.style.width = '';
+        document.body.style.paddingRight = '';
+        window.scrollTo(0, saved);
       }
     }
-    
-    return () => {
-      document.removeEventListener('wheel', handleScroll);
-      document.removeEventListener('touchmove', handleScroll);
-      document.removeEventListener('keydown', handleKeyDown);
-      if (!showModal) {
-        document.body.style.overflow = '';
-      }
-    };
   }, [showCertImageModal, showModal]);
     
   // Animation variants

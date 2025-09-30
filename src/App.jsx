@@ -165,27 +165,7 @@ function App() {
     // via the handleBootComplete callback
   }, []);
   
-  // Handle wheel events for modal auto-close
-  useEffect(() => {
-    if (showSkillsModal) {
-      // Create handler to close modal when wheel event happens on document
-      const handleWheel = (e) => {
-        // Check if the event target is not inside the modal content
-        const modalContent = document.querySelector('.skills-modal-content');
-        if (modalContent && !modalContent.contains(e.target)) {
-          setShowSkillsModal(false);
-        }
-      };
-      
-      // Add event listener for wheel events
-      document.addEventListener('wheel', handleWheel, { passive: true });
-      
-      // Clean up event listener when component unmounts or modal closes
-      return () => {
-        document.removeEventListener('wheel', handleWheel);
-      };
-    }
-  }, [showSkillsModal]);
+  // (Removed duplicate wheel-based close handler — scroll-based handler below already closes the skills modal)
 
   // Detect scroll position for navbar transparency and progress tracking
   useEffect(() => {
@@ -223,16 +203,38 @@ function App() {
     return () => window.removeEventListener('scroll', handleScroll)
   }, [mobileMenuOpen])
   
-  // Close modal when user scrolls the page
+  // Prevent background scrolling while skills modal is open and restore on close
   useEffect(() => {
     if (showSkillsModal) {
-      const handleScrollForModal = () => {
-        setShowSkillsModal(false);
-      }
-      window.addEventListener('scroll', handleScrollForModal)
-      return () => window.removeEventListener('scroll', handleScrollForModal)
+      const scrollY = window.scrollY || window.pageYOffset || 0;
+      document.body.setAttribute('data-scroll-position', String(scrollY));
+      document.body.style.overflow = 'hidden';
+      document.body.style.top = `-${scrollY}px`;
+      document.body.style.position = 'fixed';
+      document.body.style.width = '100%';
+      document.body.style.paddingRight = '15px'; // compensate for scrollbar disappearance
+    } else {
+      // Restore when modal closes
+      const scrollY = parseInt(document.body.getAttribute('data-scroll-position') || '0', 10);
+      document.body.style.overflow = '';
+      document.body.style.position = '';
+      document.body.style.top = '';
+      document.body.style.width = '';
+      document.body.style.paddingRight = '';
+      window.scrollTo(0, scrollY);
     }
-  }, [showSkillsModal])
+
+    // Cleanup in case component unmounts while modal is open
+    return () => {
+      const scrollY = parseInt(document.body.getAttribute('data-scroll-position') || '0', 10);
+      document.body.style.overflow = '';
+      document.body.style.position = '';
+      document.body.style.top = '';
+      document.body.style.width = '';
+      document.body.style.paddingRight = '';
+      window.scrollTo(0, scrollY);
+    };
+  }, [showSkillsModal]);
   
   // Close mobile menu when clicking outside
   useEffect(() => {
@@ -1209,9 +1211,13 @@ useEffect(() => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
             >
-              <div className="container max-w-[1920px] mx-auto flex items-center justify-between py-4 sm:py-5 px-4 md:px-8">
+              <div className="container mx-auto max-w-full px-4 sm:px-6 md:px-8 flex items-center justify-between py-4 sm:py-5">
                 {/* Logo and Name - Left on all screens */}
-                <div className="flex items-center flex-shrink-0 md:mr-3">
+                <button
+                  onClick={() => scrollToSection('home')}
+                  aria-label="Go to Home"
+                  className="flex items-center flex-shrink-0 md:mr-3 focus:outline-none"
+                >
                   <motion.img 
                     src={logoImg}
                     alt="Dilusha Chamika Logo" 
@@ -1223,13 +1229,12 @@ useEffect(() => {
                     transition={{ duration: 0.3 }}
                   />
                   <motion.h1 
-                    className="text-xl sm:text-2xl md:text-2xl lg:text-3xl font-bold bg-gradient-to-r from-cyan-500 to-blue-500 bg-clip-text text-transparent"
+                    className="text-xl sm:text-2xl md:text-2xl lg:text-3xl font-bold bg-gradient-to-r from-cyan-500 to-blue-500 bg-clip-text text-transparent ml-3"
                     whileHover={{ scale: 1.05 }}
                   >
                     Dilusha Chamika
                   </motion.h1>
-                </div>
-                
+                </button>
                 
                 {/* Mobile menu button - Right side on mobile/tablet */}
                 <div className="block lg:hidden">
@@ -1256,7 +1261,7 @@ useEffect(() => {
                 </div>
                 
                 {/* Desktop navigation */}
-                <div className={`hidden lg:flex justify-center mx-auto py-2 rounded-xl max-w-fit lg:max-w-fit ${
+                <div className={`hidden lg:flex justify-center mx-auto py-2 rounded-xl max-w-full overflow-hidden ${
                   theme === 'dark' 
                     ? roboticMode
                       ? 'bg-gradient-to-r from-slate-800 to-slate-900 border-2 border-cyan-600/70 shadow-lg shadow-cyan-900/30' 
@@ -1265,8 +1270,8 @@ useEffect(() => {
                       ? 'bg-gradient-to-r from-white to-blue-50 border-2 border-blue-300/70 shadow-lg shadow-blue-900/20'
                       : 'bg-white/90 border border-slate-200/80 shadow-lg shadow-slate-300/30'
                 }`}>
-                    <div className="flex items-center justify-center flex-nowrap space-x-3 md:space-x-4 lg:space-x-5 xl:space-x-6 px-0">
-                  {['Home', 'About', 'Projects', 'Publications', 'Certificates', 'Awards', 'Contact'].map((item) => (
+                    <div className="flex items-center justify-center flex-wrap gap-3 md:gap-4 lg:gap-5 xl:gap-6 px-2">
+                  {['About', 'Publications', 'Contact'].map((item) => (
                     <motion.button
                       key={item}
                       onClick={() => scrollToSection(item.toLowerCase())}

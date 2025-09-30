@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import PropTypes from 'prop-types'
 import RoboticSectionTitle from '../components/RoboticSectionTitle'
 import { Award, Trophy, Star, X, Eye } from 'lucide-react'
@@ -46,6 +46,8 @@ const awards = [
 const AwardsSection = ({ theme, roboticMode, openImageModal }) => {
   const [currentImageIndices, setCurrentImageIndices] = useState({});
   const [currentAwardIndex, setCurrentAwardIndex] = useState(awards.length * 2); // Start in the middle for infinite scroll
+  const movingRef = useRef(null)
+  const [stepWidth, setStepWidth] = useState(320 + 24) // fallback: card width (320) + gap (24)
   
   // Animation variants
   const stagger = {
@@ -75,7 +77,7 @@ const AwardsSection = ({ theme, roboticMode, openImageModal }) => {
     setCurrentImageIndices(initialIndices)
   }, [])
 
-  // Auto-cycle images for awards with multiple images
+  // Auto-cycle images for awards with multiple images (slower)
   useEffect(() => {
     const intervals = {}
 
@@ -86,7 +88,7 @@ const AwardsSection = ({ theme, roboticMode, openImageModal }) => {
             ...prev,
             [awardIndex]: (prev[awardIndex] + 1) % award.images.length
           }))
-        }, 2000) // Change image every 2 seconds
+        }, 3000) // Change image every 3 seconds (slower)
       }
     })
 
@@ -95,7 +97,7 @@ const AwardsSection = ({ theme, roboticMode, openImageModal }) => {
     }
   }, [])
 
-  // Auto-scroll awards in infinite circular motion (forward only)
+  // Auto-scroll awards in infinite circular motion (forward only) - slowed down
   useEffect(() => {
     const scrollInterval = setInterval(() => {
       setCurrentAwardIndex(prevIndex => {
@@ -106,10 +108,34 @@ const AwardsSection = ({ theme, roboticMode, openImageModal }) => {
         }
         return nextIndex
       })
-    }, 4000) // Change awards every 4 seconds
+    }, 7000) // Change awards every 7 seconds (slower)
 
     return () => clearInterval(scrollInterval)
   }, [])
+
+  // Compute step width (card width + gap) so translations align perfectly
+  useEffect(() => {
+    const computeStep = () => {
+      try {
+        const movingEl = movingRef.current
+        if (!movingEl) return
+        const firstChild = movingEl.querySelector(':scope > *')
+        if (!firstChild) return
+        const childWidth = firstChild.getBoundingClientRect().width
+        // read gap from computed style (may be like '24px')
+        const style = getComputedStyle(movingEl)
+        const gapVal = style.gap || style.getPropertyValue('gap') || '24px'
+        const gap = parseFloat(gapVal) || 24
+        setStepWidth(Math.round(childWidth + gap))
+      } catch (e) {
+        // ignore and keep fallback
+      }
+    }
+
+    computeStep()
+    window.addEventListener('resize', computeStep)
+    return () => window.removeEventListener('resize', computeStep)
+  }, [duplicatedAwards.length])
 
   const handleOpenImageModal = (images, awardTitle, awardIndex) => {
     openImageModal(images, awardTitle, currentImageIndices[awardIndex] || 0)
@@ -167,10 +193,11 @@ const AwardsSection = ({ theme, roboticMode, openImageModal }) => {
             viewport={{ once: true }}
           >
             <motion.div
+              ref={movingRef}
               className="flex gap-6"
-              animate={{ x: -currentAwardIndex * 320 }}
+              animate={{ x: -currentAwardIndex * stepWidth }}
               transition={{
-                duration: 1.5,
+                duration: 1.2,
                 ease: "linear",
                 type: "tween"
               }}

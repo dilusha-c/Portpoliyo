@@ -1,10 +1,23 @@
 .mobile-menu {
   box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.2) !important;
+  --mobile-menu-height: 70vh; /* increased default vertical height (a bit more) */
+  max-height: var(--mobile-menu-height);
+  box-sizing: border-box;
 }
 
 .mobile-menu button {
   position: relative;
   overflow: hidden;
+  min-height: 48px; /* Ensure minimum touch target size */
+  display: flex;
+  align-items: center;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 10px 12px; /* ensure touch targets while staying inside container */
+  justify-content: space-between; /* keep icon/text layout neat */
+  white-space: normal; /* allow wrapping instead of overflowing */
+  overflow-wrap: anywhere; /* break long words/URLs if necessary */
+  text-overflow: ellipsis; /* safe fallback for single-line situations */
 }
 
 .mobile-menu button::after {
@@ -20,6 +33,7 @@
 
 .dark .mobile-menu {
   background-color: rgba(15, 23, 42, 0.98) !important;
+  animation: menuGlow 3s infinite;
 }
 
 .light .mobile-menu {
@@ -39,19 +53,7 @@
   }
 }
 
-.dark .mobile-menu {
-  animation: menuGlow 3s infinite;
-}
-
 /* Menu item hover effects - improved for touch devices */
-.mobile-menu button {
-  position: relative;
-  overflow: hidden;
-  min-height: 48px; /* Ensure minimum touch target size */
-  display: flex;
-  align-items: center;
-}
-
 .mobile-menu button:hover {
   transform: translateX(10px);
   transition: all 0.3s ease;
@@ -97,16 +99,17 @@
   .mobile-menu {
     top: 12px; /* Even higher on very small screens */
     border-radius: 12px;
-    max-height: 50vh; /* More conservative for mobile */
+    --mobile-menu-height: 75vh; /* more height on very small screens */
+    max-height: var(--mobile-menu-height);
   }
 }
 
-/* Tablet improvements */
 @media (min-width: 641px) and (max-width: 1023px) {
   .mobile-menu {
     max-width: 400px;
     margin: 20px auto;
-    max-height: 45vh; /* Consistent with main menu */
+    --mobile-menu-height: 70vh; /* larger tablet height (a bit more) */
+    max-height: var(--mobile-menu-height);
   }
 }
 
@@ -136,17 +139,47 @@
   background: rgba(59, 130, 246, 0.5);
 }
 
+/* Ensure the inner container is a vertical, scrollable area that constrains content within .mobile-menu */
+.mobile-menu .container {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 100%;
+  box-sizing: border-box; /* include padding in width calculations */
+  padding: 8px; /* ensure some breathing room so buttons don't touch edges */
+  overflow-y: auto; /* allow vertical scrolling when there are many buttons */
+  -webkit-overflow-scrolling: touch; /* smooth scrolling on iOS */
+  min-width: 0; /* allow flex children to shrink properly */
+  max-height: calc(var(--mobile-menu-height) - 40px); /* increase subtraction so scroll area fills the taller menu */
+}
+
+/* Make each button reliably fill the available width and avoid horizontal overflow */
+/* ...existing properties (position, overflow, min-height, display, align-items) ... */
+.mobile-menu button {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 10px 12px; /* ensure touch targets while staying inside container */
+  justify-content: space-between; /* keep icon/text layout neat */
+  white-space: normal; /* allow wrapping instead of overflowing */
+  overflow-wrap: anywhere; /* break long words/URLs if necessary */
+  text-overflow: ellipsis; /* safe fallback for single-line situations */
+}
+
+/* Ensure individual items don't force the container to grow horizontally */
+.mobile-menu .container > * {
+  min-width: 0;
+}
+
 /* Additional zoom level adjustments */
 /* These help with higher zoom levels by reducing menu size further */
 @media (max-width: 1024px) {
   .mobile-menu {
-    max-height: var(--mobile-menu-height, min(45vh, calc(100vh - 140px))); /* Use CSS custom property with fallback */
+    max-height: var(--mobile-menu-height, min(70vh, calc(100vh - 140px)));
   }
 }
 
-/* Extra conservative approach for very high zoom levels */
 @media (max-width: 768px) {
   .mobile-menu {
-    max-height: var(--mobile-menu-height, min(40vh, calc(100vh - 120px))); /* Even more conservative on smaller screens */
+    max-height: var(--mobile-menu-height, min(65vh, calc(100vh - 120px)));
   }
 }
