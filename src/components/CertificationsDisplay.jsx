@@ -5,6 +5,7 @@ import { ThemeContext } from '../contexts/ThemeContext';
 import { X, Filter } from 'lucide-react';
 import { createPortal } from 'react-dom';
 import PropTypes from 'prop-types';
+import useScrollLock from '../hooks/useScrollLock';
 
 const certifications = [
   {
@@ -196,98 +197,30 @@ const CertificationsDisplay = ({ theme }) => {
     window.open(cert.verifyUrl, '_blank', 'noopener,noreferrer');
   };
   
-  // Prevent background scrolling while the certificates modal is open
-  // and restore the previous scroll position when closed. Also listen
-  // for Escape to close the modal. Do NOT close the modal on scroll.
-  useEffect(() => {
-    if (showModal) {
-      const scrollY = window.scrollY || window.pageYOffset || 0;
-      document.body.setAttribute('data-scroll-position', String(scrollY));
-      document.body.style.overflow = 'hidden';
-      document.body.style.top = `-${scrollY}px`;
-      document.body.style.position = 'fixed';
-      document.body.style.width = '100%';
-      document.body.style.paddingRight = '15px'; // compensate for scrollbar disappearance
-
-      const handleKeyDown = (e) => {
-        if (e.key === 'Escape') setShowModal(false);
-      };
-
-      document.addEventListener('keydown', handleKeyDown);
-
-      return () => {
-        document.removeEventListener('keydown', handleKeyDown);
-        // Only restore body scrolling when no other modal (image modal) is open
-        if (!showCertImageModal) {
-          const saved = parseInt(document.body.getAttribute('data-scroll-position') || '0', 10);
-          document.body.style.overflow = '';
-          document.body.style.position = '';
-          document.body.style.top = '';
-          document.body.style.width = '';
-          document.body.style.paddingRight = '';
-          window.scrollTo(0, saved);
-        }
-      };
-    } else {
-      // If the certificates modal is closed and the image modal is not open,
-      // ensure body scroll is restored.
-      if (!showCertImageModal) {
-        const saved = parseInt(document.body.getAttribute('data-scroll-position') || '0', 10);
-        document.body.style.overflow = '';
-        document.body.style.position = '';
-        document.body.style.top = '';
-        document.body.style.width = '';
-        document.body.style.paddingRight = '';
-        window.scrollTo(0, saved);
-      }
-    }
-  }, [showModal, showCertImageModal]);
+  // Use the custom hook to handle scroll locking for both modals
+  // Only restore scroll position when both modals are closed
+  useScrollLock(showModal || showCertImageModal);
   
-  // Prevent background scrolling while certificate image modal is open.
+  // Listen for Escape key to close modals
   useEffect(() => {
-    if (showCertImageModal) {
-      const scrollY = window.scrollY || window.pageYOffset || 0;
-      // If a scroll position wasn't already stored by the parent modal, store it now
-      if (!document.body.getAttribute('data-scroll-position')) {
-        document.body.setAttribute('data-scroll-position', String(scrollY));
-      }
-      document.body.style.overflow = 'hidden';
-      document.body.style.top = `-${document.body.getAttribute('data-scroll-position') || 0}px`;
-      document.body.style.position = 'fixed';
-      document.body.style.width = '100%';
-      document.body.style.paddingRight = '15px';
-
-      const handleKeyDown = (e) => {
-        if (e.key === 'Escape') setShowCertImageModal(false);
-      };
-
-      document.addEventListener('keydown', handleKeyDown);
-
-      return () => {
-        document.removeEventListener('keydown', handleKeyDown);
-        // Only restore when the main certificates modal is also closed
-        if (!showModal) {
-          const saved = parseInt(document.body.getAttribute('data-scroll-position') || '0', 10);
-          document.body.style.overflow = '';
-          document.body.style.position = '';
-          document.body.style.top = '';
-          document.body.style.width = '';
-          document.body.style.paddingRight = '';
-          window.scrollTo(0, saved);
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') {
+        if (showCertImageModal) {
+          setShowCertImageModal(false);
+        } else if (showModal) {
+          setShowModal(false);
         }
-      };
-    } else {
-      if (!showModal) {
-        const saved = parseInt(document.body.getAttribute('data-scroll-position') || '0', 10);
-        document.body.style.overflow = '';
-        document.body.style.position = '';
-        document.body.style.top = '';
-        document.body.style.width = '';
-        document.body.style.paddingRight = '';
-        window.scrollTo(0, saved);
       }
+    };
+
+    if (showModal || showCertImageModal) {
+      document.addEventListener('keydown', handleKeyDown);
     }
-  }, [showCertImageModal, showModal]);
+
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [showModal, showCertImageModal]);
     
   // Animation variants
   const stagger = {

@@ -1,35 +1,21 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 
 const BinaryMatrix = ({ heroSection = false }) => {
   const [matrix, setMatrix] = useState([]);
+  const containerRef = useRef(null);
   
   // Create the initial binary matrix - optimized for performance
   useEffect(() => {
-    // Reduce density for better performance - larger spacing
-    const columns = Math.floor(window.innerWidth / 40); // 40px spacing instead of 20px
-    const rows = Math.floor(window.innerHeight / 50); // 50px spacing instead of 30px
-    
-    const newMatrix = [];
-    for (let i = 0; i < rows; i++) {
-      const row = [];
-      for (let j = 0; j < columns; j++) {
-        // Each cell has a random binary digit and opacity
-        row.push({
-          value: Math.random() > 0.5 ? '1' : '0',
-          opacity: Math.random() * 0.5 + 0.1, // Between 0.1 and 0.6
-          key: `${i}-${j}`
-        });
-      }
-      newMatrix.push(row);
-    }
-    setMatrix(newMatrix);
-    
-    // Handle window resize - throttled for performance
-    const handleResize = () => {
-      const columns = Math.floor(window.innerWidth / 40);
-      const rows = Math.floor(window.innerHeight / 50);
-      
+    // Compute matrix dimensions based on the container size so it fits the hero section
+    const computeMatrix = (width, height) => {
+      // Choose spacing based on context (denser for hero)
+      const cellSpacingX = heroSection ? 22 : 40; // px
+      const cellSpacingY = heroSection ? 24 : 50; // px
+
+      const columns = Math.max(1, Math.ceil(width / cellSpacingX));
+      const rows = Math.max(1, Math.ceil(height / cellSpacingY));
+
       const newMatrix = [];
       for (let i = 0; i < rows; i++) {
         const row = [];
@@ -44,31 +30,39 @@ const BinaryMatrix = ({ heroSection = false }) => {
       }
       setMatrix(newMatrix);
     };
-    
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
+
+    const update = () => {
+      const el = containerRef.current;
+      if (el) {
+        const rect = el.getBoundingClientRect();
+        computeMatrix(rect.width, rect.height);
+      } else {
+        // Fallback to viewport
+        computeMatrix(window.innerWidth, window.innerHeight);
+      }
+    };
+
+    // Use ResizeObserver when available to measure the container (precise fitting)
+    let ro;
+    if (typeof ResizeObserver !== 'undefined' && containerRef.current) {
+      ro = new ResizeObserver(() => update());
+      ro.observe(containerRef.current);
+    }
+
+    // Initial compute
+    update();
+
+    // Fallback to window resize in case ResizeObserver isn't available
+    window.addEventListener('resize', update);
+    return () => {
+      window.removeEventListener('resize', update);
+      if (ro && containerRef.current) ro.unobserve(containerRef.current);
+    };
+  }, [heroSection]);
   
-  // Change random digits periodically - REMOVED: No more animations
-  // useEffect(() => {
-  //   if (heroSection) return; // Skip animation for hero section
-  //   
-  //   const intervalId = setInterval(() => {
-  //     setMatrix(prevMatrix => 
-  //       prevMatrix.map(row => 
-  //         row.map(cell => ({
-  //           ...cell,
-  //           value: Math.random() > 0.8 ? (cell.value === '1' ? '0' : '1') : cell.value // 20% chance to flip
-  //         }))
-  //       )
-  //     );
-  //   }, 1000);
-  //   
-  //   return () => clearInterval(intervalId);
-  // }, [heroSection]);
 
   return (
-    <div className={`absolute inset-0 pointer-events-none -z-10 overflow-hidden ${heroSection ? 'opacity-50' : 'opacity-30'}`}>
+    <div ref={containerRef} className={`absolute inset-0 pointer-events-none -z-10 overflow-hidden ${heroSection ? 'opacity-50' : 'opacity-30'}`}>
       {matrix.map((row, i) => (
         <div key={`row-${i}`} className="flex justify-center">
           {row.map((cell) => (

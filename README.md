@@ -2,7 +2,7 @@
 
 **This is my personal portfolio website** - a cutting-edge, futuristic showcase of my web development skills featuring advanced UI/UX design, robotic-themed animations, and seamless user experience.
 
-**Live Demo**: [dilusha-chamika.vercel.app](https://dilusha-chamika.vercel.app/)
+**Live Demo**: [dilusha.live](https://dilusha.live/)
 
 ---
 
@@ -62,7 +62,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - **Email**: dilushachamika@gmail.com
 - **LinkedIn**: [linkedin.com/in/dilusha-chamika](https://www.linkedin.com/in/dilusha-chamika/)
 - **GitHub**: [github.com/it23782518](https://github.com/it23782518)
-- **Portfolio**: [dilusha-chamika.vercel.app](https://dilusha-chamika.vercel.app/)
+- **Portfolio**: [dilusha.live](https://dilusha.live/)
 
 ---
 

@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://dilusha-chamika.vercel.app/sitemap.xml
+Sitemap: https://dilusha.live/sitemap.xml

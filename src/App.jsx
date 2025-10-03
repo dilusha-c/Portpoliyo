@@ -7,6 +7,7 @@ import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from "@vercel/speed-insights/react";
 import RoboticSectionTitle from './components/RoboticSectionTitle'
 import BinaryMatrix from './components/BinaryMatrix'
+import useScrollLock from './hooks/useScrollLock'
 
 // Lazy load BootScreen since it's only shown once
 const BootScreen = lazy(() => import('./components/BootScreen'))
@@ -75,7 +76,7 @@ function App() {
   
   // Function to open image modal with enhanced scroll prevention
   const openImageModal = useCallback((images, title, currentIndex = 0) => {
-    // Store the scroll position in a data attribute
+    // Store the scroll position in a data attribute for potential use by other code
     const scrollY = window.scrollY;
     document.body.setAttribute('data-scroll-position', scrollY);
     
@@ -86,12 +87,7 @@ function App() {
       currentIndex: currentIndex
     });
     
-    // Better approach to disable scrolling without jumping
-    document.body.style.overflow = 'hidden';
-    document.body.style.top = `-${scrollY}px`;
-    document.body.style.position = 'fixed';
-    document.body.style.width = '100%';
-    document.body.style.paddingRight = '15px'; // Compensate for scrollbar disappearance
+    // Scroll lock is now handled by useScrollLock hook
     
     // Add event listeners for escape key and clicks to close modal
     document.addEventListener('keydown', handleEscapeKey);
@@ -136,26 +132,20 @@ function App() {
     }
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
   
-  // Function to close image modal and restore scrolling while preserving position
+  // Function to close image modal
   const closeImageModal = useCallback(() => {
     setImageModal(prev => ({
       ...prev,
       isOpen: false
     }));
     
-    // Get the scroll position from the data attribute
-    const scrollY = parseInt(document.body.getAttribute('data-scroll-position') || '0', 10);
+    // Scroll restore is now handled by useScrollLock hook
     
-    // Restore scrolling and layout
-    document.body.style.overflow = '';
-    document.body.style.position = '';
-    document.body.style.top = '';
-    document.body.style.width = '';
-    document.body.style.paddingRight = '';
-    
-    // Important: restore the scroll position
-    window.scrollTo(0, scrollY);
-  }, []);
+    // Remove event listeners
+    document.removeEventListener('keydown', handleEscapeKey);
+    document.removeEventListener('mousedown', handleModalOutsideClick);
+    document.removeEventListener('touchstart', handleModalOutsideClick);
+  }, [handleEscapeKey, handleModalOutsideClick]);
   
   // Always show boot screen on every page refresh
   useEffect(() => {
@@ -203,38 +193,8 @@ function App() {
     return () => window.removeEventListener('scroll', handleScroll)
   }, [mobileMenuOpen])
   
-  // Prevent background scrolling while skills modal is open and restore on close
-  useEffect(() => {
-    if (showSkillsModal) {
-      const scrollY = window.scrollY || window.pageYOffset || 0;
-      document.body.setAttribute('data-scroll-position', String(scrollY));
-      document.body.style.overflow = 'hidden';
-      document.body.style.top = `-${scrollY}px`;
-      document.body.style.position = 'fixed';
-      document.body.style.width = '100%';
-      document.body.style.paddingRight = '15px'; // compensate for scrollbar disappearance
-    } else {
-      // Restore when modal closes
-      const scrollY = parseInt(document.body.getAttribute('data-scroll-position') || '0', 10);
-      document.body.style.overflow = '';
-      document.body.style.position = '';
-      document.body.style.top = '';
-      document.body.style.width = '';
-      document.body.style.paddingRight = '';
-      window.scrollTo(0, scrollY);
-    }
-
-    // Cleanup in case component unmounts while modal is open
-    return () => {
-      const scrollY = parseInt(document.body.getAttribute('data-scroll-position') || '0', 10);
-      document.body.style.overflow = '';
-      document.body.style.position = '';
-      document.body.style.top = '';
-      document.body.style.width = '';
-      document.body.style.paddingRight = '';
-      window.scrollTo(0, scrollY);
-    };
-  }, [showSkillsModal]);
+  // Use custom hook for scroll lock when skills modal is open
+  useScrollLock(showSkillsModal);
   
   // Close mobile menu when clicking outside
   useEffect(() => {
@@ -423,21 +383,15 @@ function App() {
       // Remove popstate listener
       window.removeEventListener('popstate', handlePopState);
       
-      // Ensure we clean up event listeners and restore scrolling if component unmounts with modal open
+      // Ensure we clean up event listeners if component unmounts with modal open
       if (imageModal.isOpen) {
-        const scrollY = parseInt(document.body.getAttribute('data-scroll-position') || '0', 10);
-        
-        document.body.style.overflow = '';
-        document.body.style.position = '';
-        document.body.style.top = '';
-        document.body.style.width = '';
-        document.body.style.paddingRight = '';
-        
-        window.scrollTo(0, scrollY);
         document.removeEventListener('keydown', handleEscapeKey);
       }
     }
   }, [imageModal.isOpen, handleEscapeKey, closeImageModal]); // closeImageModal added to dependencies
+  
+  // Use custom hook for scroll lock when image modal is open
+  useScrollLock(imageModal.isOpen);
   
   // Cross-browser scroll function that works reliably
   const smoothScrollToSection = (sectionId) => {
