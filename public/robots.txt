@@ -1,4 +1,8 @@
 User-agent: *
 Allow: /
+Disallow: 
+
+# Encourage full indexing of the site
+Crawl-delay: 1
 
 Sitemap: https://dilusha.live/sitemap.xml
