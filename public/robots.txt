@@ -5,7 +5,7 @@ Disallow:
 # Encourage full indexing of the site
 Crawl-delay: 1
 
-# Important logo files for search engines
+# Important logo file for search engines
 Allow: /images/logo-112.png
 Allow: /logo-verification.html
 
