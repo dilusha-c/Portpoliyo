@@ -69,7 +69,7 @@ const AboutSection = ({ theme, roboticMode, scrollToSection }) => {
                 className="w-full h-full object-cover rounded-full"
                 width="256"
                 height="256"
-                fetchpriority="high"
+                fetchPriority="high"
                 loading="eager"
               />
 
