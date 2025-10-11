@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Page Not Found | Dilusha Chamika</title>
+  <meta name="description" content="Page not found - Dilusha Chamika's portfolio">
+  <link rel="canonical" href="https://dilusha.live/404.html">
+  <link rel="icon" type="image/png" href="/images/logo-112.png">
+  
+  <meta property="og:title" content="Page Not Found | Dilusha Chamika">
+  <meta property="og:description" content="Page not found - Dilusha Chamika's portfolio">
+  <meta property="og:url" content="https://dilusha.live/404.html">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="https://dilusha.live/images/logo-112.png">
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --primary-color: #06b6d4;
+      --background-color: #0f172a;
+      --text-color: #f8fafc;
+      --accent-color: #0891b2;
+      --dark-accent: #075985;
+    }
+    
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: var(--background-color);
+      color: var(--text-color);
+      line-height: 1.6;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+      text-align: center;
+    }
+    
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      position: relative;
+    }
+    
+    .error-code {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 8rem;
+      font-weight: 700;
+      color: var(--primary-color);
+      line-height: 1;
+      margin-bottom: 0.5rem;
+      position: relative;
+      text-shadow: 0 0 15px rgba(6, 182, 212, 0.3);
+    }
+    
+    .error-code::after {
+      content: "";
+      position: absolute;
+      height: 4px;
+      width: 100px;
+      background: var(--primary-color);
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+    
+    h1 {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 2rem;
+      font-weight: 600;
+      margin-top: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    
+    p {
+      font-size: 1.1rem;
+      margin-bottom: 2rem;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    
+    .btn {
+      display: inline-block;
+      background-color: var(--primary-color);
+      color: var(--background-color);
+      font-family: 'Orbitron', sans-serif;
+      font-weight: 500;
+      text-decoration: none;
+      padding: 0.75rem 1.5rem;
+      border-radius: 4px;
+      transition: all 0.3s ease;
+      margin-top: 1rem;
+      border: none;
+      cursor: pointer;
+      font-size: 1rem;
+    }
+    
+    .btn:hover {
+      background-color: var(--accent-color);
+      transform: translateY(-3px);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    }
+    
+    .robot-decoration {
+      width: 180px;
+      height: 180px;
+      margin-bottom: 2rem;
+      opacity: 0.9;
+    }
+    
+    .circuit-lines {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      pointer-events: none;
+      z-index: -1;
+      opacity: 0.07;
+    }
+    
+    .circuit-line {
+      position: absolute;
+      background-color: var(--primary-color);
+    }
+    
+    .circuit-line:nth-child(1) {
+      width: 150px;
+      height: 2px;
+      top: 20%;
+      left: 5%;
+    }
+    
+    .circuit-line:nth-child(2) {
+      width: 2px;
+      height: 100px;
+      top: 40%;
+      left: 20%;
+    }
+    
+    .circuit-line:nth-child(3) {
+      width: 100px;
+      height: 2px;
+      top: 60%;
+      left: 15%;
+    }
+    
+    .circuit-line:nth-child(4) {
+      width: 2px;
+      height: 80px;
+      top: 10%;
+      right: 20%;
+    }
+    
+    .circuit-line:nth-child(5) {
+      width: 120px;
+      height: 2px;
+      top: 30%;
+      right: 10%;
+    }
+    
+    .circuit-line:nth-child(6) {
+      width: 2px;
+      height: 120px;
+      top: 50%;
+      right: 30%;
+    }
+    
+    @media (max-width: 768px) {
+      .error-code {
+        font-size: 6rem;
+      }
+      
+      h1 {
+        font-size: 1.5rem;
+      }
+      
+      p {
+        font-size: 1rem;
+      }
+      
+      .robot-decoration {
+        width: 150px;
+        height: 150px;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      .error-code {
+        font-size: 4rem;
+      }
+      
+      .robot-decoration {
+        width: 120px;
+        height: 120px;
+      }
+      
+      .circuit-lines {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="circuit-lines">
+      <div class="circuit-line"></div>
+      <div class="circuit-line"></div>
+      <div class="circuit-line"></div>
+      <div class="circuit-line"></div>
+      <div class="circuit-line"></div>
+      <div class="circuit-line"></div>
+    </div>
+    
+    <svg class="robot-decoration" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+      <rect x="30" y="20" width="40" height="30" rx="2" fill="#06b6d4" />
+      <rect x="38" y="30" width="8" height="8" rx="4" fill="#0f172a" />
+      <rect x="54" y="30" width="8" height="8" rx="4" fill="#0f172a" />
+      <rect x="40" y="45" width="20" height="3" rx="1" fill="#0f172a" />
+      <rect x="20" y="50" width="60" height="40" rx="3" fill="#06b6d4" />
+      <rect x="30" y="58" width="40" height="24" rx="2" fill="#0f172a" />
+      <rect x="35" y="62" width="30" height="16" rx="1" fill="#075985" />
+      <line x1="44" y1="70" x2="56" y2="70" stroke="#06b6d4" stroke-width="2" />
+      <rect x="15" y="60" width="5" height="20" fill="#06b6d4" />
+      <rect x="80" y="60" width="5" height="20" fill="#06b6d4" />
+      <rect x="25" y="90" width="10" height="5" fill="#06b6d4" />
+      <rect x="65" y="90" width="10" height="5" fill="#06b6d4" />
+      <circle cx="42" cy="34" r="2" fill="#f8fafc" />
+      <circle cx="58" cy="34" r="2" fill="#f8fafc" />
+    </svg>
+
+    <div class="error-code">404</div>
+    <h1>PAGE NOT FOUND</h1>
+    <p>Oops! The page you're looking for seems to have been moved, deleted, or never existed in the first place. The robots couldn't find what you were looking for.</p>
+    <a href="/" class="btn">Return to Homepage</a>
+  </div>
+
+  <script>
+    // Animation for the robot eyes
+    function animateRobot() {
+      const eyes = document.querySelectorAll('circle');
+      
+      setInterval(() => {
+        eyes.forEach(eye => {
+          // Random blink
+          if (Math.random() > 0.95) {
+            eye.style.opacity = '0';
+            setTimeout(() => {
+              eye.style.opacity = '1';
+            }, 150);
+          }
+        });
+      }, 1000);
+    }
+    
+    window.addEventListener('DOMContentLoaded', animateRobot);
+  </script>
+</body>
+</html>
