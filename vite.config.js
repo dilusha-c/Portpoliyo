@@ -10,6 +10,10 @@ export default defineConfig({
     VitePWA({
       registerType: 'autoUpdate',
       includeAssets: ['favicon.ico', 'logo.png', 'images/logo-112.png'],
+      workbox: {
+        // Disable default SPA navigation fallback so real 404 responses render the custom page
+        navigateFallback: null
+      },
       manifest: {
         name: 'Dilusha Chamika Portfolio',
         short_name: 'Dilusha',
