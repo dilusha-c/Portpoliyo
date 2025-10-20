@@ -318,7 +318,7 @@ const ContactSection = ({ theme, roboticMode, contactFormData, setContactFormDat
                 </motion.a>
 
                 <motion.a
-                  href="https://github.com/it23782518"
+                  href="https://github.com/dilusha-c"
                   target="_blank"
                   rel="noopener noreferrer"
                   className={`flex items-center gap-2 ${
